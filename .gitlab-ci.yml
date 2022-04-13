@@ -1,0 +1,34 @@
+image: registry.gitlab.tugraz.at/software22/teams/docker/sw22:1.0
+
+before_script:
+  - chmod +x ./gradlew
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  key: $CI_PROJECT_ID
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  after_script:
+    - 'mv app/build/outputs/apk/debug/*.apk .'
+  artifacts:
+    paths:
+      - '*.apk'
+
+tests:
+  stage: test
+  needs: ['build']
+  script:
+    - ./gradlew testDebug
+  artifacts:
+    reports:
+      junit: 'app/build/test-results/**/TEST-*.xml'
