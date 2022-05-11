@@ -47,6 +47,7 @@
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <EditText
+        android:enabled="false"
         android:id="@+id/editTextUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

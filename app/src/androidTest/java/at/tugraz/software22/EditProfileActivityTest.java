@@ -4,6 +4,7 @@ import android.content.res.Resources;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;

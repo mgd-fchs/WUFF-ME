@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import at.tugraz.software22.WuffMeApplication;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
+import at.tugraz.software22.domain.entity.User;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -23,5 +24,14 @@ public class EditProfileActivity extends AppCompatActivity {
         var user = userRepository.getLoggedInUser();
 
         binding.textViewUserName.setText(user.getUsername());
+        binding.imageButtonEditUserName.setOnClickListener( it -> {
+            if(binding.editTextUserName.isEnabled()){
+                binding.editTextUserName.setEnabled(false);
+                user.setUsername(binding.editTextUserName.getText().toString());
+                userRepository.updateUser(user);
+            } else {
+                binding.editTextUserName.setEnabled(true);
+            }
+        });
     }
 }
