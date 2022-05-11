@@ -2,4 +2,16 @@
     <string name="app_name">Software22 - Team project</string>
     <string name="intro">In contrast to the individual developer assignment, there is no given framework for the team project. You are free to customize the project according to your needs.</string>
     <string name="final_app">We are looking forward to your final app!</string>
+    <string name="title_activity_select_usertype">SelectUsertypeActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="checkBoxOwner">Owner</string>
+    <string name="checkBoxSearcher">Searcher</string>
+    <string name="buttonSelectUsertype">Select</string>
 </resources>
