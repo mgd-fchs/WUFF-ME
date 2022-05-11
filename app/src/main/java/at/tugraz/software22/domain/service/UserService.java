@@ -19,6 +19,7 @@ import java.util.concurrent.Executor;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
@@ -68,6 +69,11 @@ public class UserService implements UserRepository {
                     }
                 });
 
+    }
+
+    @Override
+    public void setUserType(String username, UserType userType) {
+        databaseReference.child(Constants.USER_TABLE).child(username).child("type").setValue(userType);
     }
 
 }
