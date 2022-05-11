@@ -9,28 +9,43 @@ import android.widget.CheckBox;
 import android.widget.Toast;
 
 import at.tugraz.software22.R;
+import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.service.UserService;
 
 public class UsertypeSelectionActivity extends AppCompatActivity {
 
-    private int selected_type = 0;
+    private UserType userType = UserType.NON;
+    Button buttonSelectUsertype;
+    CheckBox checkBoxOwner;
+    CheckBox checkBoxSearcher;
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.usertype_selection);
 
-        Button buttonSelectUsertype = findViewById(R.id.buttonSelectUsertype);
-        CheckBox checkBoxOwner = findViewById(R.id.checkBoxOwner);
-        CheckBox checkBoxSearcher = findViewById(R.id.checkBoxSearcher);
+        initialiseViews();
+        userService = new UserService();
 
         buttonSelectUsertype.setOnClickListener(view -> {
-            if (checkBoxOwner.isChecked())
-                selected_type += 1;
-            if (checkBoxSearcher.isChecked())
-                selected_type += 2;
-
-            Toast.makeText(UsertypeSelectionActivity.this, "User Selected: " + selected_type, Toast.LENGTH_LONG).show();
-            selected_type = 0;
+            setUserType();
+            userService.setUserType("test", userType);
         });
+    }
+
+    private void initialiseViews() {
+        buttonSelectUsertype = findViewById(R.id.buttonSelectUsertype);
+        checkBoxOwner = findViewById(R.id.checkBoxOwner);
+        checkBoxSearcher = findViewById(R.id.checkBoxSearcher);
+    }
+
+    private void setUserType() {
+        if (checkBoxOwner.isChecked() && checkBoxSearcher.isChecked())
+            userType = UserType.BOTH;
+        else if (checkBoxOwner.isChecked())
+            userType = UserType.OWNER;
+        else if (checkBoxSearcher.isChecked())
+            userType = UserType.SEARCHER;
     }
 }
