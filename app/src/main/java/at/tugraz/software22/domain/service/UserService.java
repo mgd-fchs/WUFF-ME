@@ -73,7 +73,7 @@ public class UserService implements UserRepository {
 
     @Override
     public void setUserType(String username, UserType userType) {
-        databaseReference.child(Constants.USER_TABLE).child(username).child("type").setValue(userType);
+        ref.child(Constants.USER_TABLE).child("-N1mLLkwu95ZlEFqYVi6").child("type").setValue(userType);
     }
 
 }
