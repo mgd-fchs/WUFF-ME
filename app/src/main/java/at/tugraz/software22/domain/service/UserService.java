@@ -18,4 +18,9 @@ public class UserService implements UserRepository {
     public void registerUser(User user) {
 
     }
+
+    @Override
+    public User getLoggedInUser() {
+        return null;
+    }
 }

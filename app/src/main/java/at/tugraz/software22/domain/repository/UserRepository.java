@@ -4,4 +4,5 @@ import at.tugraz.software22.domain.entity.User;
 
 public interface UserRepository {
     void registerUser(User user);
+    User getLoggedInUser();
 }

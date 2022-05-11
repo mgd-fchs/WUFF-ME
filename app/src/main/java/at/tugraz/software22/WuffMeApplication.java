@@ -5,16 +5,13 @@ import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 
-import at.tugraz.software22.data.UserRepository;
+import at.tugraz.software22.domain.repository.UserRepository;
 
 public class WuffMeApplication extends Application {
 
     private static UserRepository userRepository;
 
     public UserRepository getUserRepository() {
-        if (userRepository == null) {
-            userRepository = new UserRepository();
-        }
         return userRepository;
     }
 

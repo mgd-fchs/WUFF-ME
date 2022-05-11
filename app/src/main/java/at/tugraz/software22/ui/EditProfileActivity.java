@@ -1,14 +1,11 @@
 package at.tugraz.software22.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import at.tugraz.software22.R;
 import at.tugraz.software22.WuffMeApplication;
-import at.tugraz.software22.data.UserRepository;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -25,6 +22,6 @@ public class EditProfileActivity extends AppCompatActivity {
         var userRepository = wuffMeApplication.getUserRepository();
         var user = userRepository.getLoggedInUser();
 
-        binding.textViewUserName.setText(user.getName());
+        binding.textViewUserName.setText(user.getUsername());
     }
 }
