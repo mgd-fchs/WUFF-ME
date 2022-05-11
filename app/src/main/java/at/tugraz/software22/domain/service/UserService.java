@@ -23,4 +23,9 @@ public class UserService implements UserRepository {
     public User getLoggedInUser() {
         return null;
     }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
 }

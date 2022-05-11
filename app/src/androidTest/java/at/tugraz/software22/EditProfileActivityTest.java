@@ -4,6 +4,7 @@ import android.content.res.Resources;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -43,6 +44,24 @@ public class EditProfileActivityTest {
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         ActivityScenario.launch(EditProfileActivity.class);
         Espresso.onView(ViewMatchers.withText(user.getUsername())).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalled() {
+        String newUserName = "New Name";
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .perform(ViewActions.typeText(newUserName));
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .perform(ViewActions.click());
+
+        Mockito.verify(userRepositoryMock).updateUser(Mockito.argThat(user -> user.getUsername().equals(newUserName)) );
     }
 
 }
