@@ -14,4 +14,5 @@
     <string name="checkBoxOwner">Owner</string>
     <string name="checkBoxSearcher">Searcher</string>
     <string name="buttonSelectUsertype">Select</string>
+    <string name="userTypeInfo">ⓘ Select to be \"Owner\", \"Searcher\" or both by clicking the corresponding checkbox and pressing the \"Select\" button</string>
 </resources>
