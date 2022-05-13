@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
+import at.tugraz.software22.R;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
 import at.tugraz.software22.ui.viewmodel.EditProfileViewModel;
 
@@ -37,8 +39,15 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.editTextAge.setText(viewModel.getUserBirthday().toString());
         binding.imageButtonEditAge.setOnClickListener(view -> {
             if(binding.editTextAge.isEnabled()) {
+                LocalDate date;
+                try{
+                    date = LocalDate.parse(binding.editTextAge.getText().toString());
+                } catch (DateTimeParseException e){
+                    binding.editTextAge.setError(getString(R.string.edit_profile_age_error));
+                    return;
+                }
                 binding.editTextAge.setEnabled(false);
-                viewModel.updateUserBirthday(LocalDate.parse(binding.editTextAge.getText().toString()));
+                viewModel.updateUserBirthday(date);
             } else {
                 binding.editTextAge.setText("");
                 binding.editTextAge.setEnabled(true);
