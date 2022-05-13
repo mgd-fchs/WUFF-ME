@@ -86,4 +86,22 @@ public class EditProfileActivityTest {
         Mockito.verify(userRepositoryMock).updateUser(Mockito.argThat(user -> user.getBirthday().equals(newUserBirthday)) );
     }
 
+    @Test
+    public void givenLoggedInUser_whenInvalidAgeSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now()));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
+                .perform(ViewActions.typeText("1900"));
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
+                .check(ViewAssertions.matches(ViewMatchers.hasErrorText(resources.getString(R.string.edit_profile_age_error))));
+    }
+
 }
