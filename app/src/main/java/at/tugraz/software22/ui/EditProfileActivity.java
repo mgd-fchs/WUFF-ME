@@ -26,13 +26,15 @@ public class EditProfileActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
 
         binding.textViewUserName.setText(viewModel.getUsername());
+
+        binding.editTextUserName.setText(viewModel.getUsername());
         binding.imageButtonEditUserName.setOnClickListener( it -> {
             if(binding.editTextUserName.isEnabled()){
                 binding.editTextUserName.setEnabled(false);
                 viewModel.updateUserName(binding.editTextUserName.getText().toString());
             } else {
                 binding.editTextUserName.setEnabled(true);
-                binding.editTextAge.requestFocus();
+                binding.editTextUserName.requestFocus();
             }
         });
 
@@ -49,7 +51,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 binding.editTextAge.setEnabled(false);
                 viewModel.updateUserBirthday(date);
             } else {
-                binding.editTextAge.setText("");
                 binding.editTextAge.setEnabled(true);
                 binding.editTextAge.requestFocus();
             }
@@ -61,7 +62,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 binding.editTextJob.setEnabled(false);
                 viewModel.updateUserJob(binding.editTextJob.getText().toString());
             } else {
-                binding.editTextJob.setText("");
                 binding.editTextJob.setEnabled(true);
                 binding.editTextJob.requestFocus();
             }

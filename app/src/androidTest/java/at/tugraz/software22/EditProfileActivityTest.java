@@ -46,7 +46,8 @@ public class EditProfileActivityTest {
         User user = new User("Testuser",  LocalDate.now(), "Developer");
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         ActivityScenario.launch(EditProfileActivity.class);
-        Espresso.onView(ViewMatchers.withText(user.getUsername())).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withId(R.id.textViewUserName))
+                .check(ViewAssertions.matches(ViewMatchers.withText(user.getUsername())));
     }
 
     @Test
@@ -59,7 +60,7 @@ public class EditProfileActivityTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
-                .perform(ViewActions.typeText(newUserName));
+                .perform(ViewActions.replaceText(newUserName));
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
                 .perform(ViewActions.click());
@@ -77,7 +78,7 @@ public class EditProfileActivityTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
-                .perform(ViewActions.typeText(newUserBirthday.format(DateTimeFormatter.ISO_DATE)));
+                .perform(ViewActions.replaceText(newUserBirthday.format(DateTimeFormatter.ISO_DATE)));
 
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
@@ -95,7 +96,7 @@ public class EditProfileActivityTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
-                .perform(ViewActions.typeText("1900"));
+                .perform(ViewActions.replaceText("1900"));
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
                 .perform(ViewActions.click());
@@ -114,7 +115,7 @@ public class EditProfileActivityTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.editTextJob))
-                .perform(ViewActions.typeText(newJob));
+                .perform(ViewActions.replaceText(newJob));
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditJob))
                 .perform(ViewActions.click());
