@@ -3,5 +3,5 @@
     <string name="intro">In contrast to the individual developer assignment, there is no given framework for the team project. You are free to customize the project according to your needs.</string>
     <string name="final_app">We are looking forward to your final app!</string>
     <string name="edit_profile_header">Settings</string>
-    <string name="edit_profile_age_error">Invalid date format</string>
+    <string name="edit_profile_age_error">This date format is invalid! Please use YEAR-MONTH-DAY instead.</string>
 </resources>
