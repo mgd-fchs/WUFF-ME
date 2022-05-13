@@ -2,12 +2,15 @@ package at.tugraz.software22.domain.entity;
 
 import androidx.room.PrimaryKey;
 
-public class User {
+public class Users {
     private String username;
     private String password;
     private String email;
 
-    public User(String username, String password, String email) {
+    public Users() {
+    }
+
+    public Users(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -36,4 +39,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

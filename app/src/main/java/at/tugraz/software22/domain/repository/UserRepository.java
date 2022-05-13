@@ -1,7 +1,9 @@
 package at.tugraz.software22.domain.repository;
 
-import at.tugraz.software22.domain.entity.User;
+import java.util.concurrent.Executor;
+
+import at.tugraz.software22.domain.entity.Users;
 
 public interface UserRepository {
-    boolean registerUser(User user);
+    void registerUser(Executor exec, Users user);
 }
