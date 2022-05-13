@@ -43,7 +43,7 @@ public class EditProfileActivityTest {
 
     @Test
     public void givenLoggedInUser_whenActivityStarted_thenVerifyThatUserNameIsDisplayed(){
-        User user = new User("Testuser",  LocalDate.now());
+        User user = new User("Testuser",  LocalDate.now(), "Developer");
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         ActivityScenario.launch(EditProfileActivity.class);
         Espresso.onView(ViewMatchers.withText(user.getUsername())).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
@@ -52,7 +52,7 @@ public class EditProfileActivityTest {
     @Test
     public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() {
         String newUserName = "New Name";
-        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now()));
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "SCRUM Master"));
         ActivityScenario.launch(EditProfileActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
@@ -70,7 +70,7 @@ public class EditProfileActivityTest {
     @Test
     public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() {
         LocalDate newUserBirthday = LocalDate.of(2000,11,3);
-        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now()));
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
@@ -88,7 +88,7 @@ public class EditProfileActivityTest {
 
     @Test
     public void givenLoggedInUser_whenInvalidAgeSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
-        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now()));
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
@@ -102,6 +102,24 @@ public class EditProfileActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
                 .check(ViewAssertions.matches(ViewMatchers.hasErrorText(resources.getString(R.string.edit_profile_age_error))));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() {
+        String newJob = "Scrum Master";
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditJob))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextJob))
+                .perform(ViewActions.typeText(newJob));
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditJob))
+                .perform(ViewActions.click());
+
+        Mockito.verify(userRepositoryMock).updateUser(Mockito.argThat(user -> user.getJob().equals(newJob)) );
     }
 
 }

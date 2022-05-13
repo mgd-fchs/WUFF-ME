@@ -6,11 +6,14 @@ public class User {
     private String username;
     private String password;
     private String email;
+
+    private String job;
     private LocalDate birthday;
 
-    public User (String username, LocalDate birthday) {
+    public User (String username, LocalDate birthday, String job) {
         this.username = username;
         this.birthday = birthday;
+        this.job = job;
     }
 
     public String getUsername() {
@@ -27,5 +30,13 @@ public class User {
 
     public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 }
