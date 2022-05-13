@@ -22,4 +22,8 @@ public class User {
     public LocalDate getBirthday() {
         return birthday;
     }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 }

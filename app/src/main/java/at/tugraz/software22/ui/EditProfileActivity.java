@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDate;
+
 import at.tugraz.software22.WuffMeApplication;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
 import at.tugraz.software22.domain.entity.User;
@@ -30,6 +32,18 @@ public class EditProfileActivity extends AppCompatActivity {
                 viewModel.updateUserName(binding.editTextUserName.getText().toString());
             } else {
                 binding.editTextUserName.setEnabled(true);
+            }
+        });
+
+        binding.editTextAge.setText(viewModel.getUserBirthday().toString());
+        binding.imageButtonEditAge.setOnClickListener(view -> {
+            if(binding.editTextAge.isEnabled()) {
+                binding.editTextAge.setEnabled(false);
+                viewModel.updateUserBirthday(LocalDate.parse(binding.editTextAge.getText().toString()));
+            } else {
+                binding.editTextAge.setText("");
+                binding.editTextAge.setEnabled(true);
+                binding.editTextAge.requestFocus();
             }
         });
     }
