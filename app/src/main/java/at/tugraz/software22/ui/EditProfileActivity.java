@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.time.LocalDate;
 
-import at.tugraz.software22.WuffMeApplication;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
-import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.ui.viewmodel.EditProfileViewModel;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -32,6 +30,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 viewModel.updateUserName(binding.editTextUserName.getText().toString());
             } else {
                 binding.editTextUserName.setEnabled(true);
+                binding.editTextAge.requestFocus();
             }
         });
 
