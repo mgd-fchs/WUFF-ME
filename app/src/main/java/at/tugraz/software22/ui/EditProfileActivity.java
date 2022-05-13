@@ -54,5 +54,17 @@ public class EditProfileActivity extends AppCompatActivity {
                 binding.editTextAge.requestFocus();
             }
         });
+
+        binding.editTextJob.setText(viewModel.getUserJob());
+        binding.imageButtonEditJob.setOnClickListener(view -> {
+            if(binding.editTextJob.isEnabled()){
+                binding.editTextJob.setEnabled(false);
+                viewModel.updateUserJob(binding.editTextJob.getText().toString());
+            } else {
+                binding.editTextJob.setText("");
+                binding.editTextJob.setEnabled(true);
+                binding.editTextJob.requestFocus();
+            }
+        });
     }
 }
