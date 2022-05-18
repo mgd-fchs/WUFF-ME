@@ -31,7 +31,12 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.imageButtonEditUserName.setOnClickListener( it -> {
             if(binding.editTextUserName.isEnabled()){
                 binding.editTextUserName.setEnabled(false);
-                viewModel.updateUserName(binding.editTextUserName.getText().toString());
+                String newName = binding.editTextUserName.getText().toString();
+                if (newName.equals("")){
+                    binding.editTextUserName.setError(getString(R.string.edit_profile_name_empty_error));
+                } else {
+                    viewModel.updateUserName(binding.editTextUserName.getText().toString());
+                }
             } else {
                 binding.editTextUserName.setEnabled(true);
                 binding.editTextUserName.requestFocus();

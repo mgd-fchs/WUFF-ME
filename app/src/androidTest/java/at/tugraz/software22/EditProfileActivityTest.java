@@ -30,14 +30,10 @@ public class EditProfileActivityTest {
 
     private Resources resources;
 
-    @BeforeClass
-    public static void beforeClass(){
-        userRepositoryMock = Mockito.mock(UserRepository.class);
-        WuffMeApplication.setUserRepository(userRepositoryMock);
-    }
-
     @Before
     public void setUp() {
+        userRepositoryMock = Mockito.mock(UserRepository.class);
+        WuffMeApplication.setUserRepository(userRepositoryMock);
         resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
     }
 
