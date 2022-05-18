@@ -6,5 +6,5 @@ import at.tugraz.software22.domain.entity.Users;
 
 public interface UserRepository {
     void registerUser(Executor exec, Users user);
-    void setUserType(String username, UserType userType);
+    void setUserType(UserType userType);
 }

@@ -24,7 +24,6 @@ import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
-    DatabaseReference ref;
     private FirebaseAuth mAuth;
     private static final String TAG = "test";
     private final MutableLiveData<Boolean> registrationSuccess = new MutableLiveData<>();
@@ -72,8 +71,9 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void setUserType(String username, UserType userType) {
-        ref.child(Constants.USER_TABLE).child("-N1mLLkwu95ZlEFqYVi6").child("type").setValue(userType);
+    public void setUserType(UserType userType) {
+        database.getReference().child(Constants.USER_TABLE).child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("type").setValue(userType);
     }
 
 }
