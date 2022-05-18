@@ -2,6 +2,7 @@ package at.tugraz.software22.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +32,11 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
 
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
-            userService.setUserType("test", userType);
+            userService.setUserType("hans", userType);
+            Intent selectedTypeIntent = new Intent();
+            selectedTypeIntent.putExtra("hans", userType.name());
+            setResult(RESULT_OK, selectedTypeIntent);
+            finish();
         });
     }
 
