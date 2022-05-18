@@ -4,4 +4,5 @@
     <string name="final_app">We are looking forward to your final app!</string>
     <string name="edit_profile_header">Settings</string>
     <string name="edit_profile_age_error">This date format is invalid! Please use YEAR-MONTH-DAY instead.</string>
+    <string name="edit_profile_name_empty_error">Please enter your name</string>
 </resources>

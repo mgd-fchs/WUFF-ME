@@ -123,4 +123,23 @@ public class EditProfileActivityTest {
         Mockito.verify(userRepositoryMock).updateUser(Mockito.argThat(user -> user.getJob().equals(newJob)) );
     }
 
+    @Test
+    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .perform(ViewActions.clearText());
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .check(ViewAssertions.matches(ViewMatchers.hasErrorText(resources.getString(R.string.edit_profile_name_empty_error))));
+        Mockito.verify(userRepositoryMock, Mockito.never()).updateUser(Mockito.any());
+    }
+
 }
