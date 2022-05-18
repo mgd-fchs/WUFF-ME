@@ -49,4 +49,26 @@ public class UsertypeSelectionTest {
         Espresso.onView(ViewMatchers.withText(R.string.buttonSelectUsertype)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withText(R.string.userTypeInfo)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
+
+    @Test
+    public void givenUsertypeSelectionActivity_whenActivityLaunched_thenInfoTextContainsTextFromOwnerBox() {
+
+        Espresso.onView(ViewMatchers.withText(R.string.userTypeInfo)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        String infoText = resources.getString(R.string.userTypeInfo);
+        String owner = resources.getString(R.string.checkBoxOwner);
+
+        Assert.assertTrue(infoText.contains(owner));
+    }
+
+    @Test
+    public void givenUsertypeSelectionActivity_whenActivityLaunched_thenInfoTextContainsTextFromSearcherBox() {
+
+        Espresso.onView(ViewMatchers.withText(R.string.userTypeInfo)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        String infoText = resources.getString(R.string.userTypeInfo);
+        String searcher = resources.getString(R.string.checkBoxSearcher);
+
+        Assert.assertTrue(infoText.contains(searcher));
+    }
 }
