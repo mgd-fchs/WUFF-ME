@@ -47,5 +47,6 @@ public class UsertypeSelectionTest {
         Espresso.onView(ViewMatchers.withText(R.string.checkBoxOwner)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withText(R.string.checkBoxSearcher)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onView(ViewMatchers.withText(R.string.buttonSelectUsertype)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(ViewMatchers.withText(R.string.userTypeInfo)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
