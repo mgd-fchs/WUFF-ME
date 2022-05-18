@@ -11,8 +11,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="checkBoxOwner">Owner</string>
-    <string name="checkBoxSearcher">Searcher</string>
+    <string name="checkBoxOwner">owner</string>
+    <string name="checkBoxSearcher">searcher</string>
     <string name="buttonSelectUsertype">Select</string>
     <string name="userTypeInfo">ⓘ Select to be \"Owner\", \"Searcher\" or both by clicking the corresponding checkbox and pressing the \"Select\" button</string>
 </resources>
