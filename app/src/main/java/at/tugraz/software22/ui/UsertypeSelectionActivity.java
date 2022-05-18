@@ -2,6 +2,7 @@ package at.tugraz.software22.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +10,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import at.tugraz.software22.R;
+import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.service.UserService;
@@ -20,7 +24,7 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
     Button buttonSelectUsertype;
     CheckBox checkBoxOwner;
     CheckBox checkBoxSearcher;
-    UserService userService;
+    private static Application wuffApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +32,13 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.usertype_selection);
 
         initialiseViews();
-        userService = new UserService();
+        wuffApp = getApplication();
 
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
-            userService.setUserType("hans", userType);
+            ((WuffApplication) wuffApp).getUserService().setUserType(userType);
             Intent selectedTypeIntent = new Intent();
-            selectedTypeIntent.putExtra("hans", userType.name());
+            selectedTypeIntent.putExtra(FirebaseAuth.getInstance().getCurrentUser().getUid(), userType.name());
             setResult(RESULT_OK, selectedTypeIntent);
             finish();
         });
