@@ -139,4 +139,20 @@ public class EditProfileActivityTest {
         Mockito.verify(userRepositoryMock, Mockito.never()).updateUser(Mockito.any());
     }
 
+    @Test
+    public void givenLoggedInUser_whenEditNameButtonClicked_thenEnableEditTextUserNameAndChangeButtonImage() {
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .check(ViewAssertions.matches(ViewMatchers.isEnabled()));
+        Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
+                .check(ViewAssertions.matches(ViewMatchers.hasBackground(R.drawable.ic_baseline_check_24)));
+    }
+
 }
