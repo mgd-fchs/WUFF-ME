@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 
@@ -47,7 +48,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() {
+    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() throws UserNotLoggedInException {
         String newUserName = "New Name";
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "SCRUM Master"));
         ActivityScenario.launch(EditProfileActivity.class);
@@ -65,7 +66,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() {
+    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() throws UserNotLoggedInException {
         LocalDate newUserBirthday = LocalDate.of(2000,11,3);
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
@@ -102,7 +103,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() {
+    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() throws UserNotLoggedInException {
         String newJob = "Scrum Master";
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
@@ -120,7 +121,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
+    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() throws UserNotLoggedInException {
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
 

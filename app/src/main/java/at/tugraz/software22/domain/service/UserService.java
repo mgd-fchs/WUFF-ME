@@ -8,11 +8,12 @@ import java.util.Map;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
-    private FirebaseAuth mAuth;
+    private final FirebaseAuth mAuth;
 
     User loggedInUser;
 
@@ -32,10 +33,18 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user) throws UserNotLoggedInException {
         Map<String, Object> users = new HashMap<>();
-        users.put(mAuth.getCurrentUser().getUid(), user);
+        users.put(getCurrentUserId(), user);
         database.getReference().child(Constants.USER_TABLE).updateChildren(users);
         loggedInUser = user;
+    }
+
+    private String getCurrentUserId() throws UserNotLoggedInException {
+        var currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            throw new UserNotLoggedInException();
+        }
+        return currentUser.getUid();
     }
 }

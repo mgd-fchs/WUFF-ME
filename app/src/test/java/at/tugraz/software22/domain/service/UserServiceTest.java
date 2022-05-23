@@ -11,14 +11,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 
-import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -36,7 +34,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void givenDatabaseWithOneUser_whenUserUpdated_thenLoggedInUserIsUpdated(){
+    public void givenDatabaseWithOneUser_whenUserUpdated_thenLoggedInUserIsUpdated() throws UserNotLoggedInException {
         String uid = "h6MVwVQvlZOy6FeJh9us88aTNvu1";
         User updatedUser = new User("Testuser", LocalDate.now(), "Developer");
         FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
