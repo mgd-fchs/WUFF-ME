@@ -1,7 +1,12 @@
 package at.tugraz.software22;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.view.View;
+import android.widget.ImageButton;
 
+import androidx.annotation.DrawableRes;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -10,6 +15,9 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -151,8 +159,6 @@ public class EditProfileActivityTest {
                 .check(ViewAssertions.matches(ViewMatchers.isEnabled()));
         Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
                 .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
-        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
-                .check(ViewAssertions.matches(ViewMatchers.hasBackground(R.drawable.ic_baseline_check_24)));
     }
 
 }
