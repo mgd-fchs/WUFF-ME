@@ -1,12 +1,6 @@
 package at.tugraz.software22;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.widget.ImageButton;
-
-import androidx.annotation.DrawableRes;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -15,11 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -148,7 +138,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenEditNameButtonClicked_thenEnableEditTextUserNameAndChangeButtonImage() {
+    public void givenLoggedInUser_whenEditNameButtonClicked_thenEditTextUserNameGetsFocus() {
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
         ActivityScenario.launch(EditProfileActivity.class);
 
@@ -158,6 +148,34 @@ public class EditProfileActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
                 .check(ViewAssertions.matches(ViewMatchers.isEnabled()));
         Espresso.onView(ViewMatchers.withId(R.id.editTextUserName))
+                .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenEditAgeButtonClicked_thenEditTextAgeGetsFocus() {
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
+                .check(ViewAssertions.matches(ViewMatchers.isEnabled()));
+        Espresso.onView(ViewMatchers.withId(R.id.editTextAge))
+                .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenEditJobButtonClicked_thenEditTextJobGetsFocus() {
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(new User("Testuser", LocalDate.now(), "Developer"));
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditJob))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.editTextJob))
+                .check(ViewAssertions.matches(ViewMatchers.isEnabled()));
+        Espresso.onView(ViewMatchers.withId(R.id.editTextJob))
                 .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
     }
 
