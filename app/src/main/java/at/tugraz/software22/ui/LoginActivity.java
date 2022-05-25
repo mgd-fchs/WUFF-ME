@@ -1,5 +1,6 @@
 package at.tugraz.software22.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
                     uploadImage.setVisibility(View.VISIBLE);
                     loginBtn.setText("REGISTER");
                 } else {
-                    usernameInput.setVisibility(View.INVISIBLE);
+                    usernameInput.setVisibility(View.GONE);
                     uploadImage.setVisibility(View.GONE);
                     loginBtn.setText("LOG IN");
                 }
