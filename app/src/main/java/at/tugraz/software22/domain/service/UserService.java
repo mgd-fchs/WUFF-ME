@@ -88,7 +88,7 @@ public class UserService implements UserRepository {
     @Override
     public void uploadProfilePicture(File picture) {
         Uri fileUri = Uri.fromFile(picture);
-        loggedInUser.setProfilePicture("images/" + fileUri.getLastPathSegment());
+        loggedInUser.setProfilePicture(Constants.USER_PROFILE_PICTURE_STORAGE_LOCATION + '/' + fileUri.getLastPathSegment());
     }
 
     @Override
