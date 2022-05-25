@@ -1,5 +1,7 @@
 package at.tugraz.software22;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewAction;
@@ -89,13 +91,13 @@ public class UsersServiceTest {
         ActivityScenario.launch(LoginActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
-                .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())));
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+                .check(ViewAssertions.matches(isDisplayed()));
     }
 
 
