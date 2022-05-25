@@ -1,11 +1,16 @@
 package at.tugraz.software22.ui;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private static Application wuffApp;
     private UserViewModel userViewModel;
     private static String username;
+
+    private final ActivityResultLauncher<Intent> selectTypeActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            this::onSelectedTypeActivityResult);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,5 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, UsertypeSelectionActivity.class);
         selectTypeActivityLauncher.launch(intent);
+    }
+
+    private void onSelectedTypeActivityResult(ActivityResult result) {
+        Toast.makeText(this, "Type: " + result.getData().getStringExtra(FirebaseAuth.getInstance().getCurrentUser().getUid()), Toast.LENGTH_LONG).show();
     }
 }
