@@ -1,22 +1,18 @@
 package at.tugraz.software22.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
-import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
-import at.tugraz.software22.domain.service.UserService;
 
 public class UsertypeSelectionActivity extends AppCompatActivity {
 

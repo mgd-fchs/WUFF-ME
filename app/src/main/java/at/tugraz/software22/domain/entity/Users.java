@@ -1,7 +1,5 @@
 package at.tugraz.software22.domain.entity;
 
-import androidx.room.PrimaryKey;
-
 import at.tugraz.software22.domain.enums.UserType;
 
 public class Users {
