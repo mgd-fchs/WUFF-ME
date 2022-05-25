@@ -1,5 +1,11 @@
 package at.tugraz.software22;
 
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -7,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +27,7 @@ import java.util.concurrent.Executor;
 
 import at.tugraz.software22.domain.entity.Users;
 import at.tugraz.software22.domain.service.UserService;
+import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 @RunWith(AndroidJUnit4.class)
@@ -75,4 +83,20 @@ public class UsersServiceTest {
 
         Assert.assertNotEquals(oldProfilePicture, newProfilePicture);
     }
+
+    @Test
+    public void givenNewUser_whenSwitchToRegistration_thenVerifyThatProfilePictureUploadAppears(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isDisplayed())));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+
 }
