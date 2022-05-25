@@ -2,10 +2,13 @@ package at.tugraz.software22.domain.entity;
 
 import androidx.room.PrimaryKey;
 
+import at.tugraz.software22.domain.enums.UserType;
+
 public class Users {
     private String username;
     private String password;
     private String email;
+    private UserType type;
 
     public Users() {
     }
@@ -39,5 +42,14 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
+    }
+
 
 }

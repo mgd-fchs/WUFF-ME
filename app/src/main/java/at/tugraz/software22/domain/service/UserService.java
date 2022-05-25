@@ -75,8 +75,11 @@ public class UserService implements UserRepository {
 
     @Override
     public void setUserType(UserType userType) {
-        database.getReference().child(Constants.USER_TABLE).child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("type").setValue(userType);
+        Map<String, Object> users = new HashMap<>();
+        String uid = mAuth.getCurrentUser().getUid();
+        loggedInUser.setType(userType);
+        users.put(uid, loggedInUser);
+        database.getReference().child(Constants.USER_TABLE).updateChildren(users);
     }
 
 }
