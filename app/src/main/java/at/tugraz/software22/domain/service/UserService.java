@@ -25,6 +25,9 @@ public class UserService implements UserRepository {
     private static final String TAG = "test";
     private final MutableLiveData<Boolean> registrationSuccess = new MutableLiveData<>();
 
+    protected Users loggedInUser;
+
+
     public UserService(FirebaseDatabase database, FirebaseAuth mAuth) {
         this.database = database;
         this.mAuth = mAuth;
