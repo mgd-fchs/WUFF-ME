@@ -3,6 +3,7 @@ package at.tugraz.software22.domain.service;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,10 +30,12 @@ public class UsersServiceTest {
     private FirebaseDatabase database;
     @Mock
     private FirebaseAuth auth;
+    @Mock
+    private FirebaseStorage storage;
 
     private UserViewModel userViewModel;
     private Executor exec = Runnable::run;
-    private UserService userService = new UserService(database, auth);
+    private UserService userService = new UserService(database, auth, storage);
 
     @Before
     public void setUp() {
@@ -48,24 +51,6 @@ public class UsersServiceTest {
         // userViewModel.registerUser(users);
         // Mockito.verify(userService, Mockito.times(1)).registerUser(exec, users);
         // Assert.assertEquals(FirebaseAuth.getInstance().getCurrentUser().getEmail(), "test@test.at");
-    }
-
-
-    @Test
-    public void givenLoggedInUser_whenProfilePictureUploaded_thenVerifyProfilePictureHasChanged() throws IOException {
-        String uid = "h6MVwVQvlZOy6FeJh9us88aTNvu1";
-        FirebaseUser firebaseUser = Mockito.mock(FirebaseUser.class);
-        Mockito.when(firebaseUser.getUid()).thenReturn(uid);
-        Mockito.when(auth.getCurrentUser()).thenReturn(firebaseUser);
-        userService.loggedInUser = new Users();
-
-        File picture = File.createTempFile("testProfilePicture", ".png");
-        String oldProfilePicture = userService.getLoggedInUser().getProfilePicture();
-
-        userService.uploadProfilePicture(picture);
-        String newProfilePicture = userService.getLoggedInUser().getProfilePicture();
-
-        Assert.assertNotEquals(oldProfilePicture, newProfilePicture);
     }
 
 }

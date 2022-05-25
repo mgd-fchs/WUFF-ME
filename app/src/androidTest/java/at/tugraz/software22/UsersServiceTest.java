@@ -2,11 +2,23 @@ package at.tugraz.software22;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
+import at.tugraz.software22.domain.entity.Users;
 import at.tugraz.software22.domain.service.UserService;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
@@ -16,18 +28,16 @@ public class UsersServiceTest {
 //    @Rule
 //    public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private final Executor currentThreadExecutor = Runnable::run;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    @Mock
-    private WuffApplication applicationMock;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    @Mock
-    private UserService userServiceMock;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
 
-    /**
-     * Class under test (already setup with test doubles in the setUp method).
-     */
     private UserViewModel userViewModel;
+    private Executor exec = Runnable::run;
+    private UserService userService = new UserService(database, auth, storage);
+
 
     /**
      * Set up all test doubles (i.e., the applicationMock, the userServiceMock and
@@ -52,4 +62,17 @@ public class UsersServiceTest {
 //        userViewModel.registerUser(user);
 //        Assert.assertEquals(FirebaseAuth.getInstance().getCurrentUser().getEmail(), "test@test.at");
 //    }
+
+    @Test
+    public void givenLoggedInUser_whenProfilePictureUploaded_thenVerifyProfilePictureHasChanged() throws IOException {
+        userService.loggedInUser = new Users("testuser","1234", "user@user.com");
+
+        File picture = File.createTempFile("testProfilePicture", ".png");
+        String oldProfilePicture = userService.getLoggedInUser().getProfilePicture();
+
+        userService.uploadProfilePicture(picture);
+        String newProfilePicture = userService.getLoggedInUser().getProfilePicture();
+
+        Assert.assertNotEquals(oldProfilePicture, newProfilePicture);
+    }
 }

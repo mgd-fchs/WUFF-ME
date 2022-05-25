@@ -4,7 +4,6 @@ public class Users {
     private String username;
     private String password;
     private String email;
-
     private String profilePicture;
 
     public Users() {
@@ -45,5 +44,5 @@ public class Users {
         return profilePicture;
     }
 
-
+    public void setProfilePicture(String storageRef){this.profilePicture = storageRef;}
 }

@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,9 +28,14 @@ public class WuffApplication extends Application {
         return firebaseAuth;
     }
 
+    private FirebaseStorage createFirebaseStorage() {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        return firebaseStorage;
+    }
+
     public UserService getUserService() {
         if (userService == null) {
-            userService = new UserService(createDatabaseInstance(), createAuthInstance());
+            userService = new UserService(createDatabaseInstance(), createAuthInstance(), createFirebaseStorage());
         }
         return userService;
     }
