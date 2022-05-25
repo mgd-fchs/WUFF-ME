@@ -83,6 +83,8 @@ public class LoginActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
         // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);
+
+        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
         Assert.assertEquals("email@yahoo.at", FirebaseAuth.getInstance().getCurrentUser().getEmail());
     }
 
