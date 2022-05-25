@@ -67,8 +67,12 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void setUserType(String username, UserType userType) {
-        database.getReference().child(Constants.USER_TABLE).child(username).child("type").setValue(userType);
+    public void setUserType(UserType userType) {
+        Map<String, Object> users = new HashMap<>();
+        String uid = mAuth.getCurrentUser().getUid();
+        loggedInUser.setType(userType);
+        users.put(uid, loggedInUser);
+        database.getReference().child(Constants.USER_TABLE).updateChildren(users);
     }
 
     @Override
@@ -92,10 +96,4 @@ public class UserService implements UserRepository {
         mAuth.signOut();
         registrationSuccess.postValue(false);
     }
-
-    @Override
-    public void setUserType(String username, UserType userType) {
-        ref.child(Constants.USER_TABLE).child("-N1mLLkwu95ZlEFqYVi6").child("type").setValue(userType);
-    }
-
 }
