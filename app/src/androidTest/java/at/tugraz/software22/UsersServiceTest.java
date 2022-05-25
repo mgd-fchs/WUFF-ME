@@ -86,19 +86,4 @@ public class UsersServiceTest {
         Assert.assertNotEquals(oldProfilePicture, newProfilePicture);
     }
 
-    @Test
-    public void givenNewUser_whenSwitchToRegistration_thenVerifyThatProfilePictureUploadAppears(){
-        ActivityScenario.launch(LoginActivity.class);
-
-        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
-                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-
-        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
-                .perform(ViewActions.click());
-
-        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
-                .check(ViewAssertions.matches(isDisplayed()));
-    }
-
-
 }
