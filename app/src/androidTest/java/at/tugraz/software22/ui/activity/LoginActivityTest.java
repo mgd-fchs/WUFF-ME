@@ -35,16 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
-import at.tugraz.software22.domain.entity.Users;
 import at.tugraz.software22.domain.service.UserService;
 import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.MainActivity;
-import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
-    private static UserService userServiceMock;
-    private Resources resources;
+
 
 
     @BeforeClass
@@ -55,12 +52,9 @@ public class LoginActivityTest {
 
 
     @Rule public Timeout timeout = new Timeout(120000, TimeUnit.MILLISECONDS);
+    @Rule
+    public ActivityScenarioRule rule = new ActivityScenarioRule<>(LoginActivity.class);
 
-    @Before
-    public void setUp() {
-        resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
-
-    }
 
     @Test
     public void givenSuccessfulRegistration_whenRegisterButtonPressed_thenDisplayMainActivity() throws InterruptedException {
@@ -76,6 +70,8 @@ public class LoginActivityTest {
         Thread.sleep(2000);
         intended(hasComponent(MainActivity.class.getName()));
         Intents.release();
+
+        Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
 
     @Test
@@ -93,7 +89,7 @@ public class LoginActivityTest {
     public void givenExistingUser_whenLoginButtonPressed_thenVerifyThatCurrentUserIsSet() throws InterruptedException {
         ActivityScenario.launch(LoginActivity.class);
         Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at"));
-        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
         // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);

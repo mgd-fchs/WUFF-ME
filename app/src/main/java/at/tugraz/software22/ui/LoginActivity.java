@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (username.isEmpty()) {
                         usernameInput.setError("Please enter a username!");
                         usernameInput.requestFocus();
+                        return;
                     }
                 }
 
@@ -69,25 +70,33 @@ public class LoginActivity extends AppCompatActivity {
                 if (email.isEmpty()) {
                     emailInput.setError("Please enter an email address!");
                     emailInput.requestFocus();
+                    return;
                 }
                 if (password.isEmpty()) {
                     passwordInput.setError("Please enter a password!");
                     passwordInput.requestFocus();
+                    return;
                 }
 
                 if (password.length() < 6){
                     passwordInput.setError("Password needs to contain at least 6 characters!");
                     passwordInput.requestFocus();
+                    return;
                 }
 
                 if (!email.matches("^(.+)@(\\S+)$")) {
                     emailInput.setError("This email address is invalid!");
                     emailInput.requestFocus();
+                    return;
                 }
 
                 Users users = new Users(username, password, email);
 
-                userViewModel.registerUser(users);
+                if (usernameInput.getVisibility() == View.VISIBLE) {
+                    userViewModel.registerUser(users);
+                } else {
+                    userViewModel.loginUser(users);
+                }
             }
 
         });

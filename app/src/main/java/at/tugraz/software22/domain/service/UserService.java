@@ -1,6 +1,8 @@
 package at.tugraz.software22.domain.service;
 
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -20,6 +22,8 @@ import java.util.concurrent.Executor;
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.Users;
 import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.ui.LoginActivity;
+import at.tugraz.software22.ui.MainActivity;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
@@ -59,7 +63,6 @@ public class UserService implements UserRepository {
                             registrationSuccess.postValue(true);
 
                         } else {
-                            // TODO: Create toast
                             System.out.println("registration failed");
 
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -68,6 +71,32 @@ public class UserService implements UserRepository {
                     }
                 });
 
+    }
+
+    @Override
+    public void loginUser(Executor exec, Users user) {
+        mAuth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
+                .addOnCompleteListener(exec, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            registrationSuccess.postValue(true);
+
+                        } else {
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            registrationSuccess.postValue(false);
+
+                        }
+                    }
+                });
+    }
+
+    public void logout() {
+        mAuth.signOut();
+        registrationSuccess.postValue(false);
     }
 
 }

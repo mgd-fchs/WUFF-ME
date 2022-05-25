@@ -38,8 +38,21 @@ public class UserViewModel extends AndroidViewModel {
         });
     }
 
+    public void loginUser(Users users) {
+
+        executor.execute(() -> {
+            this.userService.loginUser(executor, users);
+        });
+    }
+
     public UserService getUserService(){
         return userService;
+    }
+
+    public void logout() {
+        executor.execute(() -> {
+            this.userService.logout();
+        });
     }
 
 }

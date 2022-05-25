@@ -1,12 +1,10 @@
 package at.tugraz.software22.ui.viewmodel;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -27,8 +25,6 @@ import at.tugraz.software22.domain.service.UserService;
 @RunWith(MockitoJUnitRunner.class)
 public class UsersViewModelTest {
 
-    @Rule
-    public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private final Executor currentThreadExecutor = Runnable::run;
 
