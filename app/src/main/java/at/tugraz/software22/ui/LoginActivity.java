@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText passwordInput = (EditText)findViewById(R.id.password);
         EditText usernameInput = (EditText)findViewById(R.id.username);
         Switch toggleBtn = (Switch) findViewById(R.id.toggle_register);
+        ImageView uploadImage = (ImageView)findViewById(R.id.image_button_add_profile_picture);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         wuffApp = getApplication();
@@ -42,9 +44,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (isChecked){
                     usernameInput.setVisibility(View.VISIBLE);
+                    uploadImage.setVisibility(View.VISIBLE);
                     loginBtn.setText("REGISTER");
                 } else {
                     usernameInput.setVisibility(View.INVISIBLE);
+                    uploadImage.setVisibility(View.GONE);
                     loginBtn.setText("LOG IN");
                 }
             }
