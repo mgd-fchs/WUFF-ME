@@ -1,5 +1,6 @@
 package at.tugraz.software22.domain.service;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.HashMap;
@@ -25,16 +28,18 @@ import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
+    final FirebaseStorage storage;
     DatabaseReference ref;
     private FirebaseAuth mAuth;
 
-    Users loggedInUser;
+    public Users loggedInUser;
 
     private static final String TAG = "test";
     private final MutableLiveData<Boolean> registrationSuccess = new MutableLiveData<>();
 
-    public UserService(FirebaseDatabase database, FirebaseAuth mAuth) {
+    public UserService(FirebaseDatabase database, FirebaseAuth mAuth, FirebaseStorage storage) {
         this.database = database;
+        this.storage = storage;
         this.mAuth = mAuth;
     }
 
@@ -44,7 +49,6 @@ public class UserService implements UserRepository {
 
     @Override
     public void registerUser(Executor exec, Users users) {
-
 
         mAuth.createUserWithEmailAndPassword(users.getEmail(), users.getPassword())
                 .addOnCompleteListener(exec, new OnCompleteListener<AuthResult>() {
@@ -81,10 +85,10 @@ public class UserService implements UserRepository {
         return loggedInUser;
     }
 
-
     @Override
     public void uploadProfilePicture(File picture) {
-
+        Uri fileUri = Uri.fromFile(picture);
+        loggedInUser.setProfilePicture("images/" + fileUri.getLastPathSegment());
     }
 
     @Override
