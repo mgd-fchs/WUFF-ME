@@ -3,27 +3,18 @@ package at.tugraz.software22.ui.activity;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-import android.content.Intent;
-import android.content.res.Resources;
-import android.util.Log;
-
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
-import at.tugraz.software22.domain.service.UserService;
 import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.MainActivity;
 
@@ -53,7 +43,7 @@ public class LoginActivityTest {
 
     @Rule public Timeout timeout = new Timeout(120000, TimeUnit.MILLISECONDS);
     @Rule
-    public ActivityScenarioRule rule = new ActivityScenarioRule<>(LoginActivity.class);
+    public ActivityScenarioRule<LoginActivity> rule = new ActivityScenarioRule<>(LoginActivity.class);
 
 
     @Test
@@ -75,7 +65,7 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void givenNoUsername_whenRegisterButtonPressed_thenVerifyWarning() throws InterruptedException {
+    public void givenNoUsername_whenRegisterButtonPressed_thenVerifyWarning() {
         ActivityScenario.launch(LoginActivity.class);
         String expectedWarning = "Please enter a username!";
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());

@@ -1,7 +1,5 @@
 package at.tugraz.software22.domain.entity;
 
-import androidx.room.PrimaryKey;
-
 public class Users {
     private String username;
     private String password;
