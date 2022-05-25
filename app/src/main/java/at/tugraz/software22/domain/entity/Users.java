@@ -1,11 +1,11 @@
 package at.tugraz.software22.domain.entity;
 
-import androidx.room.PrimaryKey;
-
 public class Users {
     private String username;
     private String password;
     private String email;
+
+    private String profilePicture;
 
     public Users() {
     }
@@ -39,5 +39,11 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
 
 }

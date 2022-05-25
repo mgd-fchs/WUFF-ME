@@ -3,6 +3,7 @@ package at.tugraz.software22.domain.service;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -25,6 +27,9 @@ public class UserService implements UserRepository {
     final FirebaseDatabase database;
     DatabaseReference ref;
     private FirebaseAuth mAuth;
+
+    Users loggedInUser;
+
     private static final String TAG = "test";
     private final MutableLiveData<Boolean> registrationSuccess = new MutableLiveData<>();
 
@@ -70,4 +75,20 @@ public class UserService implements UserRepository {
 
     }
 
+
+    @Override
+    public Users getLoggedInUser() {
+        return loggedInUser;
+    }
+
+
+    @Override
+    public void uploadProfilePicture(File picture) {
+
+    }
+
+    @Override
+    public File getProfilePicture() {
+        return null;
+    }
 }
