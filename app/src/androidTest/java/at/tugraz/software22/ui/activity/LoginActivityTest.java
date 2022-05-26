@@ -78,6 +78,27 @@ public class LoginActivityTest {
 
     }
 
+    @Test
+    public void givenRegistrationAndProfilePictureTaken_whenClickOnLoginSwitch_thenVerifyThatProfilePictureDisappears(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
+        Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgCaptureResult);
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+
+    }
+
      private Instrumentation.ActivityResult createImageCaptureActivityResultStub() {
          Bundle bundle = new Bundle();
          bundle.putParcelable("IMG_DATA", BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher));
