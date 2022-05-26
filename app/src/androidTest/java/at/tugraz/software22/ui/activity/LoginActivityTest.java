@@ -28,7 +28,9 @@ import androidx.test.rule.ActivityTestRule;
 
 import at.tugraz.software22.R;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,12 +44,11 @@ public class LoginActivityTest {
     @Before
     public void setUp() {
         resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
-        Intents.init();
     }
-
 
     @Test
     public void givenNewUser_whenSwitchToRegistration_thenVerifyThatProfilePictureUploadAppears(){
+        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
@@ -58,10 +59,12 @@ public class LoginActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
                 .check(ViewAssertions.matches(isDisplayed()));
+        Intents.release();
     }
 
     @Test
     public void givenRegistration_whenClickOnNewProfilePicture_thenVerifyCameraViewAppears(){
+        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
@@ -76,10 +79,14 @@ public class LoginActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
                 .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+        Intents.release();
     }
 
     @Test
     public void givenRegistrationAndProfilePictureTaken_whenClickOnLoginSwitch_thenVerifyThatProfilePictureDisappears(){
+        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
@@ -95,7 +102,8 @@ public class LoginActivityTest {
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
-                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)));
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+        Intents.release();
 
     }
 

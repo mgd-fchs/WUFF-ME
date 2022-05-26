@@ -57,8 +57,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
-                uploadImage.setVisibility(View.INVISIBLE);
+                uploadImage.setVisibility(View.VISIBLE);
                 profilePicturePreview.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginBtn.setText("REGISTER");
                 } else {
                     usernameInput.setVisibility(View.GONE);
+                    profilePicturePreview.setVisibility(View.GONE);
                     uploadImage.setVisibility(View.GONE);
                     loginBtn.setText("LOG IN");
                 }
