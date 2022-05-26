@@ -7,31 +7,26 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 
-import androidx.activity.result.ActivityResult;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.intent.Intents;
-import androidx.test.espresso.intent.matcher.IntentMatchers;
+
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
+
 
 import at.tugraz.software22.R;
 
-import org.junit.After;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import at.tugraz.software22.ui.LoginActivity;
@@ -48,7 +43,6 @@ public class LoginActivityTest {
 
     @Test
     public void givenNewUser_whenSwitchToRegistration_thenVerifyThatProfilePictureUploadAppears(){
-        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
@@ -59,7 +53,6 @@ public class LoginActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
                 .check(ViewAssertions.matches(isDisplayed()));
-        Intents.release();
     }
 
     @Test

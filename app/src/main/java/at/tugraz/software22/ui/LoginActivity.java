@@ -1,8 +1,6 @@
 package at.tugraz.software22.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,13 +10,13 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import at.tugraz.software22.R;
@@ -44,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailInput = (EditText)findViewById(R.id.email);
         EditText passwordInput = (EditText)findViewById(R.id.password);
         EditText usernameInput = (EditText)findViewById(R.id.username);
-        Switch toggleBtn = (Switch) findViewById(R.id.toggle_register);
+        SwitchCompat toggleBtn = (SwitchCompat) findViewById(R.id.toggle_register);
         ImageView uploadImage = (ImageView)findViewById(R.id.image_button_add_profile_picture);
         profilePicturePreview = (ImageView)findViewById(R.id.profile_picture_preview);
 
@@ -69,12 +67,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (isChecked){
                     usernameInput.setVisibility(View.VISIBLE);
                     uploadImage.setVisibility(View.VISIBLE);
-                    loginBtn.setText("REGISTER");
+                    loginBtn.setText(R.string.register_btn);
                 } else {
                     usernameInput.setVisibility(View.GONE);
                     profilePicturePreview.setVisibility(View.GONE);
                     uploadImage.setVisibility(View.GONE);
-                    loginBtn.setText("LOG IN");
+                    loginBtn.setText(R.string.login_btn);
                 }
             }
         });
