@@ -23,7 +23,8 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_button_add_profile_picture" />
+        app:layout_constraintTop_toBottomOf="@+id/image_button_add_profile_picture"
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/email"
@@ -35,6 +36,7 @@
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -99,12 +101,22 @@
         android:id="@+id/image_button_add_profile_picture"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="16dp"
         android:clickable="true"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_take_photo" />
+        app:srcCompat="@drawable/ic_take_photo"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/profile_picture_preview"
+        android:visibility="gone"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
