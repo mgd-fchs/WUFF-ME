@@ -2,8 +2,11 @@ package at.tugraz.software22.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -12,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +31,12 @@ public class LoginActivity extends AppCompatActivity {
     public static final String INTENT_USERNAME = "";
     private static String username;
 
+    private ImageView profilePicturePreview;
+
+    private final ActivityResultLauncher<Intent> activityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    this::onCreateActivityResult);
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -34,11 +46,21 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameInput = (EditText)findViewById(R.id.username);
         Switch toggleBtn = (Switch) findViewById(R.id.toggle_register);
         ImageView uploadImage = (ImageView)findViewById(R.id.image_button_add_profile_picture);
+        profilePicturePreview = (ImageView)findViewById(R.id.profile_picture_preview);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         wuffApp = getApplication();
 
         Button loginBtn = (Button)findViewById(R.id.login_btn);
+
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+                uploadImage.setVisibility(View.INVISIBLE);
+                profilePicturePreview.setVisibility(View.VISIBLE);
+            }
+        });
 
         toggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -108,6 +130,18 @@ public class LoginActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+    }
 
+    private void dispatchTakePictureIntent() {
+        Intent createTakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        activityResultLauncher.launch(createTakePictureIntent);
+    }
+
+    private void onCreateActivityResult(ActivityResult result){
+        if(result.getResultCode() == RESULT_OK && result.getData() != null){
+            Bundle extras = result.getData().getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            profilePicturePreview.setImageBitmap(imageBitmap);
+        }
     }
 }

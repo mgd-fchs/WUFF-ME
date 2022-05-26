@@ -64,14 +64,14 @@ public class LoginActivityTest {
     public void givenRegistration_whenClickOnNewProfilePicture_thenVerifyCameraViewAppears(){
         ActivityScenario.launch(LoginActivity.class);
 
+        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
+        Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgCaptureResult);
+
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
                 .perform(ViewActions.click());
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
                 .perform(ViewActions.click());
-
-        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
-        Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgCaptureResult);
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
                 .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
