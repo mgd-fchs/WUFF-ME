@@ -90,27 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
+                validatePasswordField(passwordInput);
+                validateEmailField(emailInput);
+
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-
-                if (email.isEmpty()) {
-                    emailInput.setError("Please enter an email address!");
-                    emailInput.requestFocus();
-                }
-                if (password.isEmpty()) {
-                    passwordInput.setError("Please enter a password!");
-                    passwordInput.requestFocus();
-                }
-
-                if (password.length() < 6){
-                    passwordInput.setError("Password needs to contain at least 6 characters!");
-                    passwordInput.requestFocus();
-                }
-
-                if (!email.matches("^(.+)@(\\S+)$")) {
-                    emailInput.setError("This email address is invalid!");
-                    emailInput.requestFocus();
-                }
 
                 Users users = new Users(username, password, email);
 
@@ -130,6 +114,32 @@ public class LoginActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+    }
+
+    private void validatePasswordField(EditText passwordField){
+        String password = passwordField.getText().toString();
+        if (password.isEmpty()) {
+            passwordField.setError("Please enter a password!");
+            passwordField.requestFocus();
+        }
+
+        if (password.length() < 6){
+            passwordField.setError("Password needs to contain at least 6 characters!");
+            passwordField.requestFocus();
+        }
+    }
+
+    private void validateEmailField(EditText emailField){
+        String email = emailField.getText().toString();
+        if (email.isEmpty()) {
+            emailField.setError("Please enter an email address!");
+            emailField.requestFocus();
+        }
+
+        if (!email.matches("^(.+)@(\\S+)$")) {
+            emailField.setError("This email address is invalid!");
+            emailField.requestFocus();
+        }
     }
 
     private void dispatchTakePictureIntent() {
