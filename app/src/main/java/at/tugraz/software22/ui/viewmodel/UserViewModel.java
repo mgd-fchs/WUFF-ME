@@ -14,8 +14,6 @@ public class UserViewModel extends AndroidViewModel {
 
     private final UserService userService;
     private final Executor executor;
-    private static boolean ret;
-    private static String username;
 
     public UserViewModel(Application application) {
         super(application);
@@ -25,21 +23,22 @@ public class UserViewModel extends AndroidViewModel {
         executor =  userApplication.getBackgroundExecutor();
     }
 
-    public void loadData() {
-        executor.execute(() -> {
-
-        });
-    }
-
     public void registerUser(Users users) {
 
-        executor.execute(() -> {
-            this.userService.registerUser(executor, users);
-        });
+        executor.execute(() -> this.userService.registerUser(executor, users));
+    }
+
+    public void loginUser(Users users) {
+
+        executor.execute(() -> this.userService.loginUser(executor, users));
     }
 
     public UserService getUserService(){
         return userService;
+    }
+
+    public void logout() {
+        executor.execute(this.userService::logout);
     }
 
 }

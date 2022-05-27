@@ -18,13 +18,11 @@ public class WuffApplication extends Application {
     private static Executor backgroundExecutor;
 
     private FirebaseDatabase createDatabaseInstance() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        return firebaseDatabase;
+        return FirebaseDatabase.getInstance();
     }
 
     private FirebaseAuth createAuthInstance() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        return firebaseAuth;
+        return FirebaseAuth.getInstance();
     }
 
     public UserService getUserService() {
@@ -39,11 +37,6 @@ public class WuffApplication extends Application {
             backgroundExecutor = Executors.newFixedThreadPool(4);
         }
         return backgroundExecutor;
-    }
-
-    @VisibleForTesting
-    public static void setUserService(UserService testUserService) {
-        userService = testUserService;
     }
 
     @VisibleForTesting
