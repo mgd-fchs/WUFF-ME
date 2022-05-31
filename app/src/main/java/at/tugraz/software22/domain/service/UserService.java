@@ -56,6 +56,8 @@ public class UserService implements UserRepository {
 
                         registrationSuccess.postValue(true);
 
+                        loggedInUser = users;
+
                     } else {
                         System.out.println("registration failed");
 
@@ -83,6 +85,8 @@ public class UserService implements UserRepository {
 
                         Log.d(TAG, "signInWithEmail:success");
                         registrationSuccess.postValue(true);
+
+                        loggedInUser = user;
 
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.getException());

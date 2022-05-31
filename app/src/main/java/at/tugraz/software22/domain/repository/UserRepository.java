@@ -9,5 +9,5 @@ public interface UserRepository {
     void registerUser(Executor exec, Users user);
     void loginUser(Executor exec, Users user);
     void logout();
-    void setUserType(String username, UserType userType);
+    void setUserType(UserType userType);
 }
