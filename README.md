@@ -1,25 +1,27 @@
-# [Add your product name]
+# WuffMe
 
-*Short name: [Add product short name consisting of 3-15 uppercase characters to be used as issue prefix]*
+*Short name: WUFF*
 
-[Describe your product idea in one to three sentences]
+This app connects people who want to spent time with animals and people who are willing to share 
+their animal. It’s like tinder but matching animal with a person.
 
-## [Add your team name]
 
-*Team number: [Add your team number]*
+## Wednesday Productions
+
+*Team number: 1*
 
 | Name            | Role           |
 | --------------- | -------------- |
-| [Add your name] | Product owner  |
-| [Add your name] | Scrum master   |
-| [Add your name] | Technical lead |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
-| [Add your name] | Developer      |
+|  	Michael Hancianu | Product owner  |
+|  	Ignaz Ötzlinger | Scrum master   |
+|  	Felix Schmidt | Technical lead |
+| Ermal Gashi | Developer      |
+| Michael Baier | Developer      |
+| Jakob Stanta | Developer      |
+| Magdalena Hinterkörner | Developer      |
+| Thomas Pinheiro de Souza | Developer      |
+| Florian Buchacher | Developer      |
+| Christian Rieger | Developer      |
 | [Add your name] | Developer      |
 
 
