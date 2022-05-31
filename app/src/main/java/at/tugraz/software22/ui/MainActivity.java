@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.R;
-import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users users = dataSnapshot.getValue(Users.class);
+                User users = dataSnapshot.getValue(User.class);
                 assert users != null;
                 textView.setText(users.getUsername());
             }

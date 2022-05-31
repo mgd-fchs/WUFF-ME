@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.time.LocalDate;
 
-import at.tugraz.software22.WuffMeApplication;
+import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
@@ -19,7 +19,7 @@ public class EditProfileViewModel extends AndroidViewModel {
 
     public EditProfileViewModel(@NonNull Application application) {
         super(application);
-        userRepository = ((WuffMeApplication)application).getUserRepository();
+        userRepository = ((WuffApplication)application).getUserService();
         currentUser = userRepository.getLoggedInUser();
     }
 

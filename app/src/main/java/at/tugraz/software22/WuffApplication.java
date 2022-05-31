@@ -10,11 +10,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.domain.service.UserService;
 
 public class WuffApplication extends Application {
 
-    private static UserService userService;
+    private static UserRepository userRepository;
     private static Executor backgroundExecutor;
 
     private FirebaseDatabase createDatabaseInstance() {
@@ -25,11 +26,11 @@ public class WuffApplication extends Application {
         return FirebaseAuth.getInstance();
     }
 
-    public UserService getUserService() {
-        if (userService == null) {
-            userService = new UserService(createDatabaseInstance(), createAuthInstance());
+    public UserRepository getUserService() {
+        if (userRepository == null) {
+            userRepository = new UserService(createDatabaseInstance(), createAuthInstance());
         }
-        return userService;
+        return userRepository;
     }
 
     public Executor getBackgroundExecutor() {
@@ -42,5 +43,10 @@ public class WuffApplication extends Application {
     @VisibleForTesting
     public static void setBackgroundExecutor(Executor testBackgroundExecutor) {
         backgroundExecutor = testBackgroundExecutor;
+    }
+
+    @VisibleForTesting
+    public static void setUserRepository(UserRepository userRepository) {
+        WuffApplication.userRepository = userRepository;
     }
 }
