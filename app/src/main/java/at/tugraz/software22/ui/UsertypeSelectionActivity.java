@@ -33,10 +33,9 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
             ((WuffApplication) wuffApp).getUserService().setUserType(userType);
-            Intent selectedTypeIntent = new Intent();
-            selectedTypeIntent.putExtra(FirebaseAuth.getInstance().getCurrentUser().getUid(), userType.name());
-            setResult(RESULT_OK, selectedTypeIntent);
-            finish();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
     }
 

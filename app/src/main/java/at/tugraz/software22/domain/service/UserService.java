@@ -14,16 +14,16 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.Constants;
+import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.entity.Users;
-import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
     private final FirebaseAuth mAuth;
     private static final String TAG = "test";
-    private final MutableLiveData<Boolean> registrationSuccess = new MutableLiveData<>();
+    private final MutableLiveData<UserState> userState = new MutableLiveData<>();
 
     protected Users loggedInUser;
 
@@ -33,8 +33,8 @@ public class UserService implements UserRepository {
         this.mAuth = mAuth;
     }
 
-    public MutableLiveData<Boolean> getRegistrationSuccess() {
-        return registrationSuccess;
+    public MutableLiveData<UserState> getUserState() {
+        return userState;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UserService implements UserRepository {
                         userMap.put(fireBaseUser.getUid(), users);
                         usersRef.updateChildren(userMap);
 
-                        registrationSuccess.postValue(true);
+                        userState.postValue(UserState.LOGGED_IN_FROM_REGISTRATION);
 
                         loggedInUser = users;
 
@@ -62,7 +62,7 @@ public class UserService implements UserRepository {
                         System.out.println("registration failed");
 
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        registrationSuccess.postValue(false);
+                        userState.postValue(UserState.NOT_LOGGED_IN);
                     }
                 });
 
@@ -84,13 +84,13 @@ public class UserService implements UserRepository {
                     if (task.isSuccessful()) {
 
                         Log.d(TAG, "signInWithEmail:success");
-                        registrationSuccess.postValue(true);
+                        userState.postValue(UserState.LOGGED_IN_FROM_LOGIN);
 
                         loggedInUser = user;
 
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        registrationSuccess.postValue(false);
+                        userState.postValue(UserState.NOT_LOGGED_IN);
 
                     }
                 });
@@ -98,6 +98,6 @@ public class UserService implements UserRepository {
 
     public void logout() {
         mAuth.signOut();
-        registrationSuccess.postValue(false);
+        userState.postValue(UserState.NOT_LOGGED_IN);
     }
 }
