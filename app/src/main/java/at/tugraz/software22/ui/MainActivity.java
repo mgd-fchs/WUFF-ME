@@ -1,6 +1,9 @@
 package at.tugraz.software22.ui;
 
 import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -9,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +31,10 @@ import at.tugraz.software22.ui.viewmodel.UserViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private UserViewModel userViewModel;
+
+    private final ActivityResultLauncher<Intent> selectTypeActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            this::onSelectedTypeActivityResult);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         });
+    }
 
-
+    private void onSelectedTypeActivityResult(ActivityResult result) {
+        Toast.makeText(this, "Type: " + result.getData().getStringExtra(FirebaseAuth.getInstance().getCurrentUser().getUid()), Toast.LENGTH_LONG).show();
     }
 }

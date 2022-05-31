@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -90,12 +91,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        userViewModel.getUserService().getRegistrationSuccess().observe(this, result -> {
-            if (result){
-
+        userViewModel.getUserService().getUserState().observe(this, result -> {
+            if (result == UserState.LOGGED_IN_FROM_REGISTRATION){
+                Intent intent = new Intent(LoginActivity.this, UsertypeSelectionActivity.class);
+                startActivity(intent);
+            }
+            else if (result == UserState.LOGGED_IN_FROM_LOGIN) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-            } else {
+            }
+            else {
                 Toast toast;
                 toast = Toast.makeText(getApplicationContext(), "Login/Registration unsuccessful!", Toast.LENGTH_LONG);
                 toast.show();
