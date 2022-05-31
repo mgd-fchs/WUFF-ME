@@ -11,12 +11,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import at.tugraz.software22.Constants;
+import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
+import java.util.concurrent.Executor;
+
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.enums.UserType;
-import at.tugraz.software22.domain.entity.Users;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
@@ -25,7 +27,7 @@ public class UserService implements UserRepository {
     private static final String TAG = "test";
     private final MutableLiveData<UserState> userState = new MutableLiveData<>();
 
-    protected Users loggedInUser;
+    protected User loggedInUser;
 
 
     public UserService(FirebaseDatabase database, FirebaseAuth mAuth) {
@@ -33,12 +35,13 @@ public class UserService implements UserRepository {
         this.mAuth = mAuth;
     }
 
+    @Override
     public MutableLiveData<UserState> getUserState() {
         return userState;
     }
 
     @Override
-    public void registerUser(Executor exec, Users users) {
+    public void registerUser(Executor exec, User users) {
 
 
         mAuth.createUserWithEmailAndPassword(users.getEmail(), users.getPassword())
@@ -78,7 +81,7 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void loginUser(Executor exec, Users user) {
+    public void loginUser(Executor exec, User user) {
         mAuth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(exec, task -> {
                     if (task.isSuccessful()) {
@@ -99,5 +102,26 @@ public class UserService implements UserRepository {
     public void logout() {
         mAuth.signOut();
         userState.postValue(UserState.NOT_LOGGED_IN);
+    }
+
+    @Override
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    @Override
+    public void updateUser(User user) throws UserNotLoggedInException {
+        Map<String, Object> users = new HashMap<>();
+        users.put(getCurrentUserId(), user);
+        database.getReference().child(Constants.USER_TABLE).updateChildren(users);
+        loggedInUser = user;
+    }
+
+    private String getCurrentUserId() throws UserNotLoggedInException {
+        var currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            throw new UserNotLoggedInException();
+        }
+        return currentUser.getUid();
     }
 }

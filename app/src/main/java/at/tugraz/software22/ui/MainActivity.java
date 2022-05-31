@@ -1,18 +1,16 @@
 package at.tugraz.software22.ui;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.app.Application;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +23,7 @@ import java.util.Objects;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.R;
-import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Users users = dataSnapshot.getValue(Users.class);
+                User users = dataSnapshot.getValue(User.class);
                 assert users != null;
                 textView.setText(users.getUsername());
             }

@@ -1,17 +1,21 @@
 package at.tugraz.software22.domain.entity;
 
+import java.time.LocalDate;
+
 import at.tugraz.software22.domain.enums.UserType;
 
-public class Users {
+public class User {
     private String username;
     private String password;
     private String email;
     private UserType type;
+    private String job;
+    private LocalDate birthday;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(String username, String password, String email) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -49,5 +53,19 @@ public class Users {
         this.type = type;
     }
 
+    public LocalDate getBirthday() {
+        return birthday;
+    }
 
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
 }

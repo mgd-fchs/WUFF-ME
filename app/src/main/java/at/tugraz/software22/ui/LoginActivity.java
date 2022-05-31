@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import at.tugraz.software22.R;
-import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Users users = new Users(username, password, email);
+            User users = new User(username, password, email);
 
             if (usernameInput.getVisibility() == View.VISIBLE) {
                 userViewModel.registerUser(users);

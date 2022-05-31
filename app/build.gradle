@@ -36,7 +36,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
+
 
 
 dependencies {
@@ -48,7 +52,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    implementation 'com.google.firebase:firebase-database:19.2.1'
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     implementation 'com.google.firebase:firebase-database:20.0.5'
