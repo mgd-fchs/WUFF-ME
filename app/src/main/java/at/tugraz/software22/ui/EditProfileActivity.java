@@ -49,8 +49,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 binding.editTextUserName.requestFocus();
             }
         });
-
-        binding.editTextAge.setText(viewModel.getUserBirthday().toString());
+        if (viewModel.getUserBirthday() != null) {
+            binding.editTextAge.setText(viewModel.getUserBirthday().toString());
+        }
         binding.imageButtonEditAge.setOnClickListener(view -> {
             if(binding.editTextAge.isEnabled()) {
                 LocalDate date;

@@ -2,6 +2,7 @@ package at.tugraz.software22.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
             userViewModel.logout();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
+        });
+
+        Button editProfile = findViewById(R.id.buttonEditProfile);
+        editProfile.setOnClickListener(v -> {
+            startActivity(new Intent(this, EditProfileActivity.class));
         });
     }
 
