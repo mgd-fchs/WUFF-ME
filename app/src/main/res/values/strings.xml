@@ -33,4 +33,6 @@
     <string name="edit_profile_header">Settings</string>
     <string name="edit_profile_age_error">This date format is invalid! Please use YEAR-MONTH-DAY instead.</string>
     <string name="edit_profile_name_empty_error">Please enter your name</string>
+    <string name="edit_profile_birthday">Birthday</string>
+    <string name="edit_profile_job">Job</string>
 </resources>
