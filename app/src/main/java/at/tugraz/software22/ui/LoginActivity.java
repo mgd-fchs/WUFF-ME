@@ -37,10 +37,10 @@ public class LoginActivity extends AppCompatActivity {
 
             if (isChecked){
                 usernameInput.setVisibility(View.VISIBLE);
-                loginBtn.setText("REGISTER");
+                loginBtn.setText(R.string.action_register);
             } else {
                 usernameInput.setVisibility(View.INVISIBLE);
-                loginBtn.setText("LOG IN");
+                loginBtn.setText(R.string.action_sign_in);
             }
         });
 
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 username = usernameInput.getText().toString();
 
                 if (username.isEmpty()) {
-                    usernameInput.setError("Please enter a username!");
+                    usernameInput.setError(getString(R.string.enter_username_alert));
                     usernameInput.requestFocus();
                     return;
                 }
@@ -60,24 +60,24 @@ public class LoginActivity extends AppCompatActivity {
             String password = passwordInput.getText().toString();
 
             if (email.isEmpty()) {
-                emailInput.setError("Please enter an email address!");
+                emailInput.setError(getString(R.string.enter_email_alert));
                 emailInput.requestFocus();
                 return;
             }
             if (password.isEmpty()) {
-                passwordInput.setError("Please enter a password!");
+                passwordInput.setError(getString(R.string.enter_password_alert));
                 passwordInput.requestFocus();
                 return;
             }
 
             if (password.length() < 6){
-                passwordInput.setError("Password needs to contain at least 6 characters!");
+                passwordInput.setError(getString(R.string.invalid_password_alert));
                 passwordInput.requestFocus();
                 return;
             }
 
             if (!email.matches("^(.+)@(\\S+)$")) {
-                emailInput.setError("This email address is invalid!");
+                emailInput.setError(getString(R.string.invalid_email_alert));
                 emailInput.requestFocus();
                 return;
             }
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 Toast toast;
-                toast = Toast.makeText(getApplicationContext(), "Login/Registration unsuccessful!", Toast.LENGTH_LONG);
+                toast = Toast.makeText(getApplicationContext(), getString(R.string.login_register_unsuccessful_alert), Toast.LENGTH_LONG);
                 toast.show();
             }
         });
