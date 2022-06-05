@@ -14,11 +14,13 @@ import at.tugraz.software22.R;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
 import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.ui.viewmodel.EditProfileViewModel;
+import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     private ActivityEditProfileBinding binding;
     private EditProfileViewModel viewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,8 +28,16 @@ public class EditProfileActivity extends AppCompatActivity {
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+//        String path = viewModel.getCurrentUser().getPicturePaths().isEmpty() ? "" : viewModel.getCurrentUser().getPicturePaths().get(0);
+//
+//        userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
+//            System.out.println(bytes);
+//        });
 
         binding.textViewUserName.setText(viewModel.getUsername());
+
+
 
         binding.editTextUserName.setText(viewModel.getUsername());
         binding.imageButtonEditUserName.setOnClickListener( it -> {

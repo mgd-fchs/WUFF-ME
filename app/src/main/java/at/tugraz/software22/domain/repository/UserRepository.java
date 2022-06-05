@@ -2,12 +2,14 @@ package at.tugraz.software22.domain.repository;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.exception.UserNotLoggedInException;
+import java.io.File;
 
 public interface UserRepository {
     void registerUser(Executor exec, User user);
@@ -17,4 +19,8 @@ public interface UserRepository {
     MutableLiveData<UserState> getUserState();
     User getLoggedInUser();
     void updateUser(User user) throws UserNotLoggedInException;
+    void addPicture(File picture) throws UserNotLoggedInException;
+    MutableLiveData<List<String>> getPictures();
+
+
 }

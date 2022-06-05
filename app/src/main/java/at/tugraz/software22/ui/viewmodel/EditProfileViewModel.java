@@ -49,4 +49,8 @@ public class EditProfileViewModel extends AndroidViewModel {
         currentUser.setJob(newJob);
         userRepository.updateUser(currentUser);
     }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

@@ -1,6 +1,8 @@
 package at.tugraz.software22.domain.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import at.tugraz.software22.domain.enums.UserType;
 
@@ -11,14 +13,29 @@ public class User {
     private UserType type;
     private String job;
     private LocalDate birthday;
+    private List<String> picturePaths = new ArrayList<>();
 
     public User() {
     }
+
+
 
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public List<String> getPicturePaths() {
+        return picturePaths;
+    }
+
+    public void setPicturePaths(List<String> picturePaths) {
+        this.picturePaths = picturePaths;
+    }
+
+    public void addPicturePath(String path) {
+        this.picturePaths.add(path);
     }
 
     public String getUsername() {

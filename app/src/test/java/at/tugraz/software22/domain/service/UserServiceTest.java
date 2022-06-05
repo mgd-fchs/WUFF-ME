@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,6 +30,9 @@ public class UserServiceTest {
     private WuffApplication applicationMock;
 
     @Mock
+    private FirebaseStorage firebaseStorage;
+
+    @Mock
     private FirebaseDatabase database;
     @Mock
     private FirebaseAuth mAuth;
@@ -39,7 +43,7 @@ public class UserServiceTest {
     @Before
     public void setUp() {
         userViewModel = new UserViewModel(applicationMock);
-        userService = new UserService(database, mAuth);
+        userService = new UserService(database, mAuth, firebaseStorage);
     }
 
     @Test
