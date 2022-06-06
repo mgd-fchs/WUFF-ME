@@ -6,16 +6,20 @@ import androidx.annotation.VisibleForTesting;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
 
 public class WuffApplication extends Application {
 
     private static UserRepository userRepository;
+    private static PictureRepository pictureRepository;
     private static Executor backgroundExecutor;
 
     private FirebaseDatabase createDatabaseInstance() {
@@ -26,12 +30,18 @@ public class WuffApplication extends Application {
         return FirebaseAuth.getInstance();
     }
 
+    private FirebaseStorage createFirebaseStorageInstance() {
+        return FirebaseStorage.getInstance();
+    }
+
     public UserRepository getUserService() {
         if (userRepository == null) {
-            userRepository = new UserService(createDatabaseInstance(), createAuthInstance());
+            userRepository = new UserService(createDatabaseInstance(), createAuthInstance(), createFirebaseStorageInstance());
         }
         return userRepository;
     }
+
+
 
     public Executor getBackgroundExecutor() {
         if (backgroundExecutor == null) {
@@ -48,5 +58,12 @@ public class WuffApplication extends Application {
     @VisibleForTesting
     public static void setUserRepository(UserRepository userRepository) {
         WuffApplication.userRepository = userRepository;
+    }
+
+    public PictureRepository getPictureService() {
+        if (pictureRepository == null) {
+            pictureRepository = new PictureService(createFirebaseStorageInstance());
+        }
+        return pictureRepository;
     }
 }

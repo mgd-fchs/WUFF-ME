@@ -66,4 +66,7 @@ dependencies {
     androidTestImplementation "org.mockito:mockito-android:$rootProject.mockitoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
+
+    implementation 'com.google.firebase:firebase-storage'
+
 }

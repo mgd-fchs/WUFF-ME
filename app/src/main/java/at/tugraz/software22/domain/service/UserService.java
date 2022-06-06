@@ -1,20 +1,34 @@
 package at.tugraz.software22.domain.service;
 
+import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.exception.UserNotLoggedInException;
+
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.domain.enums.UserState;
@@ -23,16 +37,19 @@ import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
+    private FirebaseStorage firebaseStorage;
     private final FirebaseAuth mAuth;
     private static final String TAG = "test";
     private final MutableLiveData<UserState> userState = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> picturePaths = new MutableLiveData<>();
 
     protected User loggedInUser;
 
 
-    public UserService(FirebaseDatabase database, FirebaseAuth mAuth) {
+    public UserService(FirebaseDatabase database, FirebaseAuth mAuth, FirebaseStorage firebaseStorage) {
         this.database = database;
         this.mAuth = mAuth;
+        this.firebaseStorage = firebaseStorage;
     }
 
     @Override
@@ -115,6 +132,39 @@ public class UserService implements UserRepository {
         users.put(getCurrentUserId(), user);
         database.getReference().child(Constants.USER_TABLE).updateChildren(users);
         loggedInUser = user;
+    }
+
+    @Override
+    public void addPicture(File picture) throws UserNotLoggedInException {
+        Uri file = Uri.fromFile(picture);
+        String path = "images/" + getCurrentUserId() + "/" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        StorageReference riversRef = firebaseStorage.getReference().child(path);
+        var uploadTask = riversRef.putFile(file);
+
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                // todo toast warning
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                loggedInUser.addPicturePath(path);
+
+                try {
+                    updateUser(loggedInUser);
+                } catch (UserNotLoggedInException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public MutableLiveData<List<String>> getPictures() {
+        return picturePaths;
     }
 
     private String getCurrentUserId() throws UserNotLoggedInException {
