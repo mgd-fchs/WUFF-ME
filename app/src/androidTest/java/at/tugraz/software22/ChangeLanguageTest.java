@@ -1,16 +1,23 @@
 package at.tugraz.software22;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -26,55 +33,47 @@ import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 import at.tugraz.software22.ui.LoginActivity;
 
-
 @RunWith(AndroidJUnit4.class)
 public class ChangeLanguageTest {
 
-    private static UserRepository userRepositoryMock;
-
     private Resources resources;
-
-    @BeforeClass
-    public static void beforeClass() {
-        Executor currentThreadExecutor = Runnable::run;
-        WuffApplication.setBackgroundExecutor(currentThreadExecutor);
-    }
-
-    private void setLocale(String language, String country) {
-        Locale locale = new Locale(language, country);
-        // here we update locale for date formatters
-        Locale.setDefault(locale);
-        // here we update locale for app resources
-        Resources res = InstrumentationRegistry.getInstrumentation().getContext().getResources();
-        Configuration config = res.getConfiguration();
-        config.setLocale(locale);
-        res.updateConfiguration(config, res.getDisplayMetrics());
-    }
-
+    private Context context;
 
     @Test
     public void givenAppStartedWithGermanLanguage_whenLoginActivityStarted_thenVerifyThatAllElementsAreInGerman(){
-        setLocale("de", "DE");
-        ActivityScenario.launch(LoginActivity.class);
+
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
+        resources = context.getResources();
+
         String expectedHeader = "Software22 - Gruppenarbeit";
         String expectedEmailHint = "Email";
         String expectedPasswordHint = "Passwort";
         String expectedSignInButton = "Einloggen";
         String expectedRegisterToggle = "Registrieren";
 
-       Espresso.onView(ViewMatchers.withText(expectedHeader))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedEmailHint, resources.getString(R.string.prompt_email));
+        Assert.assertEquals(expectedPasswordHint, resources.getString(R.string.prompt_password));
+        Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
+        Assert.assertEquals(expectedRegisterToggle, resources.getString(R.string.action_register));
+    }
 
-        Espresso.onView(ViewMatchers.withText(expectedEmailHint))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    @Test
+    public void givenAppStartedWithEnglishLanguage_whenLoginActivityStarted_thenVerifyThatAllElementsAreInGerman(){
 
-        Espresso.onView(ViewMatchers.withText(expectedPasswordHint))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
+        resources = context.getResources();
 
-        Espresso.onView(ViewMatchers.withText(expectedSignInButton))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        String expectedHeader = "Software22 - Team project";
+        String expectedEmailHint = "Email";
+        String expectedPasswordHint = "Password";
+        String expectedSignInButton = "Sign in";
+        String expectedRegisterToggle = "Register";
 
-        Espresso.onView(ViewMatchers.withText(expectedRegisterToggle))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedEmailHint, resources.getString(R.string.prompt_email));
+        Assert.assertEquals(expectedPasswordHint, resources.getString(R.string.prompt_password));
+        Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
+        Assert.assertEquals(expectedRegisterToggle, resources.getString(R.string.action_register));
     }
 }
