@@ -59,7 +59,7 @@ public class ChangeLanguageTest {
     }
 
     @Test
-    public void givenAppStartedWithEnglishLanguage_whenLoginActivityStarted_thenVerifyThatAllElementsAreInGerman(){
+    public void givenAppStartedWithEnglishLanguage_whenLoginActivityStarted_thenVerifyThatAllElementsAreInEnglish(){
 
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
         resources = context.getResources();
@@ -71,6 +71,54 @@ public class ChangeLanguageTest {
         String expectedRegisterToggle = "Register";
 
         Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedEmailHint, resources.getString(R.string.prompt_email));
+        Assert.assertEquals(expectedPasswordHint, resources.getString(R.string.prompt_password));
+        Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
+        Assert.assertEquals(expectedRegisterToggle, resources.getString(R.string.action_register));
+    }
+
+    @Test
+    public void givenAppStartedWithGermanLanguage_whenLoginActivityStartedWithRegisterToggle_thenVerifyThatAllElementsAreInGerman(){
+
+        ActivityScenario.launch(LoginActivity.class);
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
+        resources = context.getResources();
+
+        String expectedHeader = "Software22 - Team project";
+        String expectedUsernameHint = "Username";
+        String expectedEmailHint = "Email";
+        String expectedPasswordHint = "Password";
+        String expectedSignInButton = "Sign in";
+        String expectedRegisterToggle = "Register";
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedUsernameHint, resources.getString(R.string.prompt_username));
+        Assert.assertEquals(expectedEmailHint, resources.getString(R.string.prompt_email));
+        Assert.assertEquals(expectedPasswordHint, resources.getString(R.string.prompt_password));
+        Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
+        Assert.assertEquals(expectedRegisterToggle, resources.getString(R.string.action_register));
+    }
+
+    @Test
+    public void givenAppStartedWithEnglishLanguage_whenLoginActivityStartedWithRegisterToggle_thenVerifyThatAllElementsAreInEnglish(){
+
+        ActivityScenario.launch(LoginActivity.class);
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
+        resources = context.getResources();
+
+        String expectedHeader = "Software22 - Team project";
+        String expectedUsernameHint = "Username";
+        String expectedEmailHint = "Email";
+        String expectedPasswordHint = "Password";
+        String expectedSignInButton = "Sign in";
+        String expectedRegisterToggle = "Register";
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedUsernameHint, resources.getString(R.string.prompt_username));
         Assert.assertEquals(expectedEmailHint, resources.getString(R.string.prompt_email));
         Assert.assertEquals(expectedPasswordHint, resources.getString(R.string.prompt_password));
         Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
