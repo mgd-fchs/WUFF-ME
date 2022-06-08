@@ -7,15 +7,16 @@ import androidx.lifecycle.AndroidViewModel;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
-import at.tugraz.software22.domain.entity.Users;
+import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.repository.PictureRepository;
+import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.domain.service.UserService;
 
 public class UserViewModel extends AndroidViewModel {
 
-    private final UserService userService;
+    private final UserRepository userService;
+    private final PictureRepository pictureRepository;
     private final Executor executor;
-    private static boolean ret;
-    private static String username;
 
     public UserViewModel(Application application) {
         super(application);
@@ -23,23 +24,29 @@ public class UserViewModel extends AndroidViewModel {
         WuffApplication userApplication = (WuffApplication) application;
         userService = userApplication.getUserService();
         executor =  userApplication.getBackgroundExecutor();
+        pictureRepository = userApplication.getPictureService();
     }
 
-    public void loadData() {
-        executor.execute(() -> {
+    public void registerUser(User users) {
 
-        });
+        executor.execute(() -> this.userService.registerUser(executor, users));
     }
 
-    public void registerUser(Users users) {
+    public void loginUser(User users) {
 
-        executor.execute(() -> {
-            this.userService.registerUser(executor, users);
-        });
+        executor.execute(() -> this.userService.loginUser(executor, users));
     }
 
-    public UserService getUserService(){
+    public UserRepository getUserService(){
         return userService;
+    }
+
+    public PictureRepository getPictureService(){
+        return pictureRepository;
+    }
+
+    public void logout() {
+        executor.execute(this.userService::logout);
     }
 
 }

@@ -11,34 +11,37 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import at.tugraz.software22.domain.repository.PictureRepository;
+import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
 
 public class WuffApplication extends Application {
 
-    private static UserService userService;
+    private static UserRepository userRepository;
+    private static PictureRepository pictureRepository;
     private static Executor backgroundExecutor;
 
     private FirebaseDatabase createDatabaseInstance() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        return firebaseDatabase;
+        return FirebaseDatabase.getInstance();
     }
 
     private FirebaseAuth createAuthInstance() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        return firebaseAuth;
+        return FirebaseAuth.getInstance();
     }
 
-    private FirebaseStorage createFirebaseStorage() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        return firebaseStorage;
+    private FirebaseStorage createFirebaseStorageInstance() {
+        return FirebaseStorage.getInstance();
     }
 
-    public UserService getUserService() {
-        if (userService == null) {
-            userService = new UserService(createDatabaseInstance(), createAuthInstance(), createFirebaseStorage());
+    public UserRepository getUserService() {
+        if (userRepository == null) {
+            userRepository = new UserService(createDatabaseInstance(), createAuthInstance(), createFirebaseStorageInstance());
         }
-        return userService;
+        return userRepository;
     }
+
+
 
     public Executor getBackgroundExecutor() {
         if (backgroundExecutor == null) {
@@ -48,12 +51,19 @@ public class WuffApplication extends Application {
     }
 
     @VisibleForTesting
-    public static void setUserService(UserService testUserService) {
-        userService = testUserService;
+    public static void setBackgroundExecutor(Executor testBackgroundExecutor) {
+        backgroundExecutor = testBackgroundExecutor;
     }
 
     @VisibleForTesting
-    public static void setBackgroundExecutor(Executor testBackgroundExecutor) {
-        backgroundExecutor = testBackgroundExecutor;
+    public static void setUserRepository(UserRepository userRepository) {
+        WuffApplication.userRepository = userRepository;
+    }
+
+    public PictureRepository getPictureService() {
+        if (pictureRepository == null) {
+            pictureRepository = new PictureService(createFirebaseStorageInstance());
+        }
+        return pictureRepository;
     }
 }
