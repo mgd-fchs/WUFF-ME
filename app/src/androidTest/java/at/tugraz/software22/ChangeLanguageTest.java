@@ -163,4 +163,66 @@ public class ChangeLanguageTest {
         Assert.assertEquals(expectedSelectUserType, resources.getString(R.string.buttonSelectUsertype));
         Assert.assertEquals(HintText, resources.getString(R.string.userTypeInfo));
     }
+
+    @Test
+    public void givenAppStartedWithGermanLanguage_whenEditProfileActivityStarted_thenVerifyThatAllElementsAreInGerman() throws InterruptedException {
+
+        ActivityScenario.launch(LoginActivity.class);
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
+        resources = context.getResources();
+
+        String expectedUsername = "user";
+        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedEditProfileHeader = "Einstellungen";
+        String expectedBirthdayTextField = "Geburtstag";
+        String expectedJobTextField = "Beruf";
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText(expectedUsername));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at" + Math.random() * 1000000));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.buttonEditProfile)).perform(ViewActions.click());
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedEditProfileHeader, resources.getString(R.string.edit_profile_header));
+        Assert.assertEquals(expectedBirthdayTextField, resources.getString(R.string.edit_profile_birthday));
+        Assert.assertEquals(expectedJobTextField, resources.getString(R.string.edit_profile_job));
+    }
+
+    @Test
+    public void givenAppStartedWithEnglishLanguage_whenEditProfileActivityStarted_thenVerifyThatAllElementsAreInEnglish() throws InterruptedException {
+
+        ActivityScenario.launch(LoginActivity.class);
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
+        resources = context.getResources();
+
+        String expectedUsername = "user";
+        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedEditProfileHeader = "Einstellungen";
+        String expectedBirthdayTextField = "Geburtstag";
+        String expectedJobTextField = "Beruf";
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText(expectedUsername));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at" + Math.random() * 1000000));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.buttonEditProfile)).perform(ViewActions.click());
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedEditProfileHeader, resources.getString(R.string.edit_profile_header));
+        Assert.assertEquals(expectedBirthdayTextField, resources.getString(R.string.edit_profile_birthday));
+        Assert.assertEquals(expectedJobTextField, resources.getString(R.string.edit_profile_job));
+    }
 }
