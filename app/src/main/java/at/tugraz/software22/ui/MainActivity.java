@@ -20,11 +20,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.R;
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -71,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         editProfile.setOnClickListener(v -> {
             startActivity(new Intent(this, EditProfileActivity.class));
         });
+
+
     }
 
     private void onSelectedTypeActivityResult(ActivityResult result) {

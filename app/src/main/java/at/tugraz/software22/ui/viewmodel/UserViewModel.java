@@ -8,12 +8,14 @@ import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.domain.service.UserService;
 
 public class UserViewModel extends AndroidViewModel {
 
     private final UserRepository userService;
+    private final PictureRepository pictureRepository;
     private final Executor executor;
 
     public UserViewModel(Application application) {
@@ -22,6 +24,7 @@ public class UserViewModel extends AndroidViewModel {
         WuffApplication userApplication = (WuffApplication) application;
         userService = userApplication.getUserService();
         executor =  userApplication.getBackgroundExecutor();
+        pictureRepository = userApplication.getPictureService();
     }
 
     public void registerUser(User users) {
@@ -36,6 +39,10 @@ public class UserViewModel extends AndroidViewModel {
 
     public UserRepository getUserService(){
         return userService;
+    }
+
+    public PictureRepository getPictureService(){
+        return pictureRepository;
     }
 
     public void logout() {
