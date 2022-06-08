@@ -124,4 +124,62 @@ public class ChangeLanguageTest {
         Assert.assertEquals(expectedSignInButton, resources.getString(R.string.action_sign_in));
         Assert.assertEquals(expectedRegisterToggle, resources.getString(R.string.action_register));
     }
+
+    @Test
+    public void givenAppStartedWithGermanLanguage_whenUserTypeSelectionActivityStarted_thenVerifyThatAllElementsAreInGerman(){
+
+        ActivityScenario.launch(LoginActivity.class);
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
+        resources = context.getResources();
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText("user"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at"+Math.random()*1000000));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
+        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedUsernameBox = "Besitzer";
+        String expectedSearcherBox = "Suchender";
+        String expectedSelectUserType = "Auswählen";
+        String Besitzer = "Besitzer";
+        String Suchender = "Suchender";
+        String auswaehlen = "Auswählen";
+        String HintText = "ⓘ Wählen Sie \""+Besitzer +"\", \""+Suchender+"\" oder beides, indem Sie das entsprechende Kontrollkästchen anklicken und auf den Button \""+auswaehlen+"\" klicken.";
+
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedUsernameBox, resources.getString(R.string.checkBoxOwner));
+        Assert.assertEquals(expectedSearcherBox, resources.getString(R.string.checkBoxSearcher));
+        Assert.assertEquals(expectedSelectUserType, resources.getString(R.string.buttonSelectUsertype));
+        Assert.assertEquals(HintText, resources.getString(R.string.userTypeInfo));
+    }
+
+    @Test
+    public void givenAppStartedWithEnglishLanguage_whenUserTypeSelectionActivityStarted_thenVerifyThatAllElementsAreInEnglish(){
+
+        ActivityScenario.launch(LoginActivity.class);
+        context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
+        resources = context.getResources();
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText("user"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at"+Math.random()*1000000));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
+        String expectedHeader = "Software22 - Team project";
+        String expectedUsernameBox = "Owner";
+        String expectedSearcherBox = "Searcher";
+        String expectedSelectUserType = "Select";
+        String HintText = "ⓘ Select to be \"Owner\", \"Searcher\" or both by clicking the corresponding checkbox and pressing the \"Select\" button";
+
+        Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
+        Assert.assertEquals(expectedUsernameBox, resources.getString(R.string.checkBoxOwner));
+        Assert.assertEquals(expectedSearcherBox, resources.getString(R.string.checkBoxSearcher));
+        Assert.assertEquals(expectedSelectUserType, resources.getString(R.string.buttonSelectUsertype));
+        Assert.assertEquals(HintText, resources.getString(R.string.userTypeInfo));
+    }
 }
