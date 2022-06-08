@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 
 public class UsertypeSelectionActivity extends AppCompatActivity {
 
@@ -32,7 +33,12 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
 
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
-            ((WuffApplication) wuffApp).getUserService().setUserType(userType);
+            try {
+                ((WuffApplication) wuffApp).getUserService().setUserType(userType);
+            } catch (UserNotLoggedInException e) {
+                startActivity(new Intent(this, Login.class));
+                return;
+            }
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

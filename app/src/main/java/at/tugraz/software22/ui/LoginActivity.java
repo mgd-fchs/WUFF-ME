@@ -82,12 +82,12 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            User users = new User(username, password, email);
+            User user = new User(username, password, email);
 
             if (usernameInput.getVisibility() == View.VISIBLE) {
-                userViewModel.registerUser(users);
+                userViewModel.registerUser(user);
             } else {
-                userViewModel.loginUser(users);
+                userViewModel.loginUser(user);
             }
         });
 

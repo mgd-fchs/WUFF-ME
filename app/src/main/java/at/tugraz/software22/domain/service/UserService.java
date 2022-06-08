@@ -17,27 +17,23 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
-
-import java.util.concurrent.Executor;
-
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
-    private FirebaseStorage firebaseStorage;
+    private final FirebaseStorage firebaseStorage;
     private final FirebaseAuth mAuth;
     private static final String TAG = "test";
     private final MutableLiveData<UserState> userState = new MutableLiveData<>();
@@ -89,11 +85,10 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void setUserType(UserType userType) {
+    public void setUserType(UserType userType) throws UserNotLoggedInException {
         Map<String, Object> users = new HashMap<>();
-        String uid = mAuth.getCurrentUser().getUid();
         loggedInUser.setType(userType);
-        users.put(uid, loggedInUser);
+        users.put(getCurrentUserId(), loggedInUser);
         database.getReference().child(Constants.USER_TABLE).updateChildren(users);
     }
 

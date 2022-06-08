@@ -2,16 +2,12 @@ package at.tugraz.software22.domain.service;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,24 +20,16 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
-import java.util.concurrent.Executor;
 
 import at.tugraz.software22.Constants;
-import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
-import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MatcherServiceTest {
     @Rule
     public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-    @Mock
-    private WuffApplication applicationMock;
-
-    @Mock
-    private FirebaseStorage firebaseStorage;
 
     @Mock
     private FirebaseDatabase firebaseDatabase;

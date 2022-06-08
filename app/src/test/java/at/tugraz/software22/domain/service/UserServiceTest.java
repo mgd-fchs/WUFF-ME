@@ -36,18 +36,15 @@ public class UserServiceTest {
     private FirebaseDatabase database;
     @Mock
     private FirebaseAuth mAuth;
-    private UserViewModel userViewModel;
-    private Executor exec = Runnable::run;
     private UserService userService;
 
     @Before
     public void setUp() {
-        userViewModel = new UserViewModel(applicationMock);
         userService = new UserService(database, mAuth, firebaseStorage);
     }
 
     @Test
-    public void givenUserAndUsertype_whenSettingUsertype_thenUserHasNewType() {
+    public void givenUserAndUsertype_whenSettingUsertype_thenUserHasNewType() throws UserNotLoggedInException {
         UserType type = UserType.OWNER;
 
         String uid = "h6MVwVQvlZOy6FeJh9us88aTNvu1";

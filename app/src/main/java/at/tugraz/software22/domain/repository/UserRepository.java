@@ -15,7 +15,7 @@ public interface UserRepository {
     void registerUser(Executor exec, User user);
     void loginUser(Executor exec, User user);
     void logout();
-    void setUserType(UserType userType);
+    void setUserType(UserType userType) throws UserNotLoggedInException;
     MutableLiveData<UserState> getUserState();
     User getLoggedInUser();
     void updateUser(User user) throws UserNotLoggedInException;
