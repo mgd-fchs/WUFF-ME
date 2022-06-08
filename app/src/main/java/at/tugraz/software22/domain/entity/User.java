@@ -18,8 +18,6 @@ public class User {
     public User() {
     }
 
-
-
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -29,6 +27,8 @@ public class User {
     public List<String> getPicturePaths() {
         return picturePaths;
     }
+
+    public void getProfilePicture(){}
 
     public void setPicturePaths(List<String> picturePaths) {
         this.picturePaths = picturePaths;
