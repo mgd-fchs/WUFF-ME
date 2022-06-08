@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.MainActivity;
+import at.tugraz.software22.ui.UsertypeSelectionActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
@@ -76,7 +77,7 @@ public class LoginActivityTest {
 
         // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);
-        intended(hasComponent(MainActivity.class.getName()));
+        intended(hasComponent(UsertypeSelectionActivity.class.getName()));
         Intents.release();
 
         Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());

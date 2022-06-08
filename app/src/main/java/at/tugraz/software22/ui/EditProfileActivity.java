@@ -1,7 +1,10 @@
 package at.tugraz.software22.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,15 +32,15 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-//        String path = viewModel.getCurrentUser().getPicturePaths().isEmpty() ? "" : viewModel.getCurrentUser().getPicturePaths().get(0);
-//
-//        userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
-//            System.out.println(bytes);
-//        });
+
+        String path = viewModel.getCurrentUser().getPicturePaths().isEmpty() ? "" : viewModel.getCurrentUser().getPicturePaths().get(0);
+        userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
+            Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            binding.imageViewProfilePicture.setImageBitmap(profilePicture);
+            binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
+        });
 
         binding.textViewUserName.setText(viewModel.getUsername());
-
-
 
         binding.editTextUserName.setText(viewModel.getUsername());
         binding.imageButtonEditUserName.setOnClickListener( it -> {

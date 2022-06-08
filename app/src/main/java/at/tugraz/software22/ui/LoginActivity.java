@@ -3,7 +3,10 @@ package at.tugraz.software22.ui;
 import android.app.Application;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +20,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.domain.entity.User;
@@ -28,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private static Application wuffApp;
     private UserViewModel userViewModel;
     public static final String INTENT_USERNAME = "";
+    private File profilePictureFile = null;
     private static String username;
 
     private ImageView profilePicturePreview;
@@ -55,10 +65,25 @@ public class LoginActivity extends AppCompatActivity {
         uploadImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dispatchTakePictureIntent();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String fileName = "JPEG_" + timeStamp;
+                File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                try {
+                    profilePictureFile = File.createTempFile(
+                            fileName,
+                            ".jpg",
+                            storageDirectory
+                    );
+                    Uri imageUri = FileProvider.getUriForFile(
+                            getApplicationContext(),
+                            "at.tugraz.software22.WuffApplication.provider",
+                            profilePictureFile);
+                    dispatchTakePictureIntent(imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 uploadImage.setVisibility(View.VISIBLE);
                 profilePicturePreview.setVisibility(View.VISIBLE);
-
             }
         });
 
@@ -96,10 +121,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 String email = emailInput.getText().toString();
                 String password = passwordInput.getText().toString();
-
                 User users = new User(username, password, email);
-
-                userViewModel.registerUser(users);
+                userViewModel.registerUser(users, profilePictureFile);
             }
 
         });
@@ -148,15 +171,15 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void dispatchTakePictureIntent() {
+    private void dispatchTakePictureIntent(Uri savedPicture) {
         Intent createTakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        createTakePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, savedPicture);
         activityResultLauncher.launch(createTakePictureIntent);
     }
 
     private void onCreateActivityResult(ActivityResult result){
-        if(result.getResultCode() == RESULT_OK && result.getData() != null){
-            Bundle extras = result.getData().getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if(result.getResultCode() == RESULT_OK){
+            Bitmap imageBitmap = BitmapFactory.decodeFile(profilePictureFile.getAbsolutePath());
             profilePicturePreview.setImageBitmap(imageBitmap);
         }
     }

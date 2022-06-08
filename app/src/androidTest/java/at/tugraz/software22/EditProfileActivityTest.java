@@ -229,21 +229,21 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyPictureIsVisibleInProfile(){
+    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyPictureIsVisibleInProfile() throws InterruptedException {
         User user = Mockito.mock(User.class);
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
 
         ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("somestr");
+        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
 
         Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
         Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
         Mockito.when(user.getUsername()).thenReturn("Testboi");
         Mockito.when(user.getJob()).thenReturn("Dogwalker");
 
-
-
         ActivityScenario.launch(EditProfileActivity.class);
+
+        Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
     }
