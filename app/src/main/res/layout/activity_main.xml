@@ -65,21 +65,22 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_swiping" />
+            android:text="@string/button_swiping"
+            android:id="@+id/buttonSwiping"/>
 
         <com.google.android.material.button.MaterialButton
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_matches" />
+            android:text="@string/button_matches"
+            android:id="@+id/buttonMatches"/>
 
         <com.google.android.material.button.MaterialButton
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_messages" />
+            android:text="@string/button_messages"
+            android:id="@+id/buttonMessages"/>
 
     </com.google.android.material.button.MaterialButtonToggleGroup>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
