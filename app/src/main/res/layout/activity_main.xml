@@ -12,12 +12,16 @@
         android:id="@+id/textViewFinalApp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Welcome"
+        android:layout_marginTop="62dp"
+        android:layout_marginBottom="81dp"
+        android:gravity="center"
+        android:text="@string/welcome"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="110dp" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditProfile" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -54,33 +58,37 @@
         android:id="@+id/toggle_button_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="360dp"
-        android:gravity="center_horizontal"
+        android:gravity="bottom"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSwiping"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/button_swiping"
-            android:id="@+id/buttonSwiping"/>
+            android:textSize="32sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonMatches"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/button_matches"
-            android:id="@+id/buttonMatches"/>
+            android:textSize="32sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonMessages"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/button_messages"
-            android:id="@+id/buttonMessages"/>
-
+            android:textSize="32sp" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
