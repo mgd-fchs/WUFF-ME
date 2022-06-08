@@ -86,12 +86,12 @@ public class ChangeLanguageTest {
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
         resources = context.getResources();
 
-        String expectedHeader = "Software22 - Team project";
-        String expectedUsernameHint = "Username";
+        String expectedHeader = "Software22 - Gruppenarbeit";
         String expectedEmailHint = "Email";
-        String expectedPasswordHint = "Password";
-        String expectedSignInButton = "Sign in";
-        String expectedRegisterToggle = "Register";
+        String expectedPasswordHint = "Passwort";
+        String expectedSignInButton = "Einloggen";
+        String expectedRegisterToggle = "Registrieren";
+        String expectedUsernameHint = "Nutzername";
 
         Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
         Assert.assertEquals(expectedUsernameHint, resources.getString(R.string.prompt_username));
