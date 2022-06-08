@@ -184,9 +184,11 @@ public class ChangeLanguageTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
+        Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
 
+        Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.buttonEditProfile)).perform(ViewActions.click());
 
         Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
@@ -203,10 +205,10 @@ public class ChangeLanguageTest {
         resources = context.getResources();
 
         String expectedUsername = "user";
-        String expectedHeader = "Software22 - Gruppenarbeit";
-        String expectedEditProfileHeader = "Einstellungen";
-        String expectedBirthdayTextField = "Geburtstag";
-        String expectedJobTextField = "Beruf";
+        String expectedHeader = "Software22 - Team project";
+        String expectedEditProfileHeader = "Settings";
+        String expectedBirthdayTextField = "Birthday";
+        String expectedJobTextField = "Job";
 
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
 
@@ -215,9 +217,11 @@ public class ChangeLanguageTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
+        Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
 
+        Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.buttonEditProfile)).perform(ViewActions.click());
 
         Assert.assertEquals(expectedHeader, resources.getString(R.string.app_name));
