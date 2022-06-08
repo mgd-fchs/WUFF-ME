@@ -45,4 +45,7 @@
     <string name="invalid_email_alert">This email address is invalid!</string>
     <string name="login_register_unsuccessful_alert">Login/Registration unsuccessful!</string>
     <string name="database_connection_failed_alert">Cannot read from database: </string>
+    <string name="button_swiping">Swipe</string>
+    <string name="button_matches">Matches</string>
+    <string name="button_messages">Messages</string>
 </resources>
