@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import at.tugraz.software22.ui.ChatActivity;
 import at.tugraz.software22.ui.LoginActivity;
+import at.tugraz.software22.ui.MainActivity;
 import at.tugraz.software22.ui.MatchesActivity;
 
 @RunWith(AndroidJUnit4.class)
@@ -71,6 +72,7 @@ public class MainActivityTest {
         Thread.sleep(2000);
 
         intended(hasComponent(MatchesActivity.class.getName()));
+        Intents.release();
     }
 
     @Test
@@ -91,10 +93,11 @@ public class MainActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
         Thread.sleep(2000);
 
-        Espresso.onView(ViewMatchers.withId(R.id.buttonMatches)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonMessages)).perform(ViewActions.click());
 
         Thread.sleep(2000);
 
         intended(hasComponent(ChatActivity.class.getName()));
+        Intents.release();
     }
 }

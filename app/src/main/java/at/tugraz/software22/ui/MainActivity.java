@@ -72,6 +72,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        TextView matches = findViewById(R.id.buttonMatches);
+        matches.setOnClickListener(v -> {
+            startActivity(new Intent(this, MatchesActivity.class));
+        });
+
+        TextView messages = findViewById(R.id.buttonMessages);
+        messages.setOnClickListener(v -> {
+            startActivity(new Intent(this, ChatActivity.class));
+        });
+
         Button editProfile = findViewById(R.id.buttonEditProfile);
         editProfile.setOnClickListener(v -> {
             startActivity(new Intent(this, EditProfileActivity.class));
