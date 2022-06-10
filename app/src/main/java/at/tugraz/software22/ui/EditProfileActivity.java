@@ -33,14 +33,20 @@ public class EditProfileActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        String path = viewModel.getCurrentUser().getPicturePaths().isEmpty() ? "" : viewModel.getCurrentUser().getPicturePaths().get(0);
-        userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
-            Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            binding.imageViewProfilePicture.setImageBitmap(profilePicture);
-            binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
-        });
+
+        if (!viewModel.getCurrentUser().getPicturePaths().isEmpty()){
+            String path = viewModel.getCurrentUser().getPicturePaths().get(0);
+            userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
+                Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.imageViewProfilePicture.setImageBitmap(profilePicture);
+                binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
+            });
+        } else {
+            binding.imageViewProfilePicture.setVisibility(View.GONE);
+        }
 
         binding.textViewUserName.setText(viewModel.getUsername());
+        binding.textViewUserType.setText(viewModel.getUserTyp());
 
         binding.editTextUserName.setText(viewModel.getUsername());
         binding.imageButtonEditUserName.setOnClickListener( it -> {

@@ -36,6 +36,10 @@ public class EditProfileViewModel extends AndroidViewModel {
         return currentUser.getBirthday();
     }
 
+    public String getUserTyp(){
+        return currentUser.getType().toString();
+    }
+
     public void updateUserBirthday(LocalDate newBirthday) throws UserNotLoggedInException {
         currentUser.setBirthday(newBirthday);
         userRepository.updateUser(currentUser);

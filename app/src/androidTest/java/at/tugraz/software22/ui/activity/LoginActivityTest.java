@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import at.tugraz.software22.R;
 
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -64,10 +65,18 @@ public class LoginActivityTest {
     @Rule
     public ActivityScenarioRule<LoginActivity> rule = new ActivityScenarioRule<>(LoginActivity.class);
 
+    @Before
+    public void before(){
+        Intents.init();
+    }
+
+    @After
+    public void after(){
+        Intents.release();
+    }
 
     @Test
     public void givenSuccessfulRegistration_whenRegisterButtonPressed_thenDisplayMainActivity() throws InterruptedException {
-        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText("user"));
@@ -78,7 +87,12 @@ public class LoginActivityTest {
         // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);
         intended(hasComponent(UsertypeSelectionActivity.class.getName()));
-        Intents.release();
+
+        Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
+
+        Thread.sleep(2000);
+        intended(hasComponent(MainActivity.class.getName()));
 
         Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
@@ -97,14 +111,16 @@ public class LoginActivityTest {
     @Test
     public void givenExistingUser_whenLoginButtonPressed_thenVerifyThatCurrentUserIsSet() throws InterruptedException {
         ActivityScenario.launch(LoginActivity.class);
-        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("ww@w.at"));
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
         // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);
 
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-        Assert.assertEquals("email@yahoo.at", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        Assert.assertEquals("ww@w.at", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
 
     @Test
@@ -119,11 +135,13 @@ public class LoginActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
                 .check(ViewAssertions.matches(isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
     }
 
     @Test
     public void givenRegistration_whenClickOnNewProfilePicture_thenVerifyCameraViewAppears(){
-        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
@@ -140,12 +158,10 @@ public class LoginActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
                 .perform(ViewActions.click());
-        Intents.release();
     }
 
     @Test
     public void givenRegistrationAndProfilePictureTaken_whenClickOnLoginSwitch_thenVerifyThatProfilePictureDisappears(){
-        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
@@ -163,8 +179,6 @@ public class LoginActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
                 .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
-        Intents.release();
-
     }
 
      private Instrumentation.ActivityResult createImageCaptureActivityResultStub() {
