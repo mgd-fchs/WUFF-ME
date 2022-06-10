@@ -100,4 +100,31 @@ public class MainActivityTest {
         intended(hasComponent(ChatActivity.class.getName()));
         Intents.release();
     }
+
+    @Test
+    public void givenMatchesActivity_whenSwipingButtonIsPressed_thenMainWindowPresent() throws InterruptedException {
+
+        Intents.init();
+        ActivityScenario.launch(LoginActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText("user"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("email@yahoo.at" + Math.random() * 1000000));
+        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
+        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
+
+        Thread.sleep(2000);
+        Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
+
+        Thread.sleep(2000);
+        Espresso.onView(ViewMatchers.withId(R.id.buttonMatches)).perform(ViewActions.click());
+        Thread.sleep(2000);
+
+        Espresso.onView(ViewMatchers.withId(R.id.buttonSwiping)).perform(ViewActions.click());
+        Thread.sleep(2000);
+        intended(hasComponent(MainActivity.class.getName()));
+        Intents.release();
+    }
 }
