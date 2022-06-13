@@ -11,6 +11,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,14 +51,14 @@ public class MainActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         setContentView(R.layout.activity_main);
 
-        TextView textView = findViewById(R.id.textViewFinalApp);
+        setupButtons();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SwipingFragment()).commit();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User users = dataSnapshot.getValue(User.class);
                 assert users != null;
-                textView.setText(users.getUsername());
             }
 
             @Override
@@ -64,30 +66,37 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(getString(R.string.database_connection_failed_alert) + databaseError.getCode());
             }
         });
-        TextView logout = findViewById(R.id.logout);
+    }
 
-        logout.setOnClickListener(v -> {
+    private void setupButtons() {
+
+        TextView textViewLogout = findViewById(R.id.logout);
+        Button buttonSwiping = findViewById(R.id.buttonSwiping);
+        Button buttonMatches = findViewById(R.id.buttonMatches);
+        Button buttonMessages = findViewById(R.id.buttonMessages);
+        Button buttonEditProfile = findViewById(R.id.buttonEditProfile);
+
+        textViewLogout.setOnClickListener(v -> {
             userViewModel.logout();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         });
 
-        TextView matches = findViewById(R.id.buttonMatches);
-        matches.setOnClickListener(v -> {
-            startActivity(new Intent(this, MatchesActivity.class));
+        buttonSwiping.setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new SwipingFragment()).commit();
         });
 
-        TextView messages = findViewById(R.id.buttonMessages);
-        messages.setOnClickListener(v -> {
-            startActivity(new Intent(this, ChatActivity.class));
+        buttonMatches.setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new MatchesFragment()).commit();
         });
 
-        Button editProfile = findViewById(R.id.buttonEditProfile);
-        editProfile.setOnClickListener(v -> {
+        buttonMessages.setOnClickListener(v -> {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragmentContainer, new ChatFragment()).commit();
+        });
+
+        buttonEditProfile.setOnClickListener(v -> {
             startActivity(new Intent(this, EditProfileActivity.class));
         });
-
-
     }
 
     private void onSelectedTypeActivityResult(ActivityResult result) {
