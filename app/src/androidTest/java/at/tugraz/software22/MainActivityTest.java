@@ -98,9 +98,8 @@ public class MainActivityTest {
     }
 
     @Test
-    public void givenMatchesActivity_whenSwipingButtonIsPressed_thenMainWindowPresent() throws InterruptedException {
+    public void givenMatchesActivity_whenSwipingButtonIsPressed_thenSwipingWindowPresent() throws InterruptedException {
 
-        Intents.init();
         ActivityScenario.launch(LoginActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
@@ -113,14 +112,12 @@ public class MainActivityTest {
         Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
-
-        Thread.sleep(2000);
-        Espresso.onView(ViewMatchers.withId(R.id.buttonMatches)).perform(ViewActions.click());
         Thread.sleep(2000);
 
         Espresso.onView(ViewMatchers.withId(R.id.buttonSwiping)).perform(ViewActions.click());
+
         Thread.sleep(2000);
-        intended(hasComponent(MainActivity.class.getName()));
-        Intents.release();
+
+        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.fragmentSwiping), ViewMatchers.isDisplayed()));
     }
 }
