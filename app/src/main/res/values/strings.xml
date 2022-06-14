@@ -35,4 +35,5 @@
     <string name="edit_profile_name_empty_error">Please enter your name</string>
     <string name="edit_profile_birthday">Birthday</string>
     <string name="edit_profile_job">Job</string>
+    <string name="profile_picture">profile picture</string>
 </resources>

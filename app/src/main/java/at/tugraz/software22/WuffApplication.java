@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.domain.service.MatcherService;
 import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
 
@@ -20,6 +21,7 @@ public class WuffApplication extends Application {
 
     private static UserRepository userRepository;
     private static PictureRepository pictureRepository;
+    private static MatcherService matcherService;
     private static Executor backgroundExecutor;
 
     private FirebaseDatabase createDatabaseInstance() {
@@ -65,5 +67,16 @@ public class WuffApplication extends Application {
             pictureRepository = new PictureService(createFirebaseStorageInstance());
         }
         return pictureRepository;
+    }
+
+    public MatcherService getMatcherService() {
+        if (matcherService == null) {
+            matcherService = new MatcherService(createDatabaseInstance(), getUserService());
+        }
+        return matcherService;
+    }
+    @VisibleForTesting
+    public static void setMatcherService(MatcherService matcherService) {
+        WuffApplication.matcherService = matcherService;
     }
 }

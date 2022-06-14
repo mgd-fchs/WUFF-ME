@@ -10,12 +10,14 @@ import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.domain.service.MatcherService;
 import at.tugraz.software22.domain.service.UserService;
 
 public class UserViewModel extends AndroidViewModel {
 
     private final UserRepository userService;
     private final PictureRepository pictureRepository;
+    private final MatcherService matcherService;
     private final Executor executor;
 
     public UserViewModel(Application application) {
@@ -25,6 +27,7 @@ public class UserViewModel extends AndroidViewModel {
         userService = userApplication.getUserService();
         executor =  userApplication.getBackgroundExecutor();
         pictureRepository = userApplication.getPictureService();
+        matcherService = userApplication.getMatcherService();
     }
 
     public void registerUser(User users) {
@@ -43,6 +46,10 @@ public class UserViewModel extends AndroidViewModel {
 
     public PictureRepository getPictureService(){
         return pictureRepository;
+    }
+
+    public MatcherService getMatcherService() {
+        return matcherService;
     }
 
     public void logout() {

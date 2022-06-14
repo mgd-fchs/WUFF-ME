@@ -1,8 +1,11 @@
 package at.tugraz.software22.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,27 +46,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference().child(Constants.USER_TABLE).child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         setContentView(R.layout.activity_main);
 
-        TextView textView = findViewById(R.id.textViewFinalApp);
-
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User users = dataSnapshot.getValue(User.class);
-                assert users != null;
-                textView.setText(users.getUsername());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("Cannot read from database: " + databaseError.getCode());
-            }
-        });
         TextView logout = findViewById(R.id.logout);
 
         logout.setOnClickListener(v -> {
@@ -77,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, EditProfileActivity.class));
         });
 
+        TextView interestingUserName = findViewById(R.id.textViewNameOfInterestingUser);
+        ImageView interestingUserPicture = findViewById(R.id.imageViewInterestingUser);
+        userViewModel.getMatcherService().getNextInterestingProfile().observe(this, user -> {
+            interestingUserName.setText(user.getUsername());
+            userViewModel.getPictureService().downloadPicture(user.getPicturePaths().get(0)).observe(this, picture -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
+            });
+        });
 
     }
 
