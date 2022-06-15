@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText usernameInput = (EditText)findViewById(R.id.username);
         SwitchCompat toggleBtn = (SwitchCompat) findViewById(R.id.toggle_register);
         ImageView uploadImage = (ImageView)findViewById(R.id.image_button_add_profile_picture);
+        ImageView uploadFromGallery = (ImageView)findViewById(R.id.image_button_add_profile_picture_from_gallery);
         profilePicturePreview = (ImageView)findViewById(R.id.profile_picture_preview);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -93,11 +94,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (isChecked){
                     usernameInput.setVisibility(View.VISIBLE);
                     uploadImage.setVisibility(View.VISIBLE);
+                    uploadFromGallery.setVisibility(View.VISIBLE);
                     loginBtn.setText(R.string.register_btn);
                 } else {
                     usernameInput.setVisibility(View.GONE);
                     profilePicturePreview.setVisibility(View.GONE);
                     uploadImage.setVisibility(View.GONE);
+                    uploadFromGallery.setVisibility(View.GONE);
                     loginBtn.setText(R.string.login_btn);
                 }
             }
