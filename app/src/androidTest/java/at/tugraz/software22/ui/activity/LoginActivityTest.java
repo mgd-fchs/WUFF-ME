@@ -182,14 +182,34 @@ public class LoginActivityTest {
                 .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
+
      private Instrumentation.ActivityResult createImageCaptureActivityResultStub() {
          Bundle bundle = new Bundle();
          bundle.putParcelable("IMG_DATA", BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher));
          Intent resultData = new Intent();
          resultData.putExtras(bundle);
-
          return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
      }
+
+    @Test
+    public void givenRegistration_whenClickOnNewProfilePictureFromGallery_thenVerifyGetContentViewAppears(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
+        Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+    }
 
     @Test
     public void givenLoginActivity_whenSwitchedToRegistration_thenVerifyThatPictureUploadButtonsVisible(){
