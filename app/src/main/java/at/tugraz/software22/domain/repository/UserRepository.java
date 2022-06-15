@@ -18,6 +18,7 @@ public interface UserRepository {
     void setUserType(UserType userType);
     MutableLiveData<UserState> getUserState();
     User getLoggedInUser();
+    void setLoggedInUser(User user);
     void updateUser(User user) throws UserNotLoggedInException;
     void addPicture(File picture) throws UserNotLoggedInException;
     MutableLiveData<List<String>> getPictures();

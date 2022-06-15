@@ -4,10 +4,12 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.domain.service.UserService;
@@ -27,13 +29,20 @@ public class UserViewModel extends AndroidViewModel {
         pictureRepository = userApplication.getPictureService();
     }
 
-    public void registerUser(User users) {
-
-        executor.execute(() -> this.userService.registerUser(executor, users));
+    public void registerUser(User users, File image) {
+        executor.execute(() -> {
+            this.userService.registerUser(executor, users);
+            if (image != null){
+                try {
+                    this.userService.addPicture(image);
+                } catch (UserNotLoggedInException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void loginUser(User users) {
-
         executor.execute(() -> this.userService.loginUser(executor, users));
     }
 

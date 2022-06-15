@@ -19,12 +19,14 @@
     <ImageView
         android:id="@+id/imageViewProfilePicture"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewHeader"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/textViewUserName"
@@ -43,7 +45,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserType"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <EditText
@@ -113,5 +115,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButtonEditJob"
         app:layout_constraintTop_toTopOf="@+id/imageButtonEditJob" />
+
+    <TextView
+        android:id="@+id/textViewUserType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Owner"
+        app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
+        app:layout_constraintStart_toStartOf="@+id/textViewUserName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
