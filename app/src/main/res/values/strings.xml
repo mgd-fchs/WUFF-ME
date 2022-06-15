@@ -8,7 +8,7 @@
     <string name="app_name">Software22 - Team project</string>
     <string name="intro">In contrast to the individual developer assignment, there is no given framework for the team project. You are free to customize the project according to your needs.</string>
     <string name="final_app">We are looking forward to your final app!</string>
-    <string name="title_activity_select_usertype">SelectUsertypeActivity</string>
+    <string name="title_activity_select_usertype" translatable="false">SelectUsertypeActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -20,10 +20,12 @@
     <string name="checkBoxSearcher">&checkBoxSearcherText;</string>
     <string name="buttonSelectUsertype">Select</string>
     <string name="userTypeInfo">ⓘ Select to be \"&checkBoxOwnerText;\", \"&checkBoxSearcherText;\" or both by clicking the corresponding checkbox and pressing the \"Select\" button</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_register">Register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
@@ -37,5 +39,12 @@
     <string name="edit_profile_job">Job</string>
     <string name="register_btn">REGISTER</string>
     <string name="login_btn">LOGIN</string>
-
+    <string name="edit_profile_button">Edit Profile</string>
+    <string name="enter_username_alert">Please enter a username!</string>
+    <string name="enter_email_alert">Please enter an email address!</string>
+    <string name="enter_password_alert">Please enter a password!</string>
+    <string name="invalid_password_alert">Password needs to contain at least 6 characters!</string>
+    <string name="invalid_email_alert">This email address is invalid!</string>
+    <string name="login_register_unsuccessful_alert">Login/Registration unsuccessful!</string>
+    <string name="database_connection_failed_alert">Cannot read from database: </string>
 </resources>

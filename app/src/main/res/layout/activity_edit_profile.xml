@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewProfilePicture"
-        tools:text="Username" />
+        android:text="@string/prompt_username" />
 
     <ImageButton
         android:id="@+id/imageButtonEditUserName"
@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButtonEditUserName"
         app:layout_constraintTop_toTopOf="@+id/imageButtonEditUserName"
-        tools:text="Username" />
+        android:hint="@string/prompt_username" />
 
     <ImageButton
         android:id="@+id/imageButtonEditAge"

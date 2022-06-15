@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             else {
                 Toast toast;
-                toast = Toast.makeText(getApplicationContext(), "Login/Registration unsuccessful!", Toast.LENGTH_LONG);
+                toast = Toast.makeText(getApplicationContext(), getString(R.string.login_register_unsuccessful_alert), Toast.LENGTH_LONG);
                 toast.show();
             }
         });

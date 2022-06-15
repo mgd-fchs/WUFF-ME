@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("Cannot read from database: " + databaseError.getCode());
+                System.out.println(getString(R.string.database_connection_failed_alert) + databaseError.getCode());
             }
         });
         TextView logout = findViewById(R.id.logout);
