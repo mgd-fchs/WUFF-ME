@@ -127,6 +127,11 @@ public class UserService implements UserRepository {
     }
 
     @Override
+    public void setLoggedInUser(User user){
+        loggedInUser = user;
+    }
+
+    @Override
     public void updateUser(User user) throws UserNotLoggedInException {
         Map<String, Object> users = new HashMap<>();
         users.put(getCurrentUserId(), user);

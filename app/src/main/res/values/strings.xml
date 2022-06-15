@@ -33,6 +33,8 @@
     <string name="edit_profile_name_empty_error">Please enter your name</string>
     <string name="edit_profile_birthday">Birthday</string>
     <string name="edit_profile_job">Job</string>
+    <string name="register_btn">REGISTER</string>
+    <string name="login_btn">LOGIN</string>
     <string name="edit_profile_button">Edit Profile</string>
     <string name="enter_username_alert">Please enter a username!</string>
     <string name="enter_email_alert">Please enter an email address!</string>

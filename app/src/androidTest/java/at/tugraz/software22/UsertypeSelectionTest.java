@@ -33,6 +33,7 @@ import at.tugraz.software22.ui.UsertypeSelectionActivity;
  */
 @RunWith(AndroidJUnit4.class)
 public class UsertypeSelectionTest {
+
     @Rule
     public ActivityScenarioRule<UsertypeSelectionActivity> activityScenarioRule =
             new ActivityScenarioRule<>(UsertypeSelectionActivity.class);
@@ -77,7 +78,6 @@ public class UsertypeSelectionTest {
 
     @Test
     public void givenUserAndUserType_whenSettingUserType_thenUserHasNewType() throws InterruptedException {
-
         ActivityScenario.launch(LoginActivity.class);
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.username)).perform(ViewActions.clearText(), ViewActions.typeText("user"));
@@ -96,8 +96,8 @@ public class UsertypeSelectionTest {
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
 
-        var x = FirebaseAuth.getInstance().getCurrentUser();
+        Espresso.onView(ViewMatchers.withId(R.id.buttonEditProfile)).perform(ViewActions.click());
 
-        Assert.assertEquals("OWNER", FirebaseAuth.getInstance().getCurrentUser().zze());
+        Espresso.onView(ViewMatchers.withText("OWNER")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
