@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -189,4 +190,28 @@ public class LoginActivityTest {
 
          return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
      }
+
+    @Test
+    public void givenLoginActivity_whenSwitchedToRegistration_thenVerifyThatPictureUploadButtonsVisible(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+    }
+
 }
