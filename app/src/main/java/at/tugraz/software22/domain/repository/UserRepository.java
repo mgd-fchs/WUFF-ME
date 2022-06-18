@@ -1,5 +1,7 @@
 package at.tugraz.software22.domain.repository;
 
+import android.net.Uri;
+
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public interface UserRepository {
     void setLoggedInUser(User user);
     void updateUser(User user) throws UserNotLoggedInException;
     void addPicture(File picture) throws UserNotLoggedInException;
+    void addPicture(Uri pictureUri) throws UserNotLoggedInException;
     MutableLiveData<List<String>> getPictures();
 
 

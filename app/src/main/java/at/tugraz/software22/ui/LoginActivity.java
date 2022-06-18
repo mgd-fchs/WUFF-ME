@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     public static final String INTENT_USERNAME = "";
     private File profilePictureFile = null;
+    private Uri imageUri = null;
     private static String username;
 
     private ImageView profilePicturePreview;
@@ -45,6 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     this::onCreateActivityResult);
+    private final ActivityResultLauncher<Intent> activityResultSelectImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    this::onImageSelectedResult);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                             ".jpg",
                             storageDirectory
                     );
-                    Uri imageUri = FileProvider.getUriForFile(
+                    imageUri = FileProvider.getUriForFile(
                             getApplicationContext(),
                             "at.tugraz.software22.WuffApplication.provider",
                             profilePictureFile);
@@ -88,9 +92,23 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        uploadFromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent galleryPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    galleryPictureIntent.setType("image/*");
+                    activityResultSelectImageLauncher.launch(galleryPictureIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                uploadImage.setVisibility(View.VISIBLE);
+                profilePicturePreview.setVisibility(View.VISIBLE);
+            }
+        });
+
         toggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 if (isChecked){
                     usernameInput.setVisibility(View.VISIBLE);
                     uploadImage.setVisibility(View.VISIBLE);
@@ -127,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                 User users = new User(username, password, email);
 
                 if (usernameInput.getVisibility() == View.VISIBLE) {
-                    userViewModel.registerUser(users, profilePictureFile);
+                    userViewModel.registerUser(users, imageUri);
                 } else {
                     userViewModel.loginUser(users);
                 }
@@ -197,6 +215,14 @@ public class LoginActivity extends AppCompatActivity {
         if(result.getResultCode() == RESULT_OK){
             Bitmap imageBitmap = BitmapFactory.decodeFile(profilePictureFile.getAbsolutePath());
             profilePicturePreview.setImageBitmap(imageBitmap);
+        }
+    }
+
+    private void onImageSelectedResult(ActivityResult result){
+        if(result.getResultCode() == RESULT_OK){
+            Uri selectedImage = result.getData().getData();
+            imageUri = selectedImage;
+            profilePicturePreview.setImageURI(selectedImage);
         }
     }
 }

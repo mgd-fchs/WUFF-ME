@@ -1,6 +1,7 @@
 package at.tugraz.software22.ui.viewmodel;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.lifecycle.AndroidViewModel;
 
@@ -29,12 +30,12 @@ public class UserViewModel extends AndroidViewModel {
         pictureRepository = userApplication.getPictureService();
     }
 
-    public void registerUser(User users, File image) {
+    public void registerUser(User users, Uri imageUri) {
         executor.execute(() -> {
             this.userService.registerUser(executor, users);
-            if (image != null){
+            if (imageUri != null){
                 try {
-                    this.userService.addPicture(image);
+                    this.userService.addPicture(imageUri);
                 } catch (UserNotLoggedInException e) {
                     e.printStackTrace();
                 }

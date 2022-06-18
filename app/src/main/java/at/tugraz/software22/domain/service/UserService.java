@@ -168,6 +168,33 @@ public class UserService implements UserRepository {
     }
 
     @Override
+    public void addPicture(Uri pictureUri) throws UserNotLoggedInException {
+        String path = "images/" + getCurrentUserId() + "/" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        StorageReference riversRef = firebaseStorage.getReference().child(path);
+        var uploadTask = riversRef.putFile(pictureUri);
+
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                // todo toast warning
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                loggedInUser.addPicturePath(path);
+
+                try {
+                    updateUser(loggedInUser);
+                } catch (UserNotLoggedInException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
     public MutableLiveData<List<String>> getPictures() {
         return picturePaths;
     }

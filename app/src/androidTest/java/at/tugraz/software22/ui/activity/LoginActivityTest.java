@@ -10,6 +10,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -191,11 +192,17 @@ public class LoginActivityTest {
          return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
      }
 
+    private Instrumentation.ActivityResult createImageUploadActivityResultStub() {
+        Intent resultData = new Intent();
+        resultData.setData(Uri.parse("android.resource://at.tugraz.software22/" + R.drawable.software22));
+        return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+    }
+
     @Test
     public void givenRegistration_whenClickOnNewProfilePictureFromGallery_thenVerifyGetContentViewAppears(){
         ActivityScenario.launch(LoginActivity.class);
 
-        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
+        Instrumentation.ActivityResult imgCaptureResult = createImageUploadActivityResultStub();
         Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
 
         Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
