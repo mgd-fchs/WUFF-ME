@@ -1,5 +1,7 @@
 package at.tugraz.software22.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +9,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import at.tugraz.software22.R;
+import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +22,41 @@ import at.tugraz.software22.R;
  */
 public class SwipingFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_USERVIEWMODEL = "userViewModel";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private UserViewModel userViewModel;
 
     public SwipingFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SwipingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SwipingFragment newInstance(String param1, String param2) {
+    public static SwipingFragment newInstance(UserViewModel userViewModel) {
         SwipingFragment fragment = new SwipingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.userViewModel = userViewModel;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_swiping, container, false);
+        View view = inflater.inflate(R.layout.fragment_swiping, container, false);
+        TextView interestingUserName = view.findViewById(R.id.textViewNameOfInterestingUser);
+        ImageView interestingUserPicture = view.findViewById(R.id.imageViewInterestingUser);
+        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            interestingUserName.setText(user.getUsername());
+            if (!user.getPicturePaths().isEmpty()) {
+                userViewModel.getPictureService().downloadPicture(user.getPicturePaths().get(0)).observe(getViewLifecycleOwner(), picture -> {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                    interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
+                });
+            }
+        });
+
+        userViewModel.loadNextInterestingUser();
+        return view;
     }
 }

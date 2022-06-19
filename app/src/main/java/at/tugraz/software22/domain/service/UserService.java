@@ -1,125 +1,57 @@
 package at.tugraz.software22.domain.service;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
-
-import java.util.concurrent.Executor;
-
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class UserService implements UserRepository {
     final FirebaseDatabase database;
-    private FirebaseStorage firebaseStorage;
-    private final FirebaseAuth mAuth;
-    private static final String TAG = "test";
-    private final MutableLiveData<UserState> userState = new MutableLiveData<>();
+    private final FirebaseStorage firebaseStorage;
+
     private final MutableLiveData<List<String>> picturePaths = new MutableLiveData<>();
 
     protected User loggedInUser;
+    protected String loggedInUserUid;
 
 
-    public UserService(FirebaseDatabase database, FirebaseAuth mAuth, FirebaseStorage firebaseStorage) {
+
+
+    public UserService(FirebaseDatabase database, FirebaseStorage firebaseStorage) {
         this.database = database;
-        this.mAuth = mAuth;
         this.firebaseStorage = firebaseStorage;
     }
 
-    @Override
-    public MutableLiveData<UserState> getUserState() {
-        return userState;
-    }
-
-    @Override
-    public void registerUser(Executor exec, User users) {
-
-
-        mAuth.createUserWithEmailAndPassword(users.getEmail(), users.getPassword())
-                .addOnCompleteListener(exec, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "createUserWithEmail:success");
-
-                        DatabaseReference usersRef = database.getReference().child(Constants.USER_TABLE);
-                        Map<String, Object> userMap = new HashMap<>();
-                        FirebaseUser fireBaseUser = mAuth.getCurrentUser();
-
-                        assert fireBaseUser != null;
-                        userMap.put(fireBaseUser.getUid(), users);
-                        usersRef.updateChildren(userMap);
-
-                        userState.postValue(UserState.LOGGED_IN_FROM_REGISTRATION);
-
-                        loggedInUser = users;
-
-                    } else {
-                        System.out.println("registration failed");
-
-                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        userState.postValue(UserState.NOT_LOGGED_IN);
-                    }
-                });
-
-    }
 
     @Override
     public void setUserType(UserType userType) {
         Map<String, Object> users = new HashMap<>();
-        String uid = mAuth.getCurrentUser().getUid();
         loggedInUser.setType(userType);
-        users.put(uid, loggedInUser);
+        users.put(loggedInUserUid, loggedInUser);
         database.getReference().child(Constants.USER_TABLE).updateChildren(users);
     }
 
-    @Override
-    public void loginUser(Executor exec, User user) {
-        mAuth.signInWithEmailAndPassword(user.getEmail(), user.getPassword())
-                .addOnCompleteListener(exec, task -> {
-                    if (task.isSuccessful()) {
-
-                        Log.d(TAG, "signInWithEmail:success");
-                        userState.postValue(UserState.LOGGED_IN_FROM_LOGIN);
-
-                        loggedInUser = user;
-
-                    } else {
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        userState.postValue(UserState.NOT_LOGGED_IN);
-
-                    }
-                });
-    }
-
-    public void logout() {
-        mAuth.signOut();
-        userState.postValue(UserState.NOT_LOGGED_IN);
-    }
 
     @Override
     public User getLoggedInUser() {
@@ -127,43 +59,27 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void setLoggedInUser(User user){
-        loggedInUser = user;
-    }
-
-    @Override
-    public void updateUser(User user) throws UserNotLoggedInException {
+    public void updateUser(User user) {
         Map<String, Object> users = new HashMap<>();
-        users.put(getCurrentUserId(), user);
+        users.put(loggedInUserUid, user);
         database.getReference().child(Constants.USER_TABLE).updateChildren(users);
         loggedInUser = user;
     }
 
     @Override
-    public void addPicture(File picture) throws UserNotLoggedInException {
+    public void addPicture(File picture) {
         Uri file = Uri.fromFile(picture);
-        String path = "images/" + getCurrentUserId() + "/" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
+        String path = "images/" + loggedInUserUid + "/" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         StorageReference riversRef = firebaseStorage.getReference().child(path);
         var uploadTask = riversRef.putFile(file);
 
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                // todo toast warning
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                loggedInUser.addPicturePath(path);
-
-                try {
-                    updateUser(loggedInUser);
-                } catch (UserNotLoggedInException e) {
-                    e.printStackTrace();
-                }
-            }
+        uploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            // todo toast warning
+        }).addOnSuccessListener(taskSnapshot -> {
+            loggedInUser.addPicturePath(path);
+            updateUser(loggedInUser);
         });
     }
 
@@ -172,11 +88,48 @@ public class UserService implements UserRepository {
         return picturePaths;
     }
 
-    private String getCurrentUserId() throws UserNotLoggedInException {
-        var currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            throw new UserNotLoggedInException();
-        }
-        return currentUser.getUid();
+    @Override
+    public void getUser(String userUid, MutableLiveData<User> userMutableLiveData, MutableLiveData<UserState> userStateMutableLiveData) {
+        DatabaseReference userRef = database.getReference().child(Constants.USER_TABLE).child(userUid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                userMutableLiveData.postValue(user);
+                loggedInUserUid = userUid;
+                loggedInUser = user;
+                userStateMutableLiveData.postValue(UserState.LOGGED_IN_FROM_LOGIN);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                userStateMutableLiveData.postValue(UserState.NOT_LOGGED_IN);
+            }
+        });
+
     }
+
+    @Override
+    public void createUser(String userUid, String username, MutableLiveData<User> userMutableLiveData,
+                           MutableLiveData<UserState> userStateMutableLiveData) {
+        DatabaseReference usersRef = database.getReference().child(Constants.USER_TABLE);
+        Map<String, Object> userMap = new HashMap<>();
+        User user = new User();
+        user.setUsername(username);
+        userMap.put(userUid, user);
+        usersRef.updateChildren(userMap).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                userMutableLiveData.postValue(user);
+                this.loggedInUserUid = userUid;
+                loggedInUser = user;
+                userStateMutableLiveData.postValue(UserState.LOGGED_IN_FROM_REGISTRATION);
+            } else {
+                userStateMutableLiveData.postValue(UserState.NOT_LOGGED_IN);
+            }
+        });
+
+    }
+
+
 }

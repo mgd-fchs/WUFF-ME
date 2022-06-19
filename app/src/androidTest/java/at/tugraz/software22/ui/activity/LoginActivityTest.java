@@ -18,18 +18,11 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.intent.Intents;
-
 import androidx.test.espresso.matcher.ViewMatchers;
-
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-
 
 import com.google.firebase.auth.FirebaseAuth;
-
-import at.tugraz.software22.R;
-
 
 import org.junit.After;
 import org.junit.Assert;
@@ -43,6 +36,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
+import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.MainActivity;

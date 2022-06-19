@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import at.tugraz.software22.R;
-import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
@@ -38,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     public static final String INTENT_USERNAME = "";
     private File profilePictureFile = null;
-    private static String username;
 
     private ImageView profilePicturePreview;
 
@@ -50,90 +47,85 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditText emailInput = (EditText)findViewById(R.id.email);
-        EditText passwordInput = (EditText)findViewById(R.id.password);
-        EditText usernameInput = (EditText)findViewById(R.id.username);
-        SwitchCompat toggleBtn = (SwitchCompat) findViewById(R.id.toggle_register);
-        ImageView uploadImage = (ImageView)findViewById(R.id.image_button_add_profile_picture);
-        profilePicturePreview = (ImageView)findViewById(R.id.profile_picture_preview);
+        EditText emailInput = findViewById(R.id.email);
+        EditText passwordInput = findViewById(R.id.password);
+        EditText usernameInput = findViewById(R.id.username);
+
+        SwitchCompat toggleBtn =  findViewById(R.id.toggle_register);
+        ImageView uploadImage = findViewById(R.id.image_button_add_profile_picture);
+        profilePicturePreview = findViewById(R.id.profile_picture_preview);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         wuffApp = getApplication();
 
-        Button loginBtn = (Button)findViewById(R.id.login_btn);
+        Button loginBtn = findViewById(R.id.login_btn);
 
-        uploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String fileName = "JPEG_" + timeStamp;
-                File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                try {
-                    profilePictureFile = File.createTempFile(
-                            fileName,
-                            ".jpg",
-                            storageDirectory
-                    );
-                    Uri imageUri = FileProvider.getUriForFile(
-                            getApplicationContext(),
-                            "at.tugraz.software22.WuffApplication.provider",
-                            profilePictureFile);
-                    dispatchTakePictureIntent(imageUri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        uploadImage.setOnClickListener(view -> {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String fileName = "JPEG_" + timeStamp;
+            File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            try {
+                profilePictureFile = File.createTempFile(
+                        fileName,
+                        ".jpg",
+                        storageDirectory
+                );
+                Uri imageUri = FileProvider.getUriForFile(
+                        getApplicationContext(),
+                        "at.tugraz.software22.WuffApplication.provider",
+                        profilePictureFile);
+                dispatchTakePictureIntent(imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            uploadImage.setVisibility(View.VISIBLE);
+            profilePicturePreview.setVisibility(View.VISIBLE);
+        });
+
+        toggleBtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                usernameInput.setVisibility(View.VISIBLE);
                 uploadImage.setVisibility(View.VISIBLE);
-                profilePicturePreview.setVisibility(View.VISIBLE);
+                loginBtn.setText(R.string.register_btn);
+            } else {
+                usernameInput.setVisibility(View.GONE);
+                profilePicturePreview.setVisibility(View.GONE);
+                uploadImage.setVisibility(View.GONE);
+                loginBtn.setText(R.string.login_btn);
             }
         });
 
-        toggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked){
-                    usernameInput.setVisibility(View.VISIBLE);
-                    uploadImage.setVisibility(View.VISIBLE);
-                    loginBtn.setText(R.string.register_btn);
-                } else {
-                    usernameInput.setVisibility(View.GONE);
-                    profilePicturePreview.setVisibility(View.GONE);
-                    uploadImage.setVisibility(View.GONE);
-                    loginBtn.setText(R.string.login_btn);
-                }
-            }
-        });
+        loginBtn.setOnClickListener(v -> {
+            String username = "";
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            if (usernameInput.getVisibility() == View.VISIBLE) {
+                username = usernameInput.getText().toString();
 
-                if (usernameInput.getVisibility() == View.VISIBLE) {
-                    username = usernameInput.getText().toString();
-
-                    if (username.isEmpty()) {
-                        usernameInput.setError("Please enter a username!");
-                        usernameInput.requestFocus();
-                        return;
-                    }
-                }
-
-                if(validatePasswordField(passwordInput) || validateEmailField(emailInput)) return;
-
-                String email = emailInput.getText().toString();
-                String password = passwordInput.getText().toString();
-                User users = new User(username, password, email);
-
-                if (usernameInput.getVisibility() == View.VISIBLE) {
-                    userViewModel.registerUser(users, profilePictureFile);
-                } else {
-                    userViewModel.loginUser(users);
+                if (username.isEmpty()) {
+                    usernameInput.setError("Please enter a username!");
+                    usernameInput.requestFocus();
+                    return;
                 }
             }
 
+            if(validatePasswordField(passwordInput) || validateEmailField(emailInput)) return;
+
+            String email = emailInput.getText().toString();
+            String password = passwordInput.getText().toString();
+
+            if (usernameInput.getVisibility() == View.VISIBLE) {
+                userViewModel.registerUser(email, password, username);
+            } else {
+                userViewModel.loginUser(email, password);
+            }
         });
 
-        userViewModel.getUserService().getUserState().observe(this, result -> {
-            if (result == UserState.LOGGED_IN_FROM_REGISTRATION){
+        userViewModel.getUserStateMutableLiveData().observe(this, result -> {
+            if (result == UserState.LOGGED_IN_FROM_REGISTRATION) {
+                if (profilePictureFile != null) {
+                    userViewModel.getUserService().addPicture(profilePictureFile);
+                }
                 Intent intent = new Intent(LoginActivity.this, UsertypeSelectionActivity.class);
                 startActivity(intent);
             }

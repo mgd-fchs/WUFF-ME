@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY checkBoxOwnerText "Owner"><!ENTITY checkBoxSearcherText "Searcher">]>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY checkBoxOwnerText "Owner">
+    <!ENTITY checkBoxSearcherText "Searcher">
+    ]>
 
 <resources>
     <string name="app_name">Software22 - Team project</string>
@@ -46,4 +50,5 @@
     <string name="button_swiping">🐾</string>
     <string name="button_matches">🧡</string>
     <string name="button_messages">💬</string>
+    <string name="profile_picture">profile picture</string>
 </resources>

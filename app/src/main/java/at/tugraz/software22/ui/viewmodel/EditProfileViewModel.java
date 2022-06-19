@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 
 public class EditProfileViewModel extends AndroidViewModel {
@@ -27,7 +26,7 @@ public class EditProfileViewModel extends AndroidViewModel {
         return currentUser.getUsername();
     }
 
-    public void updateUserName(String newUserName) throws UserNotLoggedInException {
+    public void updateUserName(String newUserName) {
         currentUser.setUsername(newUserName);
         userRepository.updateUser(currentUser);
     }
@@ -40,7 +39,7 @@ public class EditProfileViewModel extends AndroidViewModel {
         return currentUser.getType().toString();
     }
 
-    public void updateUserBirthday(LocalDate newBirthday) throws UserNotLoggedInException {
+    public void updateUserBirthday(LocalDate newBirthday) {
         currentUser.setBirthday(newBirthday);
         userRepository.updateUser(currentUser);
     }
@@ -49,7 +48,7 @@ public class EditProfileViewModel extends AndroidViewModel {
         return currentUser.getJob();
     }
 
-    public void updateUserJob(String newJob) throws UserNotLoggedInException {
+    public void updateUserJob(String newJob) {
         currentUser.setJob(newJob);
         userRepository.updateUser(currentUser);
     }

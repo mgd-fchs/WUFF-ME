@@ -3,59 +3,82 @@ package at.tugraz.software22.ui.viewmodel;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
+import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
-import at.tugraz.software22.domain.service.UserService;
+import at.tugraz.software22.domain.service.AuthenticateService;
+import at.tugraz.software22.domain.service.MatcherService;
 
 public class UserViewModel extends AndroidViewModel {
 
     private final UserRepository userService;
     private final PictureRepository pictureRepository;
+    private final MatcherService matcherService;
+    private final AuthenticateService authenticateService;
     private final Executor executor;
+    private final MutableLiveData<User> userLiveData = new MutableLiveData<>();
+    private final MutableLiveData<UserState> userStateMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<User> nextInterestingUserLiveData = new MutableLiveData<>();
 
     public UserViewModel(Application application) {
         super(application);
 
         WuffApplication userApplication = (WuffApplication) application;
         userService = userApplication.getUserService();
-        executor =  userApplication.getBackgroundExecutor();
+        executor = userApplication.getBackgroundExecutor();
         pictureRepository = userApplication.getPictureService();
+        matcherService = userApplication.getMatcherService();
+        this.authenticateService = userApplication.getAuthenticateService();
     }
 
-    public void registerUser(User users, File image) {
-        executor.execute(() -> {
-            this.userService.registerUser(executor, users);
-            if (image != null){
-                try {
-                    this.userService.addPicture(image);
-                } catch (UserNotLoggedInException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public MutableLiveData<User> getUserLiveData() {
+        return userLiveData;
     }
 
-    public void loginUser(User users) {
-        executor.execute(() -> this.userService.loginUser(executor, users));
-    }
-
-    public UserRepository getUserService(){
+    public UserRepository getUserService() {
         return userService;
     }
 
-    public PictureRepository getPictureService(){
+    public PictureRepository getPictureService() {
         return pictureRepository;
     }
 
-    public void logout() {
-        executor.execute(this.userService::logout);
+    public MatcherService getMatcherService() {
+        return matcherService;
     }
 
+    public void registerUser(String email, String password, String username) {
+        executor.execute(() -> authenticateService.registerUser(email, password, username,
+                userLiveData, userStateMutableLiveData));
+    }
+
+    public void loginUser(String email, String password) {
+        executor.execute(() -> authenticateService.loginUser(email, password,
+                userLiveData, userStateMutableLiveData));
+    }
+
+    public void logout() {
+        executor.execute(() -> authenticateService.logout(userStateMutableLiveData));
+    }
+
+    public MutableLiveData<UserState> getUserStateMutableLiveData() {
+        return userStateMutableLiveData;
+    }
+
+    public LiveData<User> getNextInterestingUserLiveData() {
+        return nextInterestingUserLiveData;
+    }
+
+    public void loadNextInterestingUser() {
+        executor.execute(() -> matcherService.getNextInterestingProfile(nextInterestingUserLiveData,
+                userService.getLoggedInUser().getType()));
+    }
 }

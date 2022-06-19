@@ -1,14 +1,11 @@
 package at.tugraz.software22.ui;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
@@ -20,7 +17,7 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
     Button buttonSelectUsertype;
     CheckBox checkBoxOwner;
     CheckBox checkBoxSearcher;
-    private static Application wuffApp;
+    private WuffApplication wuffApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +25,11 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.usertype_selection);
 
         initialiseViews();
-        wuffApp = getApplication();
+        wuffApp = (WuffApplication) getApplication();
 
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
-            ((WuffApplication) wuffApp).getUserService().setUserType(userType);
+            wuffApp.getUserService().setUserType(userType);
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
