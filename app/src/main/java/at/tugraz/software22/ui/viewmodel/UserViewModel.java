@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.io.File;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
@@ -15,7 +16,6 @@ import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.domain.service.AuthenticateService;
 import at.tugraz.software22.domain.service.MatcherService;
-import at.tugraz.software22.domain.service.UserService;
 
 public class UserViewModel extends AndroidViewModel {
 

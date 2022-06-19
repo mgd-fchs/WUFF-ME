@@ -1,7 +1,6 @@
 package at.tugraz.software22.domain.service;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,7 +24,6 @@ import java.util.List;
 import at.tugraz.software22.Constants;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
-import at.tugraz.software22.domain.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MatcherServiceTest {

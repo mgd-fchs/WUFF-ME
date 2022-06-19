@@ -26,6 +26,8 @@ public class User {
         return picturePaths;
     }
 
+    public void getProfilePicture(){}
+
     public void setPicturePaths(List<String> picturePaths) {
         this.picturePaths = picturePaths;
     }

@@ -1,7 +1,9 @@
 package at.tugraz.software22.ui;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +14,6 @@ import java.time.format.DateTimeParseException;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.databinding.ActivityEditProfileBinding;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.ui.viewmodel.EditProfileViewModel;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
@@ -29,15 +30,21 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-//        String path = viewModel.getCurrentUser().getPicturePaths().isEmpty() ? "" : viewModel.getCurrentUser().getPicturePaths().get(0);
-//
-//        userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
-//            System.out.println(bytes);
-//        });
+
+
+        if (!viewModel.getCurrentUser().getPicturePaths().isEmpty()){
+            String path = viewModel.getCurrentUser().getPicturePaths().get(0);
+            userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
+                Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                binding.imageViewProfilePicture.setImageBitmap(profilePicture);
+                binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
+            });
+        } else {
+            binding.imageViewProfilePicture.setVisibility(View.GONE);
+        }
 
         binding.textViewUserName.setText(viewModel.getUsername());
-
-
+        binding.textViewUserType.setText(viewModel.getUserTyp());
 
         binding.editTextUserName.setText(viewModel.getUsername());
         binding.imageButtonEditUserName.setOnClickListener( it -> {
@@ -48,11 +55,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (newName.isEmpty()){
                     binding.editTextUserName.setError(getString(R.string.edit_profile_name_empty_error));
                 } else {
-                    try {
-                        viewModel.updateUserName(binding.editTextUserName.getText().toString());
-                    } catch (UserNotLoggedInException e) {
-                        startActivity(new Intent(this, Login.class));
-                    }
+                    viewModel.updateUserName(binding.editTextUserName.getText().toString());
                 }
             } else {
                 binding.editTextUserName.setEnabled(true);
@@ -72,11 +75,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     return;
                 }
                 binding.editTextAge.setEnabled(false);
-                try {
-                    viewModel.updateUserBirthday(date);
-                } catch (UserNotLoggedInException e) {
-                    startActivity(new Intent(this, Login.class));
-                }
+                viewModel.updateUserBirthday(date);
             } else {
                 binding.editTextAge.setEnabled(true);
                 binding.editTextAge.requestFocus();
@@ -87,11 +86,7 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.imageButtonEditJob.setOnClickListener(view -> {
             if(binding.editTextJob.isEnabled()){
                 binding.editTextJob.setEnabled(false);
-                try {
-                    viewModel.updateUserJob(binding.editTextJob.getText().toString());
-                } catch (UserNotLoggedInException e) {
-                    startActivity(new Intent(this, Login.class));
-                }
+                viewModel.updateUserJob(binding.editTextJob.getText().toString());
             } else {
                 binding.editTextJob.setEnabled(true);
                 binding.editTextJob.requestFocus();

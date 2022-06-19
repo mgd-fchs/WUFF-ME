@@ -23,32 +23,56 @@
         android:id="@+id/buttonEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit Profile"
+        android:text="@string/edit_profile_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewInterestingUser"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
-        android:contentDescription="@string/profile_picture"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/toggle_button_group"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/toggle_button_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        app:checkedButton="@+id/buttonSwiping"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:selectionRequired="true"
+        app:singleSelection="true">
 
-    <TextView
-        android:id="@+id/textViewNameOfInterestingUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewInterestingUser"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Interesting User" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonSwiping"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_swiping"
+            android:textSize="32sp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonMatches"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_matches"
+            android:textSize="32sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonMessages"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_messages"
+            android:textSize="32sp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

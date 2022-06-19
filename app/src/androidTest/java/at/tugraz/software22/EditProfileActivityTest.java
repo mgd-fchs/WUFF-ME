@@ -1,6 +1,7 @@
 package at.tugraz.software22;
 
 import android.content.res.Resources;
+
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -16,9 +17,9 @@ import org.mockito.Mockito;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 
@@ -49,7 +50,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() {
         String newUserName = "New Name";
         User user = new User();
         user.setUsername("Testuser");
@@ -71,7 +72,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() {
         LocalDate newUserBirthday = LocalDate.of(2000,11,3);
         User user = new User();
         user.setUsername("Testuser");
@@ -116,7 +117,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() {
         String newJob = "Scrum Master";
         User user = new User();
         user.setUsername("Testuser");
@@ -138,7 +139,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
         User user = new User();
         user.setUsername("Testuser");
         user.setJob("Developer");
@@ -214,4 +215,23 @@ public class EditProfileActivityTest {
                 .check(ViewAssertions.matches(ViewMatchers.hasFocus()));
     }
 
+    @Test
+    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyPictureIsVisibleInProfile() throws InterruptedException {
+        User user = Mockito.mock(User.class);
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
+
+        ArrayList<String> picPaths = new ArrayList<String>();
+        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
+
+        Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
+        Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
+        Mockito.when(user.getUsername()).thenReturn("Testboi");
+        Mockito.when(user.getJob()).thenReturn("Dogwalker");
+
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Thread.sleep(2000);
+        Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+    }
 }

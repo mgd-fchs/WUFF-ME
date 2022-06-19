@@ -52,10 +52,13 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation 'androidx.activity:activity:1.2.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     implementation 'com.google.firebase:firebase-database:20.0.5'
     implementation 'com.google.firebase:firebase-auth:21.0.3'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 
 
     testImplementation "junit:junit:$rootProject.junitVersion"
