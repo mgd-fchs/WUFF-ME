@@ -12,15 +12,11 @@ import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import java.io.File;
 
 public interface UserRepository {
-    void registerUser(Executor exec, User user);
-    void loginUser(Executor exec, User user);
-    void logout();
-    void setUserType(UserType userType) throws UserNotLoggedInException;
-    MutableLiveData<UserState> getUserState();
+    void setUserType(UserType userType);
     User getLoggedInUser();
-    void updateUser(User user) throws UserNotLoggedInException;
-    void addPicture(File picture) throws UserNotLoggedInException;
+    void updateUser(User user);
+    void addPicture(File picture);
     MutableLiveData<List<String>> getPictures();
-
-
+    void getUser(String userUid, MutableLiveData<User> userMutableLiveData, MutableLiveData<UserState> userStateMutableLiveData);
+    void createUser(String userUid, String username, MutableLiveData<User> userMutableLiveData, MutableLiveData<UserState> userStateMutableLiveData);
 }

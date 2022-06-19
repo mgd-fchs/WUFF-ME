@@ -23,26 +23,22 @@ import at.tugraz.software22.domain.repository.UserRepository;
 
 public class MatcherService {
     List<User> interestingProfiles = new ArrayList<>();
-    private final UserRepository userService;
     private final FirebaseDatabase database;
-    MutableLiveData<User> user = new MutableLiveData<>();
 
-    public MatcherService(FirebaseDatabase database, UserRepository userService) {
-        this.userService = userService;
+    public MatcherService(FirebaseDatabase database) {
         this.database = database;
     }
 
-    public LiveData<User> getNextInterestingProfile() {
+    public void getNextInterestingProfile(MutableLiveData<User> userMutableLiveData, UserType ownType) {
         if (interestingProfiles.size() <= 1) {
-            fetchNewProfiles(userService.getLoggedInUser().getType());
+            fetchNewProfiles(ownType,userMutableLiveData);
         }
         else {
-            user.postValue(interestingProfiles.remove(0));
+            userMutableLiveData.postValue(interestingProfiles.remove(0));
         }
-        return user;
     }
 
-    private void fetchNewProfiles(UserType ownType) {
+    private void fetchNewProfiles(UserType ownType, MutableLiveData<User> userMutableLiveData) {
        database.getReference().child(Constants.USER_TABLE).get().addOnSuccessListener(dataSnapshot -> {
            for (DataSnapshot child : dataSnapshot.getChildren()) {
                User user = child.getValue(User.class);
@@ -55,7 +51,7 @@ public class MatcherService {
                }
            }
            if (!interestingProfiles.isEmpty()) {
-               user.postValue(interestingProfiles.remove(0));
+               userMutableLiveData.postValue(interestingProfiles.remove(0));
            }
        });
     }

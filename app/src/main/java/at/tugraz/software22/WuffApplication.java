@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 
 import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
+import at.tugraz.software22.domain.service.AuthenticateService;
 import at.tugraz.software22.domain.service.MatcherService;
 import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
@@ -23,14 +24,12 @@ public class WuffApplication extends Application {
     private static PictureRepository pictureRepository;
     private static MatcherService matcherService;
     private static Executor backgroundExecutor;
+    private static AuthenticateService authenticateService;
 
     private FirebaseDatabase createDatabaseInstance() {
         return FirebaseDatabase.getInstance();
     }
 
-    private FirebaseAuth createAuthInstance() {
-        return FirebaseAuth.getInstance();
-    }
 
     private FirebaseStorage createFirebaseStorageInstance() {
         return FirebaseStorage.getInstance();
@@ -38,7 +37,7 @@ public class WuffApplication extends Application {
 
     public UserRepository getUserService() {
         if (userRepository == null) {
-            userRepository = new UserService(createDatabaseInstance(), createAuthInstance(), createFirebaseStorageInstance());
+            userRepository = new UserService(createDatabaseInstance(), createFirebaseStorageInstance());
         }
         return userRepository;
     }
@@ -71,12 +70,19 @@ public class WuffApplication extends Application {
 
     public MatcherService getMatcherService() {
         if (matcherService == null) {
-            matcherService = new MatcherService(createDatabaseInstance(), getUserService());
+            matcherService = new MatcherService(createDatabaseInstance());
         }
         return matcherService;
     }
     @VisibleForTesting
     public static void setMatcherService(MatcherService matcherService) {
         WuffApplication.matcherService = matcherService;
+    }
+
+    public AuthenticateService getAuthenticateService() {
+        if (authenticateService == null) {
+            authenticateService = new AuthenticateService(FirebaseAuth.getInstance(), getUserService());
+        }
+        return authenticateService;
     }
 }

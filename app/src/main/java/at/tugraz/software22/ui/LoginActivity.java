@@ -12,26 +12,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import at.tugraz.software22.R;
-import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserState;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class LoginActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
-    private static String username;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditText emailInput = (EditText)findViewById(R.id.email);
-        EditText passwordInput = (EditText)findViewById(R.id.password);
-        EditText usernameInput = (EditText)findViewById(R.id.username);
-        Switch toggleBtn = (Switch) findViewById(R.id.toggle_register);
+        EditText emailInput = findViewById(R.id.email);
+        EditText passwordInput = findViewById(R.id.password);
+        EditText usernameInput = findViewById(R.id.username);
+
+        Switch toggleBtn =  findViewById(R.id.toggle_register);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        Button loginBtn = (Button)findViewById(R.id.login_btn);
+        Button loginBtn = findViewById(R.id.login_btn);
 
         toggleBtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
@@ -44,7 +43,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         loginBtn.setOnClickListener(v -> {
+            String username = "";
 
             if (usernameInput.getVisibility() == View.VISIBLE) {
                 username = usernameInput.getText().toString();
@@ -82,16 +83,15 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            User user = new User(username, password, email);
 
             if (usernameInput.getVisibility() == View.VISIBLE) {
-                userViewModel.registerUser(user);
+                userViewModel.registerUser(email, password, username);
             } else {
-                userViewModel.loginUser(user);
+                userViewModel.loginUser(email, password);
             }
         });
 
-        userViewModel.getUserService().getUserState().observe(this, result -> {
+        userViewModel.getUserStateMutableLiveData().observe(this, result -> {
             if (result == UserState.LOGGED_IN_FROM_REGISTRATION){
                 Intent intent = new Intent(LoginActivity.this, UsertypeSelectionActivity.class);
                 startActivity(intent);

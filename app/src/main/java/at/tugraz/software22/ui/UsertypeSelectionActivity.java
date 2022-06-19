@@ -21,7 +21,7 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
     Button buttonSelectUsertype;
     CheckBox checkBoxOwner;
     CheckBox checkBoxSearcher;
-    private static Application wuffApp;
+    private WuffApplication wuffApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +29,11 @@ public class UsertypeSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.usertype_selection);
 
         initialiseViews();
-        wuffApp = getApplication();
+        wuffApp = (WuffApplication) getApplication();
 
         buttonSelectUsertype.setOnClickListener(view -> {
             setUserType();
-            try {
-                ((WuffApplication) wuffApp).getUserService().setUserType(userType);
-            } catch (UserNotLoggedInException e) {
-                startActivity(new Intent(this, Login.class));
-                return;
-            }
+            wuffApp.getUserService().setUserType(userType);
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

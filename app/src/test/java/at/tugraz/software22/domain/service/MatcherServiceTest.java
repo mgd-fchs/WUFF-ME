@@ -2,6 +2,7 @@ package at.tugraz.software22.domain.service;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -34,25 +35,20 @@ public class MatcherServiceTest {
     @Mock
     private FirebaseDatabase firebaseDatabase;
 
-
-    @Mock
-    private UserRepository userService;
-
     private MatcherService matcherService;
 
 
 
     @Before
     public void setUp() {
-        matcherService = new MatcherService(firebaseDatabase, userService);
+        matcherService = new MatcherService(firebaseDatabase);
 
     }
 
     @Test
     public void givenUserAndUsertypeSearcher_whenGetNextInterestingProfile_thenUserGetsANewInterestingOwnerProfile() {
-        User testUser = new User("Testuser", "123456", "Developer");
+        User testUser = new User("Testuser");
         testUser.setType(UserType.SEARCHER);
-        Mockito.when(userService.getLoggedInUser()).thenReturn(testUser);
 
         DatabaseReference reference = Mockito.mock(DatabaseReference.class);
         DatabaseReference childrenReference = Mockito.mock(DatabaseReference.class);
@@ -71,7 +67,8 @@ public class MatcherServiceTest {
         Mockito.when(userData.getChildren()).thenReturn(children);
 
 
-        LiveData<User> userResult = matcherService.getNextInterestingProfile();
+        MutableLiveData<User> userResult = new MutableLiveData<>();
+        matcherService.getNextInterestingProfile(userResult, testUser.getType());
         userResult.observeForever(u -> Assert.assertTrue(checkUserType(UserType.OWNER, u.getType())));
         Mockito.verify(dataSnapshotTask).addOnSuccessListener(successListener.capture());
         successListener.getValue().onSuccess(userData);
