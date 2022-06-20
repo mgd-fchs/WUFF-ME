@@ -22,8 +22,6 @@ import at.tugraz.software22.ui.viewmodel.UserViewModel;
  */
 public class SwipingFragment extends Fragment {
 
-    private static final String ARG_USERVIEWMODEL = "userViewModel";
-
     private UserViewModel userViewModel;
 
     public SwipingFragment() {
