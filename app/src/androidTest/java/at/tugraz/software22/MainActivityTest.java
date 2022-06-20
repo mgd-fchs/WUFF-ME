@@ -1,6 +1,8 @@
 package at.tugraz.software22;
 
 
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -50,6 +52,25 @@ public class MainActivityTest {
         liveData.getValue().postValue(user);
         Espresso.onView(ViewMatchers.withText(user.getUsername()))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void givenInterestingUser_whenActivityStarted_thenVerifyProfilePictureIsSet(){
+        User loggedInUser = new User();
+        loggedInUser.setType(UserType.SEARCHER);
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(loggedInUser);
+        User user = new User();
+        user.setUsername("Testuser");
+        user.addPicturePath(" ");
+        ArgumentCaptor<MutableLiveData<User>> liveData = ArgumentCaptor.forClass(MutableLiveData.class);
+
+
+        ActivityScenario.launch(MainActivity.class);
+        Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser.getType()));
+        liveData.getValue().postValue(user);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageViewInterestingUser))
+                .check(ViewAssertions.matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
 }
