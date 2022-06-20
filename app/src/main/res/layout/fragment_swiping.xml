@@ -15,6 +15,7 @@
         android:layout_marginBottom="64dp"
         android:contentDescription="@string/profile_picture"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,5 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Interesting User" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
