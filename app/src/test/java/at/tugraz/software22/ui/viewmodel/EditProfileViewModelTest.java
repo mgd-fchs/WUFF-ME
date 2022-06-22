@@ -29,8 +29,6 @@ public class EditProfileViewModelTest {
     @Rule
     public final InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private final Executor currentThreadExecutor = Runnable::run;
-
     @Mock
     private WuffApplication applicationMock;
 
@@ -54,7 +52,6 @@ public class EditProfileViewModelTest {
     @Before
     public void setUp() {
         Mockito.when(applicationMock.getUserService()).thenReturn(userServiceMock);
-        Mockito.when(applicationMock.getBackgroundExecutor()).thenReturn(currentThreadExecutor);
         Mockito.when(userServiceMock.getLoggedInUser()).thenReturn(createDummyUser());
         editProfileViewModel = new EditProfileViewModel(applicationMock);
     }
@@ -73,5 +70,30 @@ public class EditProfileViewModelTest {
         Assert.assertEquals(editProfileViewModel.getUserTyp(), UserType.OWNER.toString());
         Assert.assertEquals(editProfileViewModel.getUserJob(), "Developer");
         Assert.assertEquals(editProfileViewModel.getUsername(), "Test User");
+    }
+
+    @Test
+    public void givenRegisteredUser_whenUserNameChange_thenUpdateUserIsCalled() {
+        User user = editProfileViewModel.getCurrentUser();
+        user.setUsername("New Test User");
+        editProfileViewModel.updateUserName("New Test User");
+        Mockito.verify(userServiceMock, Mockito.times(1)).updateUser(user);
+    }
+
+    @Test
+    public void givenRegisteredUser_whenBirthdayChange_thenUpdateUserIsCalled() {
+        User user = editProfileViewModel.getCurrentUser();
+        LocalDate today = LocalDate.now();
+        user.setBirthday(today);
+        editProfileViewModel.updateUserBirthday(today);
+        Mockito.verify(userServiceMock, Mockito.times(1)).updateUser(user);
+    }
+
+    @Test
+    public void givenRegisteredUser_whenJobChange_thenUpdateUserIsCalled() {
+        User user = editProfileViewModel.getCurrentUser();
+        user.setJob("New Job");
+        editProfileViewModel.updateUserJob("New Job");
+        Mockito.verify(userServiceMock, Mockito.times(1)).updateUser(user);
     }
 }

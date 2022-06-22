@@ -107,7 +107,7 @@ public class LoginActivityTest {
     @Test
     public void givenExistingUser_whenLoginButtonPressed_thenVerifyThatCurrentUserIsSet() throws InterruptedException {
         ActivityScenario.launch(LoginActivity.class);
-        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("ww@w.at"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("www@w.atw"));
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
@@ -115,7 +115,7 @@ public class LoginActivityTest {
         Thread.sleep(2000);
 
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-        Assert.assertEquals("ww@w.at", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        Assert.assertEquals("www@w.atw", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
 
