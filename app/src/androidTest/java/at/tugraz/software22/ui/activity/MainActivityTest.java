@@ -1,4 +1,4 @@
-package at.tugraz.software22;
+package at.tugraz.software22.ui.activity;
 
 
 import androidx.lifecycle.MutableLiveData;
@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;

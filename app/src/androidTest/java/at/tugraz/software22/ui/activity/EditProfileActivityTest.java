@@ -1,4 +1,4 @@
-package at.tugraz.software22;
+package at.tugraz.software22.ui.activity;
 
 import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -30,6 +30,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import at.tugraz.software22.R;
+import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
@@ -312,6 +314,9 @@ public class EditProfileActivityTest {
 
         ActivityScenario.launch(EditProfileActivity.class);
 
+        Instrumentation.ActivityResult imgCaptureResult = createImageUploadActivityResultStub();
+        Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
+
         Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_gallery))
                 .perform(ViewActions.click());
 
@@ -335,6 +340,9 @@ public class EditProfileActivityTest {
         Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
 
         ActivityScenario.launch(EditProfileActivity.class);
+
+        Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
+        Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgCaptureResult);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture))
                 .perform(ViewActions.click());
