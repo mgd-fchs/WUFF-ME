@@ -28,15 +28,43 @@
         tools:srcCompat="@tools:sample/avatars"
         tools:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/image_button_edit_add_profile_picture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_button_edit_add_profile_picture_from_gallery"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserType"
+        app:srcCompat="@drawable/ic_take_photo"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/image_button_edit_add_profile_picture_from_gallery"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/image_button_edit_add_profile_picture"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserType"
+        app:srcCompat="@drawable/ic_add_from_gallery"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/textViewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:text="@string/prompt_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewProfilePicture"
-        android:text="@string/prompt_username" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewProfilePicture" />
 
     <ImageButton
         android:id="@+id/imageButtonEditUserName"
@@ -45,24 +73,24 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserType"
+        app:layout_constraintTop_toBottomOf="@+id/image_button_edit_add_profile_picture_from_gallery"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <EditText
-        android:enabled="false"
         android:id="@+id/editTextUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
+        android:enabled="false"
+        android:hint="@string/prompt_username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageButtonEditUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButtonEditUserName"
-        app:layout_constraintTop_toTopOf="@+id/imageButtonEditUserName"
-        android:hint="@string/prompt_username" />
+        app:layout_constraintTop_toTopOf="@+id/imageButtonEditUserName" />
 
     <ImageButton
         android:id="@+id/imageButtonEditAge"
@@ -121,9 +149,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="Owner"
         app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
         app:layout_constraintStart_toStartOf="@+id/textViewUserName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewUserName" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserName"
+        tools:text="Owner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
