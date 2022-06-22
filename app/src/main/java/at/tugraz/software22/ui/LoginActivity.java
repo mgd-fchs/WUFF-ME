@@ -89,27 +89,6 @@ public class LoginActivity extends AppCompatActivity {
                 profilePicturePreview.setVisibility(View.VISIBLE);
             }
         });
-//        uploadImage.setOnClickListener(view -> {
-//            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//            String fileName = "JPEG_" + timeStamp;
-//            File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//            try {
-//                profilePictureFile = File.createTempFile(
-//                        fileName,
-//                        ".jpg",
-//                        storageDirectory
-//                );
-//                Uri imageUri = FileProvider.getUriForFile(
-//                        getApplicationContext(),
-//                        "at.tugraz.software22.WuffApplication.provider",
-//                        profilePictureFile);
-//                dispatchTakePictureIntent(imageUri);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            uploadImage.setVisibility(View.VISIBLE);
-//            profilePicturePreview.setVisibility(View.VISIBLE);
-//        });
 
         uploadFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
