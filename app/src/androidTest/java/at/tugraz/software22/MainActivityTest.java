@@ -80,7 +80,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenSwipeLeft_thenVerifyToastIsDisplayed(){
+    public void givenLoggedInUser_whenSwipeLeft_thenVerifySnackbarIsDisplayed(){
         ActivityScenario.launch(MainActivity.class);
         Espresso.onView(ViewMatchers.withId(R.id.users_swipe_deck)).perform(ViewActions.swipeLeft());
         Espresso.onView(Matchers.allOf(ViewMatchers.withText(containsString("User Swiped Left")))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
