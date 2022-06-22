@@ -96,10 +96,14 @@ public class UserService implements UserRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                userMutableLiveData.postValue(user);
-                loggedInUserUid = userUid;
-                loggedInUser = user;
-                userStateMutableLiveData.postValue(UserState.LOGGED_IN_FROM_LOGIN);
+                if (user != null){
+                    userMutableLiveData.postValue(user);
+                    loggedInUserUid = userUid;
+                    loggedInUser = user;
+                    userStateMutableLiveData.postValue(UserState.LOGGED_IN_FROM_LOGIN);
+                } else {
+                    userStateMutableLiveData.postValue(UserState.NOT_LOGGED_IN);
+                }
             }
 
             @Override

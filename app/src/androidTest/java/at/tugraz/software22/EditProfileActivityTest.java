@@ -2,6 +2,7 @@ package at.tugraz.software22;
 
 import android.content.res.Resources;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -13,6 +14,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -20,19 +22,24 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class EditProfileActivityTest {
 
-    private static UserRepository userRepositoryMock;
+    private UserRepository userRepositoryMock;
+    private PictureRepository pictureRepositoryMock;
 
     private Resources resources;
 
     @Before
     public void setUp() {
+        pictureRepositoryMock = Mockito.mock(PictureRepository.class);
         userRepositoryMock = Mockito.mock(UserRepository.class);
+        WuffApplication.setPictureRepository(pictureRepositoryMock);
         WuffApplication.setUserRepository(userRepositoryMock);
         resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
     }
@@ -57,7 +64,7 @@ public class EditProfileActivityTest {
         user.setJob("SCRUM Master");
         user.setBirthday(LocalDate.now());
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-        ActivityScenario.launch(EditProfileActivity.class);
+        ActivityScenario.launch(EditProfileActivity.class).recreate();
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
                 .perform(ViewActions.click());
@@ -186,7 +193,7 @@ public class EditProfileActivityTest {
         user.setJob("Developer");
         user.setBirthday(LocalDate.now());
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-        ActivityScenario.launch(EditProfileActivity.class);
+        ActivityScenario.launch(EditProfileActivity.class).recreate();
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
                 .perform(ViewActions.click());
@@ -227,11 +234,17 @@ public class EditProfileActivityTest {
         Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
         Mockito.when(user.getUsername()).thenReturn("Testboi");
         Mockito.when(user.getJob()).thenReturn("Dogwalker");
+        Mockito.when(user.getType()).thenReturn(UserType.OWNER);
 
         ActivityScenario.launch(EditProfileActivity.class);
 
-        Thread.sleep(2000);
-        Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        ArgumentCaptor<MutableLiveData<byte[]>> liveData = ArgumentCaptor.forClass(MutableLiveData.class);
+        Mockito.verify(pictureRepositoryMock).downloadPicture(Mockito.eq(picPaths.get(0)), liveData.capture());
+
+        liveData.getValue().postValue(new byte[1]);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
     }
 }
