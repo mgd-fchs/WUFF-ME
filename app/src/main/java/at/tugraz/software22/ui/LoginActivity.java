@@ -36,8 +36,6 @@ import at.tugraz.software22.ui.viewmodel.UserViewModel;
 public class LoginActivity extends AppCompatActivity {
     private static Application wuffApp;
     private UserViewModel userViewModel;
-    public static final String INTENT_USERNAME = "";
-    private File profilePictureFile = null;
     private Uri imageUri = null;
     private static String username;
 
@@ -74,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 String fileName = "JPEG_" + timeStamp;
                 File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                 try {
-                    profilePictureFile = File.createTempFile(
+                    File profilePictureFile = File.createTempFile(
                             fileName,
                             ".jpg",
                             storageDirectory
@@ -213,8 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onCreateActivityResult(ActivityResult result){
         if(result.getResultCode() == RESULT_OK){
-            Bitmap imageBitmap = BitmapFactory.decodeFile(profilePictureFile.getAbsolutePath());
-            profilePicturePreview.setImageBitmap(imageBitmap);
+            profilePicturePreview.setImageURI(imageUri);
         }
     }
 
