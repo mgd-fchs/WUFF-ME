@@ -41,4 +41,7 @@
     <string name="invalid_email_alert">Diese Email Adresse ist nicht gültig!</string>
     <string name="login_register_unsuccessful_alert">Einloggen/Registrieren nicht erfolgreich!</string>
     <string name="database_connection_failed_alert">"Lesen von Datenbank fehlgeschlagen: "</string>
+    <string name="button_swiping">🐾</string>
+    <string name="button_matches">🧡</string>
+    <string name="button_messages">💬</string>
 </resources>

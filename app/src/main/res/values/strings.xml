@@ -27,7 +27,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_register">Register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -47,4 +47,8 @@
     <string name="invalid_email_alert">This email address is invalid!</string>
     <string name="login_register_unsuccessful_alert">Login/Registration unsuccessful!</string>
     <string name="database_connection_failed_alert">Cannot read from database: </string>
+    <string name="button_swiping">🐾</string>
+    <string name="button_matches">🧡</string>
+    <string name="button_messages">💬</string>
+    <string name="profile_picture">profile picture</string>
 </resources>

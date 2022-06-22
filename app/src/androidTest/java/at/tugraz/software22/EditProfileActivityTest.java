@@ -1,20 +1,11 @@
 package at.tugraz.software22;
 
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.provider.MediaStore;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -24,17 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import java.sql.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import at.tugraz.software22.domain.entity.User;
-import at.tugraz.software22.domain.exception.UserNotLoggedInException;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
-import at.tugraz.software22.ui.LoginActivity;
-import at.tugraz.software22.ui.activity.LoginActivityTest;
 
 @RunWith(AndroidJUnit4.class)
 public class EditProfileActivityTest {
@@ -63,7 +50,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenNameEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectName() {
         String newUserName = "New Name";
         User user = new User();
         user.setUsername("Testuser");
@@ -85,7 +72,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenAgeEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectAge() {
         LocalDate newUserBirthday = LocalDate.of(2000,11,3);
         User user = new User();
         user.setUsername("Testuser");
@@ -130,7 +117,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenJobEditedAndSubmitted_thenVerifyThatUpdateUserIsCalledWithCorrectJob() {
         String newJob = "Scrum Master";
         User user = new User();
         user.setUsername("Testuser");
@@ -152,7 +139,7 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() throws UserNotLoggedInException {
+    public void givenLoggedInUser_whenEmptyNameSubmitted_thenVerifyThatErrorMessageIsDisplayed() {
         User user = new User();
         user.setUsername("Testuser");
         user.setJob("Developer");
