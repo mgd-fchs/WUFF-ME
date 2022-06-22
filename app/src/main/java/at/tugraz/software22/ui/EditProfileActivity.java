@@ -34,11 +34,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (!viewModel.getCurrentUser().getPicturePaths().isEmpty()){
             String path = viewModel.getCurrentUser().getPicturePaths().get(0);
-            userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
+            userViewModel.getPictureLiveData().observe(this, bytes -> {
                 Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 binding.imageViewProfilePicture.setImageBitmap(profilePicture);
                 binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
             });
+            userViewModel.loadPicture(path);
         } else {
             binding.imageViewProfilePicture.setVisibility(View.GONE);
         }
