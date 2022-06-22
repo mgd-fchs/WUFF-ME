@@ -71,5 +71,5 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
 
     implementation 'com.google.firebase:firebase-storage'
-
+    implementation 'com.daprlabs.aaron:cardstack:0.3.1-beta0'
 }

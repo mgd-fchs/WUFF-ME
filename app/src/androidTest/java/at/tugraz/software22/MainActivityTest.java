@@ -1,21 +1,27 @@
 package at.tugraz.software22;
 
 
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewFinder;
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import static org.hamcrest.core.StringContains.containsString;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
@@ -71,6 +77,13 @@ public class MainActivityTest {
 
         Espresso.onView(ViewMatchers.withId(R.id.imageViewInterestingUser))
                 .check(ViewAssertions.matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenSwipeLeft_thenVerifyToastIsDisplayed(){
+        ActivityScenario.launch(MainActivity.class);
+        Espresso.onView(ViewMatchers.withId(R.id.users_swipe_deck)).perform(ViewActions.swipeLeft());
+        Espresso.onView(Matchers.allOf(ViewMatchers.withText(containsString("User Swiped Left")))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
 }
