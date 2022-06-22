@@ -14,11 +14,9 @@ import at.tugraz.software22.domain.enums.UserType;
 public interface UserRepository {
     void setUserType(UserType userType);
     User getLoggedInUser();
-    void updateUser(User user);
     void addPicture(File picture);
-    void setLoggedInUser(User user);
-    void updateUser(User user) throws UserNotLoggedInException;
-    void addPicture(Uri pictureUri) throws UserNotLoggedInException;
+    void updateUser(User user);
+    void addPicture(Uri pictureUri);
     MutableLiveData<List<String>> getPictures();
     void getUser(String userUid, MutableLiveData<User> userMutableLiveData, MutableLiveData<UserState> userStateMutableLiveData);
     void createUser(String userUid, String username, MutableLiveData<User> userMutableLiveData, MutableLiveData<UserState> userStateMutableLiveData);

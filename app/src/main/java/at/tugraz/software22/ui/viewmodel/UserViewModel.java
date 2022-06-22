@@ -1,8 +1,11 @@
 package at.tugraz.software22.ui.viewmodel;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -37,17 +40,10 @@ public class UserViewModel extends AndroidViewModel {
         this.authenticateService = userApplication.getAuthenticateService();
     }
 
-    public void registerUser(User users, Uri imageUri) {
-        executor.execute(() -> {
-            this.userService.registerUser(executor, users);
-            if (imageUri != null){
-                try {
-                    this.userService.addPicture(imageUri);
-                } catch (UserNotLoggedInException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void addPictureToLoggedInUser(Uri imageUri){
+        if (imageUri != null){
+            this.userService.addPicture(imageUri);
+        }
     }
 
     public MutableLiveData<User> getUserLiveData() {

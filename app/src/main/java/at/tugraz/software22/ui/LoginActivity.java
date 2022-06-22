@@ -88,27 +88,28 @@ public class LoginActivity extends AppCompatActivity {
                 uploadImage.setVisibility(View.VISIBLE);
                 profilePicturePreview.setVisibility(View.VISIBLE);
             }
-        uploadImage.setOnClickListener(view -> {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String fileName = "JPEG_" + timeStamp;
-            File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            try {
-                profilePictureFile = File.createTempFile(
-                        fileName,
-                        ".jpg",
-                        storageDirectory
-                );
-                Uri imageUri = FileProvider.getUriForFile(
-                        getApplicationContext(),
-                        "at.tugraz.software22.WuffApplication.provider",
-                        profilePictureFile);
-                dispatchTakePictureIntent(imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            uploadImage.setVisibility(View.VISIBLE);
-            profilePicturePreview.setVisibility(View.VISIBLE);
         });
+//        uploadImage.setOnClickListener(view -> {
+//            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//            String fileName = "JPEG_" + timeStamp;
+//            File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//            try {
+//                profilePictureFile = File.createTempFile(
+//                        fileName,
+//                        ".jpg",
+//                        storageDirectory
+//                );
+//                Uri imageUri = FileProvider.getUriForFile(
+//                        getApplicationContext(),
+//                        "at.tugraz.software22.WuffApplication.provider",
+//                        profilePictureFile);
+//                dispatchTakePictureIntent(imageUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            uploadImage.setVisibility(View.VISIBLE);
+//            profilePicturePreview.setVisibility(View.VISIBLE);
+//        });
 
         uploadFromGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,26 +130,14 @@ public class LoginActivity extends AppCompatActivity {
             if (isChecked){
                 usernameInput.setVisibility(View.VISIBLE);
                 uploadImage.setVisibility(View.VISIBLE);
+                uploadFromGallery.setVisibility(View.VISIBLE);
                 loginBtn.setText(R.string.register_btn);
             } else {
                 usernameInput.setVisibility(View.GONE);
                 profilePicturePreview.setVisibility(View.GONE);
                 uploadImage.setVisibility(View.GONE);
+                uploadFromGallery.setVisibility(View.GONE);
                 loginBtn.setText(R.string.login_btn);
-        toggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    usernameInput.setVisibility(View.VISIBLE);
-                    uploadImage.setVisibility(View.VISIBLE);
-                    uploadFromGallery.setVisibility(View.VISIBLE);
-                    loginBtn.setText(R.string.register_btn);
-                } else {
-                    usernameInput.setVisibility(View.GONE);
-                    profilePicturePreview.setVisibility(View.GONE);
-                    uploadImage.setVisibility(View.GONE);
-                    uploadFromGallery.setVisibility(View.GONE);
-                    loginBtn.setText(R.string.login_btn);
-                }
             }
         });
 
@@ -173,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
 
             if (usernameInput.getVisibility() == View.VISIBLE) {
                 userViewModel.registerUser(email, password, username);
-//                userViewModel.registerUser(users, imageUri);
             } else {
                 userViewModel.loginUser(email, password);
             }
@@ -181,8 +169,8 @@ public class LoginActivity extends AppCompatActivity {
 
         userViewModel.getUserStateMutableLiveData().observe(this, result -> {
             if (result == UserState.LOGGED_IN_FROM_REGISTRATION) {
-                if (profilePictureFile != null) {
-                    userViewModel.getUserService().addPicture(profilePictureFile);
+                if (imageUri != null) {
+                    userViewModel.addPictureToLoggedInUser(imageUri);
                 }
                 Intent intent = new Intent(LoginActivity.this, UsertypeSelectionActivity.class);
                 startActivity(intent);

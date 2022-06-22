@@ -67,12 +67,10 @@ public class UserService implements UserRepository {
     }
 
     @Override
-    public void addPicture(File picture) {
-        Uri file = Uri.fromFile(picture);
+    public void addPicture(Uri pictureUri) {
         String path = "images/" + loggedInUserUid + "/" + LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
         StorageReference riversRef = firebaseStorage.getReference().child(path);
-        var uploadTask = riversRef.putFile(file);
-
+        var uploadTask = riversRef.putFile(pictureUri);
 
         uploadTask.addOnFailureListener(exception -> {
             // Handle unsuccessful uploads
@@ -81,6 +79,12 @@ public class UserService implements UserRepository {
             loggedInUser.addPicturePath(path);
             updateUser(loggedInUser);
         });
+    }
+
+    @Override
+    public void addPicture(File picture) {
+        Uri pictureUri = Uri.fromFile(picture);
+        addPicture(pictureUri);
     }
 
     @Override
