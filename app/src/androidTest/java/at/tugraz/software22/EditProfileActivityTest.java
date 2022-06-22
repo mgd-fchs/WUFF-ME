@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 
@@ -232,6 +233,26 @@ public class EditProfileActivityTest {
 
         Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyThatImageButtonsArePresent(){
+        User user = Mockito.mock(User.class);
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
+
+        ArrayList<String> picPaths = new ArrayList<String>();
+        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
+        Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
+        Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
+        Mockito.when(user.getUsername()).thenReturn("Testboi");
+        Mockito.when(user.getJob()).thenReturn("Dogwalker");
+        Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
+
+        ActivityScenario.launch(EditProfileActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
     }
+
 }
