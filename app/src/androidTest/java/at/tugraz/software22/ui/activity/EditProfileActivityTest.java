@@ -21,6 +21,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +51,12 @@ public class EditProfileActivityTest {
         userRepositoryMock = Mockito.mock(UserRepository.class);
         WuffApplication.setUserRepository(userRepositoryMock);
         resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
+        Intents.init();
+    }
+
+    @After
+    public void After(){
+        Intents.release();
     }
 
     @Test
@@ -234,14 +241,7 @@ public class EditProfileActivityTest {
     public void givenLoggedInUser_whenProfilePictureSet_thenVerifyPictureIsVisibleInProfile() throws InterruptedException {
         User user = Mockito.mock(User.class);
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-
-        ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
-
-        Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
-        Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
-        Mockito.when(user.getUsername()).thenReturn("Testboi");
-        Mockito.when(user.getJob()).thenReturn("Dogwalker");
+        mockUser(user);
 
         ActivityScenario.launch(EditProfileActivity.class);
 
@@ -249,19 +249,21 @@ public class EditProfileActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
-    @Test
-    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyThatImageButtonsArePresent(){
-        User user = Mockito.mock(User.class);
-        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-
+    private void mockUser(User user){
         ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
+        picPaths.add("images/E0VlMPMgOAWjE5SHn9OJ3W1HWk82/1655894930");
         Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
         Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
         Mockito.when(user.getUsername()).thenReturn("Testboi");
         Mockito.when(user.getJob()).thenReturn("Dogwalker");
         Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
+    }
 
+    @Test
+    public void givenLoggedInUser_whenProfilePictureSet_thenVerifyThatImageButtonsArePresent(){
+        User user = Mockito.mock(User.class);
+        mockUser(user);
+        Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         ActivityScenario.launch(EditProfileActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_gallery)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
@@ -283,34 +285,10 @@ public class EditProfileActivityTest {
     }
 
     @Test
-    public void givenEditProfile_whenClickOnNewProfilePictureFromGallery_thenVerifyGetContentViewAppears(){
-        ActivityScenario.launch(LoginActivity.class);
-
-        Instrumentation.ActivityResult imgCaptureResult = createImageUploadActivityResultStub();
-        Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
-
-        Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_gallery))
-                .perform(ViewActions.click());
-
-        Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture))
-                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-    }
-
-    @Test
     public void givenEditProfile_whenClickOnNewProfilePictureFromGallery_thenVerifyGalleryIntentLaunched() {
-
-        Intents.init();
-
         User user = Mockito.mock(User.class);
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-
-        ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
-        Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
-        Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
-        Mockito.when(user.getUsername()).thenReturn("Testboi");
-        Mockito.when(user.getJob()).thenReturn("Dogwalker");
-        Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
+        mockUser(user);
 
         ActivityScenario.launch(EditProfileActivity.class);
 
@@ -325,19 +303,9 @@ public class EditProfileActivityTest {
 
     @Test
     public void givenEditProfile_whenClickOnNewProfilePictureFromCamera_thenVerifyCameraIntentLaunched() {
-
-        Intents.init();
-
         User user = Mockito.mock(User.class);
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-
-        ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
-        Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
-        Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
-        Mockito.when(user.getUsername()).thenReturn("Testboi");
-        Mockito.when(user.getJob()).thenReturn("Dogwalker");
-        Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
+        mockUser(user);
 
         ActivityScenario.launch(EditProfileActivity.class);
 
