@@ -18,26 +18,23 @@ public class PictureService implements PictureRepository {
     }
 
     @Override
-    public MutableLiveData<byte[]> downloadPicture(String path) {
-        StorageReference islandRef = firebaseStorage.getReference().child(path);
-        final MutableLiveData<byte[]> picturePaths = new MutableLiveData<>();
+    public void downloadPicture(String path, MutableLiveData<byte[]> pictureLiveData) {
+        StorageReference pictureReference = firebaseStorage.getReference().child(path);
         final long FOUR_MEGABYTE = 2048 * 2048;
-        islandRef.getBytes(FOUR_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        pictureReference.getBytes(FOUR_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                picturePaths.postValue(bytes);
+                pictureLiveData.postValue(bytes);
                 System.out.println("success");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 //TODO default picture
-//                picturePaths.postValue();
+//                pictureLiveData.postValue();
                 System.out.println("failure0");
                 // Handle any errors
             }
         });
-        return picturePaths;
-
     }
 }

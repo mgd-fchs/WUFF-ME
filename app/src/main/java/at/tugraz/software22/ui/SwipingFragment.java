@@ -46,13 +46,15 @@ public class SwipingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_swiping, container, false);
         TextView interestingUserName = view.findViewById(R.id.textViewNameOfInterestingUser);
         ImageView interestingUserPicture = view.findViewById(R.id.imageViewInterestingUser);
+
+        userViewModel.getPictureLiveData().observe(getViewLifecycleOwner(), picture -> {
+            Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+            interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
+        });
         userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
             interestingUserName.setText(user.getUsername());
             if (!user.getPicturePaths().isEmpty()) {
-                userViewModel.getPictureService().downloadPicture(user.getPicturePaths().get(0)).observe(getViewLifecycleOwner(), picture -> {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-                    interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
-                });
+                userViewModel.loadPicture(user.getPicturePaths().get(0));
             }
         });
 

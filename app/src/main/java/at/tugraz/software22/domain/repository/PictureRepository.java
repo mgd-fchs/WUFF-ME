@@ -4,5 +4,5 @@ import androidx.lifecycle.MutableLiveData;
 
 public interface PictureRepository {
 
-    MutableLiveData<byte[]> downloadPicture(String path);
+    void downloadPicture(String path, MutableLiveData<byte[]> pictureLiveData);
 }
