@@ -16,7 +16,6 @@
     <string name="previous">Previous</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="checkBoxOwner">&checkBoxOwnerText;</string>
     <string name="checkBoxSearcher">&checkBoxSearcherText;</string>
     <string name="buttonSelectUsertype">Select</string>
     <string name="userTypeInfo">ⓘ Select to be \"&checkBoxOwnerText;\", \"&checkBoxSearcherText;\" or both by clicking the corresponding checkbox and pressing the \"Select\" button</string>
@@ -51,4 +50,7 @@
     <string name="button_matches">🧡</string>
     <string name="button_messages">💬</string>
     <string name="profile_picture">profile picture</string>
+    <string name="swipe_left_snackbar">You Swiped Left!</string>
+    <string name="swipe_right_snackbar">You Swiped Right!</string>
+    <string name="swipe_depleted_snackbar">You swiped all interesting users!</string>
 </resources>

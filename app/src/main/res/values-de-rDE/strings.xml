@@ -44,4 +44,10 @@
     <string name="button_swiping">🐾</string>
     <string name="button_matches">🧡</string>
     <string name="button_messages">💬</string>
+    <string name="register_btn">REGISTRIEREN</string>
+    <string name="login_btn">ANMELDEN</string>
+    <string name="profile_picture">Profilbild</string>
+    <string name="swipe_left_snackbar">Du hast nach links gewischt!</string>
+    <string name="swipe_right_snackbar">Du hast nach rechts gewischt!</string>
+    <string name="swipe_depleted_snackbar">Du hast alle interessanten Nutzer gesehen!</string>
 </resources>

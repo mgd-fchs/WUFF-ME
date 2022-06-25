@@ -1,16 +1,13 @@
 package at.tugraz.software22;
 
 
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewFinder;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
-import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -56,6 +53,8 @@ public class MainActivityTest {
         ActivityScenario.launch(MainActivity.class);
         Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser.getType()));
         liveData.getValue().postValue(user);
+        Espresso.onView(ViewMatchers.withId(R.id.users_swipe_deck)).perform(ViewActions.swipeLeft());
+
         Espresso.onView(ViewMatchers.withText(user.getUsername()))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }

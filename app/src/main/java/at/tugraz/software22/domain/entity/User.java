@@ -8,7 +8,7 @@ import at.tugraz.software22.domain.enums.UserType;
 
 public class User {
     private String username;
-    private UserType type = UserType.SEARCHER;
+    private UserType type = UserType.NON;
     private String job;
     private LocalDate birthday;
     private List<String> picturePaths = new ArrayList<>();

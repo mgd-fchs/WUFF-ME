@@ -9,7 +9,6 @@
     tools:context=".ui.SwipingFragment">
 
     <com.daprlabs.cardstack.SwipeFrameLayout
-        xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,12 +21,12 @@
         <com.daprlabs.cardstack.SwipeDeck
             android:id="@+id/users_swipe_deck"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
+            android:layout_height="match_parent"
             android:padding="20dp"
-            swipedeck:card_spacing="10dp"
-            swipedeck:max_visible="1"
-            swipedeck:render_above="true"
-            swipedeck:rotation_degrees="15" />
+            app:card_spacing="10dp"
+            app:max_visible="1"
+            app:render_above="true"
+            app:rotation_degrees="15" />
 
     </com.daprlabs.cardstack.SwipeFrameLayout>
 

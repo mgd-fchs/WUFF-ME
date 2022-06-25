@@ -46,14 +46,8 @@ public class SwipingFragment extends Fragment {
     private ArrayList<User> userList = new ArrayList<User>();
 
     public SwipingFragment() {
-        User user1 = new User("Test1");
-        User user2 = new User("Test2");
-        User user3 = new User("Test3");
-
-        // TODO: Remove!
-        userList.add(user1);
-        userList.add(user2);
-        userList.add(user3);
+        User tutorialUser = new User("");
+        userList.add(tutorialUser);
     }
 
     public static SwipingFragment newInstance(UserViewModel userViewModel) {
@@ -71,69 +65,46 @@ public class SwipingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // TODO: Fetch first user object and add to userList!
+        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
+            userList.add(user);
+        });
 
         View view = inflater.inflate(R.layout.fragment_swiping, container, false);
         interestingUserSwipeDeck = (SwipeDeck) view.findViewById(R.id.users_swipe_deck);
-        final SwipeItemAdapter adapter = new SwipeItemAdapter(userList, getContext());
+        final SwipeItemAdapter adapter = new SwipeItemAdapter(userList, getContext(), userViewModel, getViewLifecycleOwner());
         interestingUserSwipeDeck.setAdapter(adapter);
 
         interestingUserSwipeDeck.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
             public void cardSwipedLeft(int position) {
-                // on card swipe left we are displaying a toast message.
-                Snackbar.make(getView(),"User Swiped Left", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getView(),getString(R.string.swipe_left_snackbar), Snackbar.LENGTH_LONG).show();
+                userViewModel.loadNextInterestingUser();
             }
 
             @Override
             public void cardSwipedRight(int position) {
-                // on card swiped to right we are displaying a toast message.
-                Snackbar.make(getView(),"User Swiped Right", Snackbar.LENGTH_LONG).show();
-
-                // TODO: Fetch new user object here!
-                User user4 = new User("Test4");
-                userList.add(user4);
-
-                // TODO: Match!
+                Snackbar.make(getView(),getString(R.string.swipe_right_snackbar), Snackbar.LENGTH_LONG).show();
+                userViewModel.loadNextInterestingUser();
 
             }
 
             @Override
             public void cardsDepleted() {
-                // this method is called when no card is present
-                Snackbar.make(getView(),"You swiped all interesting users!", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getView(),getString(R.string.swipe_depleted_snackbar), Snackbar.LENGTH_LONG).show();
             }
 
             @Override
             public void cardActionDown() {
-                // this method is called when card is swiped down.
                 Log.i("TAG", "CARDS MOVED DOWN");
             }
 
             @Override
             public void cardActionUp() {
-                // this method is called when card is moved up.
                 Log.i("TAG", "CARDS MOVED UP");
             }
         });
-//        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
-//
-//            interestingUserName.setText(user.getUsername());
-//            if (!user.getPicturePaths().isEmpty()) {
-//                View itemView = inflater.inflate(R.layout.swipe_item, container, false);
-//
-//                userViewModel.getPictureService().downloadPicture(user.getPicturePaths().get(0)).observe(getViewLifecycleOwner(), picture -> {
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-//                    interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
-//                });
-//                interestingUserPicture.setVisibility(View.VISIBLE);
-//            } else {
-//                interestingUserPicture.setImageResource(R.drawable.default_image);
-//                interestingUserPicture.setVisibility(View.VISIBLE);
-//            }
-//        });
 
-//        userViewModel.loadNextInterestingUser();
+        userViewModel.loadNextInterestingUser();
         return view;
     }
 }
