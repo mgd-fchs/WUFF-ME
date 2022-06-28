@@ -61,6 +61,11 @@ public class WuffApplication extends Application {
         WuffApplication.userRepository = userRepository;
     }
 
+    @VisibleForTesting
+    public static void setPictureRepository(PictureRepository pictureRepository) {
+        WuffApplication.pictureRepository = pictureRepository;
+    }
+
     public PictureRepository getPictureService() {
         if (pictureRepository == null) {
             pictureRepository = new PictureService(createFirebaseStorageInstance());

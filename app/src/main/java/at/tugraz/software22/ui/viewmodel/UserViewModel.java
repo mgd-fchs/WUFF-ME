@@ -3,11 +3,12 @@ package at.tugraz.software22.ui.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.io.File;
+import java.time.LocalDate;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
@@ -28,6 +29,7 @@ public class UserViewModel extends AndroidViewModel {
     private final MutableLiveData<User> userLiveData = new MutableLiveData<>();
     private final MutableLiveData<UserState> userStateMutableLiveData = new MutableLiveData<>();
     private final MutableLiveData<User> nextInterestingUserLiveData = new MutableLiveData<>();
+    private final MutableLiveData<byte[]> pictureLiveData = new MutableLiveData<>();
 
     public UserViewModel(Application application) {
         super(application);
@@ -46,16 +48,12 @@ public class UserViewModel extends AndroidViewModel {
         }
     }
 
-    public MutableLiveData<User> getUserLiveData() {
-        return userLiveData;
+    public LiveData<User> getUserLiveData() {
+        return new MutableLiveData<User>(userService.getLoggedInUser());
     }
 
     public UserRepository getUserService() {
         return userService;
-    }
-
-    public PictureRepository getPictureService() {
-        return pictureRepository;
     }
 
     public MatcherService getMatcherService() {
@@ -87,5 +85,21 @@ public class UserViewModel extends AndroidViewModel {
     public void loadNextInterestingUser() {
         executor.execute(() -> matcherService.getNextInterestingProfile(nextInterestingUserLiveData,
                 userService.getLoggedInUser().getType()));
+    }
+
+    public LiveData<byte[]> getPictureLiveData() {
+        return pictureLiveData;
+    }
+
+    public void loadPicture(String path) {
+        executor.execute(() -> pictureRepository.downloadPicture(path, pictureLiveData));
+    }
+
+    public void updateUser(User newUser) {
+        executor.execute(() -> {
+            userService.updateUser(newUser);
+            userLiveData.postValue(newUser);
+        });
+
     }
 }

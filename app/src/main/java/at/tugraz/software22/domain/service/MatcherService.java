@@ -35,7 +35,12 @@ public class MatcherService {
                User user = child.getValue(User.class);
                switch (ownType) {
                    case SEARCHER:
-                       if (user.getType() == UserType.OWNER || user.getType() == UserType.BOTH) { // TODO filter already swiped
+                       if (user.getType() == UserType.OWNER || user.getType() == UserType.BOTH) {
+                           interestingProfiles.add(user);
+                       }
+                       break;
+                   case OWNER:
+                       if (user.getType() == UserType.SEARCHER || user.getType() == UserType.BOTH) {
                            interestingProfiles.add(user);
                        }
                        break;

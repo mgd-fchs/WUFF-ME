@@ -1,4 +1,4 @@
-package at.tugraz.software22.ui.activity;
+package at.tugraz.software22;
 
 import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -25,6 +26,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -35,6 +37,8 @@ import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.repository.PictureRepository;
+import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
 import at.tugraz.software22.ui.LoginActivity;
@@ -42,13 +46,16 @@ import at.tugraz.software22.ui.LoginActivity;
 @RunWith(AndroidJUnit4.class)
 public class EditProfileActivityTest {
 
-    private static UserRepository userRepositoryMock;
+    private UserRepository userRepositoryMock;
+    private PictureRepository pictureRepositoryMock;
 
     private Resources resources;
 
     @Before
     public void setUp() {
+        pictureRepositoryMock = Mockito.mock(PictureRepository.class);
         userRepositoryMock = Mockito.mock(UserRepository.class);
+        WuffApplication.setPictureRepository(pictureRepositoryMock);
         WuffApplication.setUserRepository(userRepositoryMock);
         resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
         Intents.init();
@@ -79,7 +86,7 @@ public class EditProfileActivityTest {
         user.setJob("SCRUM Master");
         user.setBirthday(LocalDate.now());
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-        ActivityScenario.launch(EditProfileActivity.class);
+        ActivityScenario.launch(EditProfileActivity.class).recreate();
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditUserName))
                 .perform(ViewActions.click());
@@ -208,7 +215,7 @@ public class EditProfileActivityTest {
         user.setJob("Developer");
         user.setBirthday(LocalDate.now());
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
-        ActivityScenario.launch(EditProfileActivity.class);
+        ActivityScenario.launch(EditProfileActivity.class).recreate();
 
         Espresso.onView(ViewMatchers.withId(R.id.imageButtonEditAge))
                 .perform(ViewActions.click());
@@ -258,6 +265,7 @@ public class EditProfileActivityTest {
         Mockito.when(user.getJob()).thenReturn("Dogwalker");
         Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
     }
+        Mockito.when(user.getType()).thenReturn(UserType.OWNER);
 
     @Test
     public void givenLoggedInUser_whenProfilePictureSet_thenVerifyThatImageButtonsArePresent(){
@@ -290,7 +298,17 @@ public class EditProfileActivityTest {
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         mockUser(user);
 
+        ArrayList<String> picPaths = new ArrayList<String>();
+        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
+
         ActivityScenario.launch(EditProfileActivity.class);
+        ArgumentCaptor<MutableLiveData<byte[]>> liveData = ArgumentCaptor.forClass(MutableLiveData.class);
+        Mockito.verify(pictureRepositoryMock).downloadPicture(Mockito.eq(picPaths.get(0)), liveData.capture());
+
+        liveData.getValue().postValue(new byte[1]);
+
+        Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
 
         Instrumentation.ActivityResult imgCaptureResult = createImageUploadActivityResultStub();
         Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
