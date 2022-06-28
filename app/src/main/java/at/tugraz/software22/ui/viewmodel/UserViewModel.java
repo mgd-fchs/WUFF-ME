@@ -48,7 +48,7 @@ public class UserViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<User> getUserLiveData() {
+    public MutableLiveData<User> getUserLiveData() {
         return new MutableLiveData<User>(userService.getLoggedInUser());
     }
 

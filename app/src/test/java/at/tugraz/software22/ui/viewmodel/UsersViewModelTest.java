@@ -3,6 +3,7 @@ package at.tugraz.software22.ui.viewmodel;
 import android.net.Uri;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +21,7 @@ import java.util.concurrent.Executor;
 import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 
+import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.service.AuthenticateService;
 import at.tugraz.software22.domain.service.MatcherService;
@@ -77,14 +79,14 @@ public class UsersViewModelTest {
     public void givenUserWantsToRegister_whenRegisterCalled_thenAuthenticationServiceIsCalled() {
         userViewModel.registerUser("test@test.test","test1234", "testuser");
         Mockito.verify(authenticateService, Mockito.times(1))
-                .registerUser("test@test.test","test1234", "testuser", userViewModel.getUserLiveData(), userViewModel.getUserStateMutableLiveData());
+                .registerUser(Mockito.eq("test@test.test"), Mockito.eq("test1234"), Mockito.eq("testuser"), Mockito.any(MutableLiveData.class), Mockito.any(MutableLiveData.class));
     }
 
     @Test
     public void givenUserHasAccount_whenLogin_thenAuthenticationServiceIsCalled() {
         userViewModel.loginUser("test@test.test","test1234");
         Mockito.verify(authenticateService, Mockito.times(1))
-                .loginUser("test@test.test","test1234", userViewModel.getUserLiveData(), userViewModel.getUserStateMutableLiveData());
+                .loginUser(Mockito.eq("test@test.test"), Mockito.eq("test1234"), Mockito.any(MutableLiveData.class), Mockito.any(MutableLiveData.class));
     }
 
     @Test
