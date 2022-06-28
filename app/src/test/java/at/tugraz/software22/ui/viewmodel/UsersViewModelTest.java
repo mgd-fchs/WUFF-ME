@@ -1,6 +1,9 @@
 package at.tugraz.software22.ui.viewmodel;
 
+import android.net.Uri;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -10,10 +13,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import android.net.Uri;
+
+import java.io.File;
 import java.util.concurrent.Executor;
 
+import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 
+import at.tugraz.software22.domain.entity.User;
+import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.service.AuthenticateService;
+import at.tugraz.software22.domain.service.MatcherService;
 import at.tugraz.software22.domain.service.UserService;
 
 /**
@@ -34,6 +45,12 @@ public class UsersViewModelTest {
     @Mock
     private UserService userServiceMock;
 
+    @Mock
+    private AuthenticateService authenticateService;
+
+    @Mock
+    private MatcherService matcherService;
+
     /**
      * Class under test (already setup with test doubles in the setUp method).
      */
@@ -52,14 +69,29 @@ public class UsersViewModelTest {
     public void setUp() {
         Mockito.when(applicationMock.getUserService()).thenReturn(userServiceMock);
         Mockito.when(applicationMock.getBackgroundExecutor()).thenReturn(currentThreadExecutor);
+        Mockito.when(applicationMock.getAuthenticateService()).thenReturn(authenticateService);
+        Mockito.when(applicationMock.getMatcherService()).thenReturn(matcherService);
 
         userViewModel = new UserViewModel(applicationMock);
     }
 
     @Test
-    public void givenDatabaseSetup_whenRegisterUser_thenVerifyThatCreateRegisterUserWithEmailAndPasswordMethodOfDatabaseIsCalled() {
-        /*Users users = new Users("user1", "123", "test@test.at");
-        userViewModel.registerUser(users);
-        Assert.assertEquals(FirebaseAuth.getInstance().getCurrentUser().getEmail(), "test@test.at");*/
+    public void givenUserWantsToRegister_whenRegisterCalled_thenAuthenticationServiceIsCalled() {
+        userViewModel.registerUser("test@test.test","test1234", "testuser");
+        Mockito.verify(authenticateService, Mockito.times(1))
+                .registerUser(Mockito.eq("test@test.test"), Mockito.eq("test1234"), Mockito.eq("testuser"), Mockito.any(MutableLiveData.class), Mockito.any(MutableLiveData.class));
+    }
+
+    @Test
+    public void givenUserHasAccount_whenLogin_thenAuthenticationServiceIsCalled() {
+        userViewModel.loginUser("test@test.test","test1234");
+        Mockito.verify(authenticateService, Mockito.times(1))
+                .loginUser(Mockito.eq("test@test.test"), Mockito.eq("test1234"), Mockito.any(MutableLiveData.class), Mockito.any(MutableLiveData.class));
+    }
+
+    @Test
+    public void givenUserIsLoggedIn_whenLogsOut_thenAuthenticationServiceIsCalled() {
+        userViewModel.logout();
+        Mockito.verify(authenticateService, Mockito.times(1)).logout(userViewModel.getUserStateMutableLiveData());
     }
 }

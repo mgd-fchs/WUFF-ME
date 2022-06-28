@@ -1,6 +1,7 @@
 package at.tugraz.software22.ui.activity;
 
 import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -10,8 +11,10 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -105,7 +108,7 @@ public class LoginActivityTest {
     @Test
     public void givenExistingUser_whenLoginButtonPressed_thenVerifyThatCurrentUserIsSet() throws InterruptedException {
         ActivityScenario.launch(LoginActivity.class);
-        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("ww@w.at"));
+        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("www@w.atw"));
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
@@ -113,7 +116,7 @@ public class LoginActivityTest {
         Thread.sleep(2000);
 
         Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-        Assert.assertEquals("ww@w.at", FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        Assert.assertEquals("www@w.atw", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
 
@@ -175,12 +178,62 @@ public class LoginActivityTest {
                 .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
+
      private Instrumentation.ActivityResult createImageCaptureActivityResultStub() {
          Bundle bundle = new Bundle();
          bundle.putParcelable("IMG_DATA", BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher));
          Intent resultData = new Intent();
          resultData.putExtras(bundle);
-
          return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
      }
+
+    private Instrumentation.ActivityResult createImageUploadActivityResultStub() {
+        Intent resultData = new Intent();
+        resultData.setData(Uri.parse("android.resource://at.tugraz.software22/" + R.drawable.software22));
+        return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+    }
+
+    @Test
+    public void givenRegistration_whenClickOnNewProfilePictureFromGallery_thenVerifyGetContentViewAppears(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Instrumentation.ActivityResult imgCaptureResult = createImageUploadActivityResultStub();
+        Intents.intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgCaptureResult);
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.profile_picture_preview))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+    }
+
+    @Test
+    public void givenLoginActivity_whenSwitchedToRegistration_thenVerifyThatPictureUploadButtonsVisible(){
+        ActivityScenario.launch(LoginActivity.class);
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_add_profile_picture_from_gallery))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.toggle_register))
+                .perform(ViewActions.click());
+    }
+
 }
