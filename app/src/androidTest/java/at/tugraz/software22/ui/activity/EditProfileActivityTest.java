@@ -265,7 +265,6 @@ public class EditProfileActivityTest {
         Mockito.when(user.getJob()).thenReturn("Dogwalker");
         Mockito.when(user.getType()).thenReturn(UserType.SEARCHER);
     }
-        Mockito.when(user.getType()).thenReturn(UserType.OWNER);
 
     @Test
     public void givenLoggedInUser_whenProfilePictureSet_thenVerifyThatImageButtonsArePresent(){

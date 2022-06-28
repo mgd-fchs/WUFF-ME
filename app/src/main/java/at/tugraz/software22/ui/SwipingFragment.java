@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +48,22 @@ public class SwipingFragment extends Fragment {
         TextView interestingUserName = view.findViewById(R.id.textViewNameOfInterestingUser);
         ImageView interestingUserPicture = view.findViewById(R.id.imageViewInterestingUser);
 
-        userViewModel.getPictureLiveData().observe(getViewLifecycleOwner(), picture -> {
-            Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-            interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
-        });
-        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
-            interestingUserName.setText(user.getUsername());
-            if (!user.getPicturePaths().isEmpty()) {
-                userViewModel.loadPicture(user.getPicturePaths().get(0));
-            }
-        });
+        try {
+            userViewModel.getPictureLiveData().observe(getViewLifecycleOwner(), picture -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
+            });
+            userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
+                interestingUserName.setText(user.getUsername());
+                if (!user.getPicturePaths().isEmpty()) {
+                    userViewModel.loadPicture(user.getPicturePaths().get(0));
+                }
+            });
 
-        userViewModel.loadNextInterestingUser();
+            userViewModel.loadNextInterestingUser();
+        } catch (Exception e){
+            Log.w("Swiping Fragment", "Error: " + e.getMessage());
+        }
         return view;
     }
 }
