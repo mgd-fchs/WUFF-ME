@@ -1,6 +1,7 @@
 package at.tugraz.software22.ui.viewmodel;
 
 import android.app.Application;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -41,7 +42,13 @@ public class UserViewModel extends AndroidViewModel {
         this.authenticateService = userApplication.getAuthenticateService();
     }
 
-    public LiveData<User> getUserLiveData() {
+    public void addPictureToLoggedInUser(Uri imageUri){
+        if (imageUri != null){
+            this.userService.addPicture(imageUri);
+        }
+    }
+
+    public MutableLiveData<User> getUserLiveData() {
         return new MutableLiveData<User>(userService.getLoggedInUser());
     }
 

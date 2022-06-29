@@ -35,13 +35,17 @@ public class LoginActivity extends AppCompatActivity {
     private static Application wuffApp;
     private UserViewModel userViewModel;
     public static final String INTENT_USERNAME = "";
-    private File profilePictureFile = null;
+    private Uri imageUri = null;
+    private static String username;
 
     private ImageView profilePicturePreview;
 
     private final ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                     this::onCreateActivityResult);
+    private final ActivityResultLauncher<Intent> activityResultSelectImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    this::onImageSelectedResult);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,43 +58,64 @@ public class LoginActivity extends AppCompatActivity {
         SwitchCompat toggleBtn =  findViewById(R.id.toggle_register);
         ImageView uploadImage = findViewById(R.id.image_button_add_profile_picture);
         profilePicturePreview = findViewById(R.id.profile_picture_preview);
+        ImageView uploadFromGallery = (ImageView)findViewById(R.id.image_button_add_profile_picture_from_gallery);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         wuffApp = getApplication();
 
         Button loginBtn = findViewById(R.id.login_btn);
 
-        uploadImage.setOnClickListener(view -> {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            String fileName = "JPEG_" + timeStamp;
-            File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            try {
-                profilePictureFile = File.createTempFile(
-                        fileName,
-                        ".jpg",
-                        storageDirectory
-                );
-                Uri imageUri = FileProvider.getUriForFile(
-                        getApplicationContext(),
-                        "at.tugraz.software22.WuffApplication.provider",
-                        profilePictureFile);
-                dispatchTakePictureIntent(imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String fileName = "JPEG_" + timeStamp;
+                File storageDirectory = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                try {
+                    File profilePictureFile = File.createTempFile(
+                            fileName,
+                            ".jpg",
+                            storageDirectory
+                    );
+                    imageUri = FileProvider.getUriForFile(
+                            getApplicationContext(),
+                            "at.tugraz.software22.WuffApplication.provider",
+                            profilePictureFile);
+                    dispatchTakePictureIntent(imageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                uploadImage.setVisibility(View.VISIBLE);
+                profilePicturePreview.setVisibility(View.VISIBLE);
             }
-            uploadImage.setVisibility(View.VISIBLE);
-            profilePicturePreview.setVisibility(View.VISIBLE);
+        });
+
+        uploadFromGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent galleryPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    galleryPictureIntent.setType("image/*");
+                    activityResultSelectImageLauncher.launch(galleryPictureIntent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                uploadImage.setVisibility(View.VISIBLE);
+                profilePicturePreview.setVisibility(View.VISIBLE);
+            }
         });
 
         toggleBtn.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
                 usernameInput.setVisibility(View.VISIBLE);
                 uploadImage.setVisibility(View.VISIBLE);
+                uploadFromGallery.setVisibility(View.VISIBLE);
                 loginBtn.setText(R.string.register_btn);
             } else {
                 usernameInput.setVisibility(View.GONE);
                 profilePicturePreview.setVisibility(View.GONE);
                 uploadImage.setVisibility(View.GONE);
+                uploadFromGallery.setVisibility(View.GONE);
                 loginBtn.setText(R.string.login_btn);
             }
         });
@@ -123,8 +148,8 @@ public class LoginActivity extends AppCompatActivity {
 
         userViewModel.getUserStateMutableLiveData().observe(this, result -> {
             if (result == UserState.LOGGED_IN_FROM_REGISTRATION) {
-                if (profilePictureFile != null) {
-                    userViewModel.getUserService().addPicture(profilePictureFile);
+                if (imageUri != null) {
+                    userViewModel.addPictureToLoggedInUser(imageUri);
                 }
                 Intent intent = new Intent(LoginActivity.this, UsertypeSelectionActivity.class);
                 startActivity(intent);
@@ -184,8 +209,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onCreateActivityResult(ActivityResult result){
         if(result.getResultCode() == RESULT_OK){
-            Bitmap imageBitmap = BitmapFactory.decodeFile(profilePictureFile.getAbsolutePath());
-            profilePicturePreview.setImageBitmap(imageBitmap);
+            profilePicturePreview.setImageURI(imageUri);
+        }
+    }
+
+    private void onImageSelectedResult(ActivityResult result){
+        if(result.getResultCode() == RESULT_OK){
+            Uri selectedImage = result.getData().getData();
+            imageUri = selectedImage;
+            profilePicturePreview.setImageURI(selectedImage);
         }
     }
 }

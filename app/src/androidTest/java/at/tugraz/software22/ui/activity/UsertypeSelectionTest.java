@@ -1,4 +1,4 @@
-package at.tugraz.software22;
+package at.tugraz.software22.ui.activity;
 
 import android.content.res.Resources;
 
@@ -18,6 +18,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import at.tugraz.software22.R;
+import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.UsertypeSelectionActivity;
