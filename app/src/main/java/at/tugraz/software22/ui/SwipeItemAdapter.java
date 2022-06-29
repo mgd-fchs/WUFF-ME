@@ -20,10 +20,10 @@ import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
 public class SwipeItemAdapter extends BaseAdapter {
-    private ArrayList<User> interestingUsers;
+    private final ArrayList<User> interestingUsers;
     private Context context;
-    private UserViewModel userViewModel;
-    private LifecycleOwner lifecycleOwner;
+    private final UserViewModel userViewModel;
+    private final LifecycleOwner lifecycleOwner;
 
     public SwipeItemAdapter(ArrayList<User> interestingUsers, Context context, UserViewModel userViewModel, LifecycleOwner lifecycleOwner) {
         this.interestingUsers = interestingUsers;

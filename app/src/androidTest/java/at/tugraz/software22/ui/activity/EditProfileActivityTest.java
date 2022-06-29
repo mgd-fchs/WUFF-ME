@@ -1,4 +1,4 @@
-package at.tugraz.software22;
+package at.tugraz.software22.ui.activity;
 
 import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
@@ -38,10 +38,8 @@ import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.PictureRepository;
-import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
 import at.tugraz.software22.ui.EditProfileActivity;
-import at.tugraz.software22.ui.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class EditProfileActivityTest {
@@ -251,14 +249,17 @@ public class EditProfileActivityTest {
         mockUser(user);
 
         ActivityScenario.launch(EditProfileActivity.class);
+        ArgumentCaptor<MutableLiveData<byte[]>> liveData = ArgumentCaptor.forClass(MutableLiveData.class);
+        Mockito.verify(pictureRepositoryMock).downloadPicture(Mockito.any(), liveData.capture());
 
-        Thread.sleep(2000);
+        liveData.getValue().postValue(new byte[1]);
+
         Espresso.onView(ViewMatchers.withId(R.id.imageViewProfilePicture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     private void mockUser(User user){
         ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/E0VlMPMgOAWjE5SHn9OJ3W1HWk82/1655894930");
+        picPaths.add("pathtopic");
         Mockito.when(user.getPicturePaths()).thenReturn(picPaths);
         Mockito.when(user.getBirthday()).thenReturn(LocalDate.now());
         Mockito.when(user.getUsername()).thenReturn("Testboi");
@@ -274,7 +275,7 @@ public class EditProfileActivityTest {
         ActivityScenario.launch(EditProfileActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_gallery)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
-        Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_camera)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
     }
 
     private Instrumentation.ActivityResult createImageCaptureActivityResultStub() {
@@ -297,12 +298,9 @@ public class EditProfileActivityTest {
         Mockito.when(userRepositoryMock.getLoggedInUser()).thenReturn(user);
         mockUser(user);
 
-        ArrayList<String> picPaths = new ArrayList<String>();
-        picPaths.add("images/3Bf2xH09ahd9nLia4keNxIOo9vi1/1654684549");
-
         ActivityScenario.launch(EditProfileActivity.class);
         ArgumentCaptor<MutableLiveData<byte[]>> liveData = ArgumentCaptor.forClass(MutableLiveData.class);
-        Mockito.verify(pictureRepositoryMock).downloadPicture(Mockito.eq(picPaths.get(0)), liveData.capture());
+        Mockito.verify(pictureRepositoryMock).downloadPicture(Mockito.any(), liveData.capture());
 
         liveData.getValue().postValue(new byte[1]);
 
@@ -329,7 +327,7 @@ public class EditProfileActivityTest {
         Instrumentation.ActivityResult imgCaptureResult = createImageCaptureActivityResultStub();
         Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgCaptureResult);
 
-        Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture))
+        Espresso.onView(ViewMatchers.withId(R.id.image_button_edit_add_profile_picture_from_camera))
                 .perform(ViewActions.click());
 
         Intents.intended(hasAction(MediaStore.ACTION_IMAGE_CAPTURE),times(1));

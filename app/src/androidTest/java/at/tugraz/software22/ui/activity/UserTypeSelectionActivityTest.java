@@ -22,18 +22,18 @@ import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.enums.UserType;
 import at.tugraz.software22.domain.repository.UserRepository;
-import at.tugraz.software22.ui.UsertypeSelectionActivity;
+import at.tugraz.software22.ui.UserTypeSelectionActivity;
 
 /**
  * Instrumented test, which will execute on an Android device and tests the CreateActivity.
  * For details see http://d.android.com/tools/testing
  */
 @RunWith(AndroidJUnit4.class)
-public class UsertypeSelectionTest {
+public class UserTypeSelectionActivityTest {
 
     @Rule
-    public ActivityScenarioRule<UsertypeSelectionActivity> activityScenarioRule =
-            new ActivityScenarioRule<>(UsertypeSelectionActivity.class);
+    public ActivityScenarioRule<UserTypeSelectionActivity> activityScenarioRule =
+            new ActivityScenarioRule<>(UserTypeSelectionActivity.class);
 
     private UserRepository userRepositoryMock;
     private Resources resources;
@@ -79,7 +79,7 @@ public class UsertypeSelectionTest {
     @Test
     public void givenUserAndUserType_whenSettingUserType_thenUserHasNewType() {
 
-        ActivityScenario.launch(UsertypeSelectionActivity.class);
+        ActivityScenario.launch(UserTypeSelectionActivity.class);
 
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());

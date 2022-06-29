@@ -5,7 +5,7 @@
     ]>
 
 <resources>
-    <string name="app_name">Software22 - Team project</string>
+    <string name="app_name" translatable="false">WuffMe</string>
     <string name="intro">In contrast to the individual developer assignment, there is no given framework for the team project. You are free to customize the project according to your needs.</string>
     <string name="final_app">We are looking forward to your final app!</string>
     <string name="title_activity_select_usertype" translatable="false">SelectUsertypeActivity</string>
@@ -16,6 +16,7 @@
     <string name="previous">Previous</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="checkBoxOwner">&checkBoxOwnerText;</string>
     <string name="checkBoxSearcher">&checkBoxSearcherText;</string>
     <string name="buttonSelectUsertype">Select</string>
     <string name="userTypeInfo">ⓘ Select to be \"&checkBoxOwnerText;\", \"&checkBoxSearcherText;\" or both by clicking the corresponding checkbox and pressing the \"Select\" button</string>
@@ -53,4 +54,8 @@
     <string name="swipe_left_snackbar">You Swiped Left!</string>
     <string name="swipe_right_snackbar">You Swiped Right!</string>
     <string name="swipe_depleted_snackbar">You swiped all interesting users!</string>
+    <string name="searcher_type">searcher</string>
+    <string name="owner_type">owner</string>
+    <string name="non_type">no type selected</string>
+    <string name="both_type">searcher and owner</string>
 </resources>

@@ -1,7 +1,6 @@
 package at.tugraz.software22.ui.activity;
 
 import static androidx.test.espresso.intent.Intents.intended;
-import static androidx.test.espresso.intent.Intents.times;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -14,7 +13,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
@@ -25,10 +23,7 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -43,7 +38,7 @@ import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.ui.LoginActivity;
 import at.tugraz.software22.ui.MainActivity;
-import at.tugraz.software22.ui.UsertypeSelectionActivity;
+import at.tugraz.software22.ui.UserTypeSelectionActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginActivityTest {
@@ -81,9 +76,8 @@ public class LoginActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
-        // We call sleep method, because of asynchronous firebase call.
         Thread.sleep(2000);
-        intended(hasComponent(UsertypeSelectionActivity.class.getName()));
+        intended(hasComponent(UserTypeSelectionActivity.class.getName()));
 
         Espresso.onView(ViewMatchers.withId(R.id.checkBoxOwner)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.buttonSelectUsertype)).perform(ViewActions.click());
@@ -103,21 +97,6 @@ public class LoginActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.username)).check(ViewAssertions.matches(ViewMatchers.hasErrorText(expectedWarning)));
-    }
-
-    @Test
-    public void givenExistingUser_whenLoginButtonPressed_thenVerifyThatCurrentUserIsSet() throws InterruptedException {
-        ActivityScenario.launch(LoginActivity.class);
-        Espresso.onView(ViewMatchers.withId(R.id.email)).perform(ViewActions.clearText(), ViewActions.typeText("www@w.atw"));
-        Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("123456"), ViewActions.closeSoftKeyboard());
-        Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
-
-        // We call sleep method, because of asynchronous firebase call.
-        Thread.sleep(2000);
-
-        Assert.assertNotNull(FirebaseAuth.getInstance().getCurrentUser());
-        Assert.assertEquals("www@w.atw", FirebaseAuth.getInstance().getCurrentUser().getEmail());
-        Espresso.onView(ViewMatchers.withId(R.id.logout)).perform(ViewActions.click());
     }
 
     @Test

@@ -3,12 +3,10 @@ package at.tugraz.software22.ui.viewmodel;
 import android.app.Application;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.time.LocalDate;
 import java.util.concurrent.Executor;
 
 import at.tugraz.software22.WuffApplication;
@@ -49,15 +47,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<User> getUserLiveData() {
-        return new MutableLiveData<User>(userService.getLoggedInUser());
-    }
-
-    public UserRepository getUserService() {
-        return userService;
-    }
-
-    public MatcherService getMatcherService() {
-        return matcherService;
+        return new MutableLiveData<>(userService.getLoggedInUser());
     }
 
     public void registerUser(String email, String password, String username) {
@@ -82,9 +72,9 @@ public class UserViewModel extends AndroidViewModel {
         return nextInterestingUserLiveData;
     }
 
-    public void loadNextInterestingUser() {
+    public void loadNextInterestingUser(User currentUser) {
         executor.execute(() -> matcherService.getNextInterestingProfile(nextInterestingUserLiveData,
-                userService.getLoggedInUser().getType()));
+                currentUser));
     }
 
     public LiveData<byte[]> getPictureLiveData() {
@@ -100,6 +90,5 @@ public class UserViewModel extends AndroidViewModel {
             userService.updateUser(newUser);
             userLiveData.postValue(newUser);
         });
-
     }
 }

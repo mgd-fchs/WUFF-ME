@@ -10,6 +10,7 @@ import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -19,6 +20,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import static org.hamcrest.core.StringContains.containsString;
+
+import android.content.res.Resources;
+
+import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
@@ -31,13 +36,14 @@ public class MainActivityTest {
 
     private UserRepository userRepositoryMock;
     private MatcherService matcherService;
-
+    private Resources resources;
     @Before
     public void setUp() {
         userRepositoryMock = Mockito.mock(UserRepository.class);
         WuffApplication.setUserRepository(userRepositoryMock);
         matcherService = Mockito.mock(MatcherService.class);
         WuffApplication.setMatcherService(matcherService);
+        resources = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources();
     }
 
     @Test
@@ -52,7 +58,7 @@ public class MainActivityTest {
 
 
         ActivityScenario.launch(MainActivity.class);
-        Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser.getType()));
+        Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser));
         liveData.getValue().postValue(user);
         Espresso.onView(ViewMatchers.withId(R.id.users_swipe_deck)).perform(ViewActions.swipeLeft());
 
@@ -72,7 +78,7 @@ public class MainActivityTest {
 
 
         ActivityScenario.launch(MainActivity.class);
-        Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser.getType()));
+        Mockito.verify(matcherService).getNextInterestingProfile(liveData.capture(), Mockito.eq(loggedInUser));
         liveData.getValue().postValue(user);
 
         Espresso.onView(ViewMatchers.withId(R.id.imageViewInterestingUser))
@@ -83,7 +89,7 @@ public class MainActivityTest {
     public void givenLoggedInUser_whenSwipeLeft_thenVerifySnackbarIsDisplayed(){
         ActivityScenario.launch(MainActivity.class);
         Espresso.onView(ViewMatchers.withId(R.id.users_swipe_deck)).perform(ViewActions.swipeLeft());
-        Espresso.onView(Matchers.allOf(ViewMatchers.withText(containsString("User Swiped Left")))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onView(Matchers.allOf(ViewMatchers.withText(containsString(resources.getString(R.string.swipe_depleted_snackbar))))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 
 }

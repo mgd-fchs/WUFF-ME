@@ -20,35 +20,38 @@ public class MatcherService {
         this.database = database;
     }
 
-    public void getNextInterestingProfile(MutableLiveData<User> userMutableLiveData, UserType ownType) {
+    public void getNextInterestingProfile(MutableLiveData<User> userMutableLiveData, User currentUser) {
         if (interestingProfiles.size() <= 1) {
-            fetchNewProfiles(ownType,userMutableLiveData);
-        }
-        else {
+            fetchNewProfiles(currentUser, userMutableLiveData);
+        } else {
             userMutableLiveData.postValue(interestingProfiles.remove(0));
         }
     }
 
-    private void fetchNewProfiles(UserType ownType, MutableLiveData<User> userMutableLiveData) {
-       database.getReference().child(Constants.USER_TABLE).get().addOnSuccessListener(dataSnapshot -> {
-           for (DataSnapshot child : dataSnapshot.getChildren()) {
-               User user = child.getValue(User.class);
-               switch (ownType) {
-                   case SEARCHER:
-                       if (user.getType() == UserType.OWNER || user.getType() == UserType.BOTH) {
-                           interestingProfiles.add(user);
-                       }
-                       break;
-                   case OWNER:
-                       if (user.getType() == UserType.SEARCHER || user.getType() == UserType.BOTH) {
-                           interestingProfiles.add(user);
-                       }
-                       break;
-               }
-           }
-           if (!interestingProfiles.isEmpty()) {
-               userMutableLiveData.postValue(interestingProfiles.remove(0));
-           }
-       });
+    private void fetchNewProfiles(User currentUser, MutableLiveData<User> userMutableLiveData) {
+        database.getReference().child(Constants.USER_TABLE).get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                User user = child.getValue(User.class);
+                if (!currentUser.getLeftSwipedProfiles().contains(user.getId())
+                        && !currentUser.getRightSwipedProfiles().contains(user.getId())) {
+
+                    switch (currentUser.getType()) {
+                        case SEARCHER:
+                            if ((user.getType() == UserType.OWNER || user.getType() == UserType.BOTH)) {
+                                interestingProfiles.add(user);
+                            }
+                            break;
+                        case OWNER:
+                            if ((user.getType() == UserType.SEARCHER || user.getType() == UserType.BOTH)) {
+                                interestingProfiles.add(user);
+                            }
+                            break;
+                    }
+                }
+            }
+            if (!interestingProfiles.isEmpty()) {
+                userMutableLiveData.postValue(interestingProfiles.remove(0));
+            }
+        });
     }
 }

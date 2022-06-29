@@ -1,59 +1,38 @@
 package at.tugraz.software22.ui;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.daprlabs.cardstack.SwipeDeck;
-
-import java.util.ArrayList;
-import android.widget.TextView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.daprlabs.cardstack.SwipeDeck;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import at.tugraz.software22.R;
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SwipingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SwipingFragment extends Fragment {
 
     private UserViewModel userViewModel;
     private SwipeDeck interestingUserSwipeDeck;
-    private ArrayList<User> userList = new ArrayList<User>();
+    private final ArrayList<User> userList = new ArrayList<>();
+    private User currentUser;
 
     public SwipingFragment() {
         User tutorialUser = new User("");
         userList.add(tutorialUser);
     }
 
-    public static SwipingFragment newInstance(UserViewModel userViewModel) {
+    public static SwipingFragment newInstance(User user) {
         SwipingFragment fragment = new SwipingFragment();
-        fragment.userViewModel = userViewModel;
+        fragment.currentUser = user;
         return fragment;
     }
 
@@ -65,13 +44,12 @@ public class SwipingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
-            userList.add(user);
-        });
+        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> userList.add(user));
 
         View view = inflater.inflate(R.layout.fragment_swiping, container, false);
-        interestingUserSwipeDeck = (SwipeDeck) view.findViewById(R.id.users_swipe_deck);
+        interestingUserSwipeDeck = view.findViewById(R.id.users_swipe_deck);
         final SwipeItemAdapter adapter = new SwipeItemAdapter(userList, getContext(), userViewModel, getViewLifecycleOwner());
         interestingUserSwipeDeck.setAdapter(adapter);
 
@@ -79,14 +57,17 @@ public class SwipingFragment extends Fragment {
             @Override
             public void cardSwipedLeft(int position) {
                 Snackbar.make(getView(),getString(R.string.swipe_left_snackbar), Snackbar.LENGTH_LONG).show();
-                userViewModel.loadNextInterestingUser();
+                currentUser.addLeftSwipedProfile(userList.get(position).getId());
+                userViewModel.updateUser(currentUser);
+                userViewModel.loadNextInterestingUser(currentUser);
             }
 
             @Override
             public void cardSwipedRight(int position) {
                 Snackbar.make(getView(),getString(R.string.swipe_right_snackbar), Snackbar.LENGTH_LONG).show();
-                userViewModel.loadNextInterestingUser();
-
+                currentUser.addRightSwipedProfile(userList.get(position).getId());
+                userViewModel.updateUser(currentUser);
+                userViewModel.loadNextInterestingUser(currentUser);
             }
 
             @Override
@@ -105,7 +86,7 @@ public class SwipingFragment extends Fragment {
             }
         });
 
-        userViewModel.loadNextInterestingUser();
+        userViewModel.loadNextInterestingUser(currentUser);
         return view;
     }
 }

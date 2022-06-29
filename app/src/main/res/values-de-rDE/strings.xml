@@ -2,9 +2,10 @@
 <!DOCTYPE resources [
     <!ENTITY checkBoxOwnerTextGerman "Besitzer">
     <!ENTITY checkBoxSearcherTextGerman "Suchender">
+    <!ENTITY checkBoxBothTextGerman "Beides">
+    <!ENTITY checkBoxNonTextGerman "Nichts">
     ]>
 <resources>
-    <string name="app_name">Software22 - Gruppenarbeit</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Passwort</string>
     <string name="action_sign_in">Einloggen</string>
@@ -50,4 +51,8 @@
     <string name="swipe_left_snackbar">Du hast nach links gewischt!</string>
     <string name="swipe_right_snackbar">Du hast nach rechts gewischt!</string>
     <string name="swipe_depleted_snackbar">Du hast alle interessanten Nutzer gesehen!</string>
+    <string name="both_type">Suchender und Besitzer</string>
+    <string name="non_type">Typ nicht ausgewählt</string>
+    <string name="owner_type">Besitzer</string>
+    <string name="searcher_type">Suchender</string>
 </resources>
