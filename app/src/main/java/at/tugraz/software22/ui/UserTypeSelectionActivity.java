@@ -11,7 +11,7 @@ import at.tugraz.software22.R;
 import at.tugraz.software22.WuffApplication;
 import at.tugraz.software22.domain.enums.UserType;
 
-public class UsertypeSelectionActivity extends AppCompatActivity {
+public class UserTypeSelectionActivity extends AppCompatActivity {
 
     private UserType userType = UserType.NON;
     Button buttonSelectUsertype;

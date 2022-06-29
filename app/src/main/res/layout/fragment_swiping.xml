@@ -5,30 +5,30 @@
     android:id="@+id/fragmentSwiping"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
     tools:context=".ui.SwipingFragment">
 
-    <ImageView
-        android:id="@+id/imageViewInterestingUser"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="64dp"
-        android:contentDescription="@string/profile_picture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+    <com.daprlabs.cardstack.SwipeFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewNameOfInterestingUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewInterestingUser"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Interesting User" />
+        <!--below widget is used for creating a swipe deck-->
+        <!--in below widget card spacing is the spacing between cards
+            max visible is the max number of cards which are visible
+            render above is to render the cards
+            rotation degree is the angle of card rotation when card is swiped-->
+        <com.daprlabs.cardstack.SwipeDeck
+            android:id="@+id/users_swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            app:card_spacing="10dp"
+            app:max_visible="1"
+            app:render_above="true"
+            app:rotation_degrees="15" />
+
+    </com.daprlabs.cardstack.SwipeFrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

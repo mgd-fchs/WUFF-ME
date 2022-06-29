@@ -15,9 +15,9 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference databaseReference = database.getReference("message");
 
-        myRef.setValue("Hello, World!");
+        databaseReference.setValue("Hello, World!");
         setContentView(R.layout.activity_main);
     }
 }

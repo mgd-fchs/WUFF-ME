@@ -54,7 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = userViewModel.getUserLiveData().getValue();
         profilePicturePreview = binding.imageViewProfilePicture;
 
-        binding.imageButtonEditAddProfilePicture.setOnClickListener(new View.OnClickListener() {
+        binding.imageButtonEditAddProfilePictureFromCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -77,29 +77,15 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        binding.imageButtonEditAddProfilePictureFromGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Intent galleryPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    galleryPictureIntent.setType("image/*");
-                    activityResultSelectImageLauncher.launch(galleryPictureIntent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        binding.imageButtonEditAddProfilePictureFromGallery.setOnClickListener(view -> {
+            try {
+                Intent galleryPictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryPictureIntent.setType("image/*");
+                activityResultSelectImageLauncher.launch(galleryPictureIntent);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
-
-//        if (!viewModel.getCurrentUser().getPicturePaths().isEmpty()){
-//            String path = viewModel.getCurrentUser().getPicturePaths().get(0);
-//            userViewModel.getPictureService().downloadPicture(path).observe(this, bytes -> {
-//                Bitmap profilePicture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-//                binding.imageViewProfilePicture.setImageBitmap(profilePicture);
-//                binding.imageViewProfilePicture.setVisibility(View.VISIBLE);
-//            });
-//        } else {
-//            binding.imageViewProfilePicture.setVisibility(View.GONE);
-//        }
 
         binding.imageButtonEditUserName.setOnClickListener( it -> {
             if(binding.editTextUserName.isEnabled()){
@@ -162,7 +148,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             binding.textViewUserName.setText(user.getUsername());
-            binding.textViewUserType.setText(user.getType().toString());
+
+            binding.textViewUserType.setText(user.getType().getTypeTranslation(this));
             binding.editTextUserName.setText(user.getUsername());
 
             if (user.getBirthday() != null) {
@@ -186,6 +173,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private void onCreateActivityResult(ActivityResult result){
         if(result.getResultCode() == RESULT_OK){
             profilePicturePreview.setImageURI(imageUri);
+            userViewModel.addPictureToLoggedInUser(imageUri);
+            profilePicturePreview.setVisibility(View.VISIBLE);
         }
     }
 
@@ -194,6 +183,8 @@ public class EditProfileActivity extends AppCompatActivity {
             Uri selectedImage = result.getData().getData();
             imageUri = selectedImage;
             profilePicturePreview.setImageURI(selectedImage);
+            userViewModel.addPictureToLoggedInUser(imageUri);
+            profilePicturePreview.setVisibility(View.VISIBLE);
         }
     }
 }

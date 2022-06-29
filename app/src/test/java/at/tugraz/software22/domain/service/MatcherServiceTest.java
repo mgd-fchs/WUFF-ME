@@ -67,7 +67,7 @@ public class MatcherServiceTest {
 
 
         MutableLiveData<User> userResult = new MutableLiveData<>();
-        matcherService.getNextInterestingProfile(userResult, testUser.getType());
+        matcherService.getNextInterestingProfile(userResult, testUser);
         Observer<User> observer = Mockito.mock(Observer.class);
         userResult.observeForever(observer);
         Mockito.verify(dataSnapshotTask).addOnSuccessListener(successListener.capture());
@@ -100,7 +100,7 @@ public class MatcherServiceTest {
 
 
         MutableLiveData<User> userResult = new MutableLiveData<>();
-        matcherService.getNextInterestingProfile(userResult, testUser.getType());
+        matcherService.getNextInterestingProfile(userResult, testUser);
         Observer<User> observer = Mockito.mock(Observer.class);
         userResult.observeForever(observer);
         Mockito.verify(dataSnapshotTask).addOnSuccessListener(successListener.capture());

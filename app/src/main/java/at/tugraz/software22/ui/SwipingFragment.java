@@ -1,38 +1,38 @@
 package at.tugraz.software22.ui;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.daprlabs.cardstack.SwipeDeck;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 import at.tugraz.software22.R;
+import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.ui.viewmodel.UserViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SwipingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SwipingFragment extends Fragment {
 
-    private static final String ARG_USERVIEWMODEL = "userViewModel";
-
     private UserViewModel userViewModel;
+    private SwipeDeck interestingUserSwipeDeck;
+    private final ArrayList<User> userList = new ArrayList<>();
+    private User currentUser;
 
     public SwipingFragment() {
+        User tutorialUser = new User("");
+        userList.add(tutorialUser);
     }
 
-    public static SwipingFragment newInstance(UserViewModel userViewModel) {
+    public static SwipingFragment newInstance(User user) {
         SwipingFragment fragment = new SwipingFragment();
-        fragment.userViewModel = userViewModel;
+        fragment.currentUser = user;
         return fragment;
     }
 
@@ -44,26 +44,49 @@ public class SwipingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> userList.add(user));
+
         View view = inflater.inflate(R.layout.fragment_swiping, container, false);
-        TextView interestingUserName = view.findViewById(R.id.textViewNameOfInterestingUser);
-        ImageView interestingUserPicture = view.findViewById(R.id.imageViewInterestingUser);
+        interestingUserSwipeDeck = view.findViewById(R.id.users_swipe_deck);
+        final SwipeItemAdapter adapter = new SwipeItemAdapter(userList, getContext(), userViewModel, getViewLifecycleOwner());
+        interestingUserSwipeDeck.setAdapter(adapter);
 
-        try {
-            userViewModel.getPictureLiveData().observe(getViewLifecycleOwner(), picture -> {
-                Bitmap bmp = BitmapFactory.decodeByteArray(picture, 0, picture.length);
-                interestingUserPicture.setImageBitmap(Bitmap.createScaledBitmap(bmp, interestingUserPicture.getWidth(), interestingUserPicture.getHeight(), false));
-            });
-            userViewModel.getNextInterestingUserLiveData().observe(getViewLifecycleOwner(), user -> {
-                interestingUserName.setText(user.getUsername());
-                if (!user.getPicturePaths().isEmpty()) {
-                    userViewModel.loadPicture(user.getPicturePaths().get(0));
-                }
-            });
+        interestingUserSwipeDeck.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+            @Override
+            public void cardSwipedLeft(int position) {
+                Snackbar.make(getView(),getString(R.string.swipe_left_snackbar), Snackbar.LENGTH_LONG).show();
+                currentUser.addLeftSwipedProfile(userList.get(position).getId());
+                userViewModel.updateUser(currentUser);
+                userViewModel.loadNextInterestingUser(currentUser);
+            }
 
-            userViewModel.loadNextInterestingUser();
-        } catch (Exception e){
-            Log.w("Swiping Fragment", "Error: " + e.getMessage());
-        }
+            @Override
+            public void cardSwipedRight(int position) {
+                Snackbar.make(getView(),getString(R.string.swipe_right_snackbar), Snackbar.LENGTH_LONG).show();
+                currentUser.addRightSwipedProfile(userList.get(position).getId());
+                userViewModel.updateUser(currentUser);
+                userViewModel.loadNextInterestingUser(currentUser);
+            }
+
+            @Override
+            public void cardsDepleted() {
+                Snackbar.make(getView(),getString(R.string.swipe_depleted_snackbar), Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void cardActionDown() {
+                Log.i("TAG", "CARDS MOVED DOWN");
+            }
+
+            @Override
+            public void cardActionUp() {
+                Log.i("TAG", "CARDS MOVED UP");
+            }
+        });
+
+        userViewModel.loadNextInterestingUser(currentUser);
         return view;
     }
 }

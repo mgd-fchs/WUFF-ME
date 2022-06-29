@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,6 @@ public class UserService implements UserRepository {
 
     protected User loggedInUser;
     protected String loggedInUserUid;
-
-
 
 
     public UserService(FirebaseDatabase database, FirebaseStorage firebaseStorage) {
@@ -72,11 +71,10 @@ public class UserService implements UserRepository {
         StorageReference riversRef = firebaseStorage.getReference().child(path);
         var uploadTask = riversRef.putFile(pictureUri);
 
-        uploadTask.addOnFailureListener(exception -> {
-            // Handle unsuccessful uploads
-            // todo toast warning
-        }).addOnSuccessListener(taskSnapshot -> {
-            loggedInUser.addPicturePath(path);
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            List<String> paths = new ArrayList<>();
+            paths.add(path);
+            loggedInUser.setPicturePaths(paths);
             updateUser(loggedInUser);
         });
     }
@@ -100,7 +98,7 @@ public class UserService implements UserRepository {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                if (user != null){
+                if (user != null) {
                     userMutableLiveData.postValue(user);
                     loggedInUserUid = userUid;
                     loggedInUser = user;
@@ -125,9 +123,11 @@ public class UserService implements UserRepository {
         Map<String, Object> userMap = new HashMap<>();
         User user = new User();
         user.setUsername(username);
+        user.setId(userUid);
+        user.addLeftSwipedProfile(userUid);
         userMap.put(userUid, user);
         usersRef.updateChildren(userMap).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 userMutableLiveData.postValue(user);
                 this.loggedInUserUid = userUid;
                 loggedInUser = user;

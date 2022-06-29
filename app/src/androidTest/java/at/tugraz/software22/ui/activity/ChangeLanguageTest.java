@@ -1,4 +1,4 @@
-package at.tugraz.software22;
+package at.tugraz.software22.ui.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import at.tugraz.software22.LocaleHelper;
+import at.tugraz.software22.R;
 import at.tugraz.software22.ui.LoginActivity;
 
 @RunWith(AndroidJUnit4.class)
@@ -28,7 +30,7 @@ public class ChangeLanguageTest {
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
         resources = context.getResources();
 
-        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedHeader = "WuffMe";
         String expectedEmailHint = "Email";
         String expectedPasswordHint = "Passwort";
         String expectedSignInButton = "Einloggen";
@@ -47,7 +49,7 @@ public class ChangeLanguageTest {
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
         resources = context.getResources();
 
-        String expectedHeader = "Software22 - Team project";
+        String expectedHeader = "WuffMe";
         String expectedEmailHint = "Email";
         String expectedPasswordHint = "Password";
         String expectedSignInButton = "Sign in";
@@ -69,7 +71,7 @@ public class ChangeLanguageTest {
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "de");
         resources = context.getResources();
 
-        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedHeader = "WuffMe";
         String expectedEmailHint = "Email";
         String expectedPasswordHint = "Passwort";
         String expectedSignInButton = "Einloggen";
@@ -93,7 +95,7 @@ public class ChangeLanguageTest {
         context = LocaleHelper.setLocale(InstrumentationRegistry.getInstrumentation().getTargetContext(), "en");
         resources = context.getResources();
 
-        String expectedHeader = "Software22 - Team project";
+        String expectedHeader = "WuffMe";
         String expectedUsernameHint = "Username";
         String expectedEmailHint = "Email";
         String expectedPasswordHint = "Password";
@@ -122,7 +124,7 @@ public class ChangeLanguageTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
-        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedHeader = "WuffMe";
         String expectedSelectUserType = "Auswählen";
         String expectedOwnerType = "Besitzer";
         String expectedSearcherType = "Suchender";
@@ -150,7 +152,7 @@ public class ChangeLanguageTest {
         Espresso.onView(ViewMatchers.withId(R.id.password)).perform(ViewActions.clearText(), ViewActions.typeText("1234567"), ViewActions.closeSoftKeyboard());
         Espresso.onView(ViewMatchers.withId(R.id.login_btn)).perform(ViewActions.click());
 
-        String expectedHeader = "Software22 - Team project";
+        String expectedHeader = "WuffMe";
         String expectedOwnerBox = "Owner";
         String expectedSearcherBox = "Searcher";
         String expectedSelectUserType = "Select";
@@ -172,7 +174,7 @@ public class ChangeLanguageTest {
         resources = context.getResources();
 
         String expectedUsername = "user";
-        String expectedHeader = "Software22 - Gruppenarbeit";
+        String expectedHeader = "WuffMe";
         String expectedEditProfileHeader = "Einstellungen";
         String expectedBirthdayTextField = "Geburtstag";
         String expectedJobTextField = "Beruf";
@@ -205,7 +207,7 @@ public class ChangeLanguageTest {
         resources = context.getResources();
 
         String expectedUsername = "user";
-        String expectedHeader = "Software22 - Team project";
+        String expectedHeader = "WuffMe";
         String expectedEditProfileHeader = "Settings";
         String expectedBirthdayTextField = "Birthday";
         String expectedJobTextField = "Job";
