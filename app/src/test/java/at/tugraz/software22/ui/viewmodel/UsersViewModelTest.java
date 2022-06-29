@@ -30,10 +30,6 @@ import at.tugraz.software22.domain.service.MatcherService;
 import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
 
-/**
- * This test should be implemented in Assignment 2
- * See https://tc.tugraz.at/main/mod/assign/view.php?id=253546
- */
 @RunWith(MockitoJUnitRunner.class)
 public class UsersViewModelTest {
 
@@ -57,20 +53,8 @@ public class UsersViewModelTest {
     @Mock
     private MatcherService matcherService;
 
-    /**
-     * Class under test (already setup with test doubles in the setUp method).
-     */
     private UserViewModel userViewModel;
 
-    /**
-     * Set up all test doubles (i.e., the applicationMock, the userServiceMock and
-     * the currentThreadExecutor) and initialize a new UserViewModel (i.e., the class under test)
-     * with those test doubles.
-     * This method also starts the observation of the UserViewModel's live data. The executor
-     * (i.e., the currentThreadExecutor) runs all tasks on the current thread, so there is no need
-     * to wait for an asynchronous operation. Verify that a live data has changed by calling the
-     * Mockito.verify(...LiveDataObserver).onChanged(expectedValue) method.
-     */
     @Before
     public void setUp() {
         Mockito.when(applicationMock.getUserService()).thenReturn(userServiceMock);
