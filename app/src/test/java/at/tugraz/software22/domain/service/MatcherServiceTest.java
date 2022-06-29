@@ -36,8 +36,6 @@ public class MatcherServiceTest {
 
     private MatcherService matcherService;
 
-
-
     @Before
     public void setUp() {
         matcherService = new MatcherService(firebaseDatabase);

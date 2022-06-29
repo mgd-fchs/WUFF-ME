@@ -11,7 +11,7 @@ android {
         minSdk 28
         targetSdk 31
         versionCode 1
-        versionName "2.0"
+        versionName "2.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +40,7 @@ android {
         viewBinding true
     }
     testOptions {
+        unitTests.returnDefaultValues = true
         animationsDisabled true
     }
 }

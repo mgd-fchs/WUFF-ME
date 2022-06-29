@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,14 +24,12 @@ import at.tugraz.software22.WuffApplication;
 
 import at.tugraz.software22.domain.entity.User;
 import at.tugraz.software22.domain.enums.UserType;
+import at.tugraz.software22.domain.repository.PictureRepository;
 import at.tugraz.software22.domain.service.AuthenticateService;
 import at.tugraz.software22.domain.service.MatcherService;
+import at.tugraz.software22.domain.service.PictureService;
 import at.tugraz.software22.domain.service.UserService;
 
-/**
- * This test should be implemented in Assignment 2
- * See https://tc.tugraz.at/main/mod/assign/view.php?id=253546
- */
 @RunWith(MockitoJUnitRunner.class)
 public class UsersViewModelTest {
 
@@ -49,30 +48,43 @@ public class UsersViewModelTest {
     private AuthenticateService authenticateService;
 
     @Mock
+    private PictureService pictureService;
+
+    @Mock
     private MatcherService matcherService;
 
-    /**
-     * Class under test (already setup with test doubles in the setUp method).
-     */
     private UserViewModel userViewModel;
 
-    /**
-     * Set up all test doubles (i.e., the applicationMock, the userServiceMock and
-     * the currentThreadExecutor) and initialize a new UserViewModel (i.e., the class under test)
-     * with those test doubles.
-     * This method also starts the observation of the UserViewModel's live data. The executor
-     * (i.e., the currentThreadExecutor) runs all tasks on the current thread, so there is no need
-     * to wait for an asynchronous operation. Verify that a live data has changed by calling the
-     * Mockito.verify(...LiveDataObserver).onChanged(expectedValue) method.
-     */
     @Before
     public void setUp() {
         Mockito.when(applicationMock.getUserService()).thenReturn(userServiceMock);
+        Mockito.when(applicationMock.getPictureService()).thenReturn(pictureService);
         Mockito.when(applicationMock.getBackgroundExecutor()).thenReturn(currentThreadExecutor);
         Mockito.when(applicationMock.getAuthenticateService()).thenReturn(authenticateService);
         Mockito.when(applicationMock.getMatcherService()).thenReturn(matcherService);
 
         userViewModel = new UserViewModel(applicationMock);
+    }
+
+    @Test
+    public void givenLoggedInUser_whenAddPictureToLoggedInUserCalledWithInvalidUri_thenUserServiceIsNotCalled(){
+        Uri uri = Uri.EMPTY;
+        userViewModel.addPictureToLoggedInUser(uri);
+        Mockito.verify(userServiceMock, Mockito.times(0))
+                .addPicture(Mockito.any(Uri.class));
+    }
+
+    @Test
+    public void givenLoggedInUser_whenGetUserLiveDataCalled_thenReturnsUserLiveDataFromUserService(){
+        User user = new User();
+        user.setId("12345abcdef");
+        Mockito.when(userServiceMock.getLoggedInUser()).thenReturn(user);
+        User returnedUser = userViewModel.getUserLiveData().getValue();
+
+        Mockito.verify(userServiceMock, Mockito.times(1))
+                .getLoggedInUser();
+        Assert.assertNotNull(returnedUser);
+        Assert.assertEquals(user.getId(), returnedUser.getId());
     }
 
     @Test
@@ -93,5 +105,29 @@ public class UsersViewModelTest {
     public void givenUserIsLoggedIn_whenLogsOut_thenAuthenticationServiceIsCalled() {
         userViewModel.logout();
         Mockito.verify(authenticateService, Mockito.times(1)).logout(userViewModel.getUserStateMutableLiveData());
+    }
+
+    @Test
+    public void givenUserIsLoggedIn_whenUserWantsToFindNextInterestingUser_thenMatcherServiceIsCalled() {
+        User user = new User();
+        userViewModel.loadNextInterestingUser(user);
+        Mockito.verify(matcherService, Mockito.times(1))
+                .getNextInterestingProfile(Mockito.any(), Mockito.eq(user));
+    }
+
+    @Test
+    public void givenUserIsLoggedIn_whenUserWantsToSeeHisPicture_thenUserServiceIsCalled() {
+        String path = "Any Path";
+        userViewModel.loadPicture(path);
+        Mockito.verify(pictureService, Mockito.times(1))
+                .downloadPicture(Mockito.eq(path), Mockito.any());
+    }
+
+    @Test
+    public void givenUserIsLoggedIn_whenUserInformationIsUpdated_thenUserServiceIsCalled() {
+        User newUser = new User();
+        userViewModel.updateUser(newUser);
+        Mockito.verify(userServiceMock, Mockito.times(1))
+                .updateUser(newUser);
     }
 }
